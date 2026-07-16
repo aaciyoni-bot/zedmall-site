@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZedMall - Shop Global, Pay with Mobile Money</title>
+    <meta name="description" content="ZedMall - Zambia's gateway to global shopping. Browse millions of products and pay easily with MTN Mobile Money, Airtel Money or Zamtel Kwacha.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zed: {
+                            50: '#fff7ed', 100: '#ffedd5', 500: '#f97316',
+                            600: '#ea580c', 700: '#c2410c'
+                        },
+                        zam: {
+                            green: '#198a00', red: '#de2010', black: '#000000', orange: '#ef7d00'
+                        }
+                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .spinner { border: 3px solid #ffedd5; border-top-color: #f97316; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .pulse-ring { animation: pulseRing 1.5s ease-out infinite; }
+        @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(25,138,0,0.4); } 100% { box-shadow: 0 0 0 16px rgba(25,138,0,0); } }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
+
+    <!-- ======================= TOP BAR ======================= -->
+    <div class="bg-zam-green text-white text-xs sm:text-sm py-1.5 px-4 text-center">
+        <i class="fas fa-truck-fast mr-1"></i> Free shipping to Lusaka on orders over K500 &nbsp;•&nbsp; Pay with <b>MTN MoMo</b>, <b>Airtel Money</b> &amp; <b>Zamtel Kwacha</b>
+    </div>
+
+    <!-- ======================= HEADER ======================= -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-6">
+            <a href="#" onclick="goHome(); return false;" class="flex items-center gap-2 shrink-0">
+                <div class="bg-zed-500 text-white w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-xl">Z</div>
+                <div class="hidden sm:block">
+                    <h1 class="text-xl font-extrabold tracking-tight leading-none">Zed<span class="text-zed-500">Mall</span></h1>
+                    <p class="text-[10px] text-slate-400 leading-none mt-0.5">Shop Global. Pay Local.</p>
+                </div>
+            </a>
+
+            <div class="flex-1 relative">
+                <input id="searchInput" type="text" placeholder="Search millions of products..."
+                    class="w-full border-2 border-zed-500 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-zed-100"
+                    onkeydown="if(event.key==='Enter') doSearch()">
+                <button onclick="doSearch()" class="absolute right-1 top-1 bottom-1 bg-zed-500 hover:bg-zed-600 text-white rounded-full w-10 flex items-center justify-center transition">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <button onclick="toggleCart(true)" class="relative shrink-0 text-slate-600 hover:text-zed-600 transition p-2">
+                <i class="fas fa-cart-shopping text-2xl"></i>
+                <span id="cartCount" class="absolute -top-1 -right-1 bg-zam-red text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
+            </button>
+        </div>
+
+        <!-- Categories -->
+        <nav class="max-w-7xl mx-auto px-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar">
+            <button onclick="showUnder25()" class="cat-chip !bg-zam-green !text-white hover:!bg-green-800">💸 Under K25</button>
+            <button onclick="searchCategory('phone accessories')" class="cat-chip">📱 Phones &amp; Accessories</button>
+            <button onclick="searchCategory('women fashion dress')" class="cat-chip">👗 Fashion</button>
+            <button onclick="searchCategory('home kitchen gadgets')" class="cat-chip">🏠 Home &amp; Kitchen</button>
+            <button onclick="searchCategory('men watches')" class="cat-chip">⌚ Watches</button>
+            <button onclick="searchCategory('kids toys')" class="cat-chip">🧸 Toys</button>
+            <button onclick="searchCategory('hair wigs beauty')" class="cat-chip">💄 Beauty &amp; Hair</button>
+            <button onclick="searchCategory('solar lights electronics')" class="cat-chip">🔆 Solar &amp; Electronics</button>
+            <button onclick="searchCategory('football jersey sports')" class="cat-chip">⚽ Sports</button>
+        </nav>
+    </header>
+
+    <!-- ======================= HERO ======================= -->
+    <section id="heroSection" class="bg-gradient-to-r from-zam-green via-emerald-700 to-zam-green text-white">
+        <div class="max-w-7xl mx-auto px-4 py-10 sm:py-14 grid sm:grid-cols-2 gap-8 items-center">
+            <div>
+                <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight">The whole world's marketplace,<br>now in <span class="text-zam-orange">Zambia</span> 🇿🇲</h2>
+                <p class="mt-3 text-emerald-100 text-sm sm:text-base">Browse the same products you'd find on global marketplaces — but pay in Kwacha with the mobile money you already use. No credit card needed. Ever.</p>
+                <div class="mt-5 flex flex-wrap gap-3 text-sm font-semibold">
+                    <span class="bg-white/15 backdrop-blur px-4 py-2 rounded-full"><i class="fas fa-mobile-screen mr-1"></i> MTN MoMo</span>
+                    <span class="bg-white/15 backdrop-blur px-4 py-2 rounded-full"><i class="fas fa-mobile-screen mr-1"></i> Airtel Money</span>
+                    <span class="bg-white/15 backdrop-blur px-4 py-2 rounded-full"><i class="fas fa-mobile-screen mr-1"></i> Zamtel Kwacha</span>
+                </div>
+            </div>
+            <div class="hidden sm:grid grid-cols-3 gap-3 text-center text-sm">
+                <div class="bg-white/10 rounded-2xl p-4"><div class="text-3xl">🛒</div><p class="mt-2 font-semibold">Millions of products</p></div>
+                <div class="bg-white/10 rounded-2xl p-4"><div class="text-3xl">💚</div><p class="mt-2 font-semibold">Pay with Mobile Money</p></div>
+                <div class="bg-white/10 rounded-2xl p-4"><div class="text-3xl">📦</div><p class="mt-2 font-semibold">Delivered to Zambia</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ======================= MAIN ======================= -->
+    <main class="max-w-7xl mx-auto px-4 py-8 w-full flex-1">
+        <!-- Under K25 strip (shown on the home page) -->
+        <section id="under25Strip" class="hidden mb-8 bg-gradient-to-r from-zam-green/10 to-emerald-50 rounded-2xl p-4">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-lg sm:text-xl font-bold text-zam-green">💸 Everything under K25</h3>
+                <button onclick="showUnder25()" class="text-sm font-bold text-zam-green hover:underline shrink-0">See all <i class="fas fa-arrow-right text-xs"></i></button>
+            </div>
+            <div id="under25Row" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
+        </section>
+
+        <div class="flex items-center justify-between mb-4">
+            <h3 id="resultsTitle" class="text-xl font-bold">🔥 Trending in Zambia</h3>
+            <span id="resultsCount" class="text-sm text-slate-400"></span>
+        </div>
+
+        <div id="statusBox" class="hidden text-center py-16">
+            <div class="spinner mx-auto"></div>
+            <p id="statusText" class="mt-4 text-slate-500 text-sm">Loading products...</p>
+        </div>
+
+        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4"></div>
+    </main>
+
+    <!-- ======================= FOOTER ======================= -->
+    <footer class="bg-slate-900 text-slate-300 mt-10">
+        <div class="max-w-7xl mx-auto px-4 py-10 grid sm:grid-cols-3 gap-8 text-sm">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <div class="bg-zed-500 text-white w-8 h-8 rounded-lg flex items-center justify-center font-extrabold">Z</div>
+                    <span class="font-extrabold text-white text-lg">Zed<span class="text-zed-500">Mall</span></span>
+                </div>
+                <p class="text-slate-400">Zambia's gateway to global online shopping. Shop the world's products and pay with the mobile money you already have.</p>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-3">How it works</h4>
+                <ol class="space-y-2 text-slate-400 list-decimal list-inside">
+                    <li>Find your product &amp; add to cart</li>
+                    <li>Enter your mobile money number</li>
+                    <li>Approve the payment prompt on your phone</li>
+                    <li>We order &amp; ship it to you in Zambia</li>
+                </ol>
+            </div>
+            <div>
+                <h4 class="font-bold text-white mb-3">We accept</h4>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-yellow-400 text-black font-bold px-3 py-1.5 rounded-lg text-xs">MTN MoMo</span>
+                    <span class="bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs">Airtel Money</span>
+                    <span class="bg-green-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs">Zamtel Kwacha</span>
+                </div>
+                <p class="mt-4 text-slate-500 text-xs">Prices shown in Zambian Kwacha (ZMW), incl. service fee. Exchange rate updated daily.</p>
+            </div>
+        </div>
+        <div class="border-t border-slate-800 text-center py-4 text-xs text-slate-500">© 2026 ZedMall Zambia. All rights reserved.</div>
+    </footer>
+
+    <!-- ======================= CART DRAWER ======================= -->
+    <div id="cartOverlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart(false)"></div>
+    <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b">
+            <h3 class="font-bold text-lg"><i class="fas fa-cart-shopping text-zed-500 mr-2"></i>Your Cart</h3>
+            <button onclick="toggleCart(false)" class="text-slate-400 hover:text-slate-700 p-2"><i class="fas fa-xmark text-xl"></i></button>
+        </div>
+        <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+        <div class="border-t p-4 space-y-3 bg-slate-50">
+            <div class="flex justify-between text-sm"><span class="text-slate-500">Subtotal</span><span id="cartSubtotal" class="font-semibold">K0.00</span></div>
+            <div class="flex justify-between text-sm"><span class="text-slate-500">Service &amp; delivery estimate</span><span id="cartFees" class="font-semibold">K0.00</span></div>
+            <div class="flex justify-between text-lg font-extrabold"><span>Total</span><span id="cartTotal" class="text-zam-green">K0.00</span></div>
+            <button id="checkoutBtn" onclick="openCheckout()" class="w-full bg-zam-green hover:bg-green-800 text-white font-bold py-3.5 rounded-xl transition disabled:opacity-40 disabled:cursor-not-allowed">
+                <i class="fas fa-mobile-screen mr-2"></i>Pay with Mobile Money
+            </button>
+        </div>
+    </aside>
+
+    <!-- ======================= CHECKOUT MODAL ======================= -->
+    <div id="checkoutModal" class="fixed inset-0 bg-black/60 z-[60] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden fade-in">
+
+            <!-- Step 1: payment details -->
+            <div id="payStep1">
+                <div class="bg-zam-green text-white p-5">
+                    <h3 class="font-bold text-lg"><i class="fas fa-mobile-screen mr-2"></i>Mobile Money Checkout</h3>
+                    <p class="text-emerald-100 text-sm mt-1">Total to pay: <b id="payTotal" class="text-white">K0.00</b></p>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label class="text-sm font-semibold text-slate-600 block mb-2">Choose your network</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="selectProvider('mtn', this)" class="provider-btn border-2 rounded-xl p-3 text-center transition hover:border-zed-500">
+                                <div class="bg-yellow-400 text-black font-extrabold text-xs rounded-md py-1 mb-1">MTN</div>
+                                <span class="text-[11px] text-slate-500">MoMo</span>
+                            </button>
+                            <button onclick="selectProvider('airtel', this)" class="provider-btn border-2 rounded-xl p-3 text-center transition hover:border-zed-500">
+                                <div class="bg-red-600 text-white font-extrabold text-xs rounded-md py-1 mb-1">Airtel</div>
+                                <span class="text-[11px] text-slate-500">Money</span>
+                            </button>
+                            <button onclick="selectProvider('zamtel', this)" class="provider-btn border-2 rounded-xl p-3 text-center transition hover:border-zed-500">
+                                <div class="bg-green-700 text-white font-extrabold text-xs rounded-md py-1 mb-1">Zamtel</div>
+                                <span class="text-[11px] text-slate-500">Kwacha</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm font-semibold text-slate-600 block mb-2">Mobile money number</label>
+                        <div class="flex">
+                            <span class="bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl px-3 flex items-center text-sm font-semibold text-slate-500">🇿🇲 +260</span>
+                            <input id="payPhone" type="tel" maxlength="9" placeholder="97 1234567"
+                                class="flex-1 border border-slate-300 rounded-r-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zam-green"
+                                oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm font-semibold text-slate-600 block mb-2">Full name (for delivery)</label>
+                        <input id="payName" type="text" placeholder="e.g. Mwamba Banda" class="w-full border border-slate-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zam-green">
+                    </div>
+                    <div>
+                        <label class="text-sm font-semibold text-slate-600 block mb-2">Delivery address / town</label>
+                        <input id="payAddress" type="text" placeholder="e.g. Plot 25, Kabulonga, Lusaka" class="w-full border border-slate-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zam-green">
+                    </div>
+                    <p id="payError" class="text-zam-red text-sm font-semibold hidden"></p>
+                    <button onclick="submitPayment()" class="w-full bg-zam-green hover:bg-green-800 text-white font-bold py-3.5 rounded-xl transition">
+                        Send payment request <i class="fas fa-arrow-right ml-1"></i>
+                    </button>
+                    <button onclick="closeCheckout()" class="w-full text-slate-400 text-sm py-1 hover:text-slate-600">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Step 2: waiting for approval -->
+            <div id="payStep2" class="hidden p-8 text-center">
+                <div class="w-20 h-20 mx-auto rounded-full bg-zam-green/10 flex items-center justify-center pulse-ring">
+                    <i class="fas fa-mobile-screen-button text-zam-green text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-lg mt-5">Check your phone 📲</h3>
+                <p class="text-slate-500 text-sm mt-2">We sent a payment request of <b id="pay2Total" class="text-zam-green">K0.00</b> to <b id="pay2Phone"></b>.<br>Enter your Mobile Money PIN to approve.</p>
+                <p class="text-xs text-slate-400 mt-4"><span class="spinner inline-block !w-4 !h-4 !border-2 align-middle mr-1"></span> Waiting for confirmation...</p>
+            </div>
+
+            <!-- Step 3: success -->
+            <div id="payStep3" class="hidden p-8 text-center">
+                <div class="w-20 h-20 mx-auto rounded-full bg-zam-green flex items-center justify-center">
+                    <i class="fas fa-check text-white text-3xl"></i>
+                </div>
+                <h3 class="font-bold text-xl mt-5 text-zam-green">Payment received! 🎉</h3>
+                <p class="text-slate-500 text-sm mt-2">Order <b id="orderRef"></b> is confirmed.<br>We're placing your order now — you'll get an SMS with tracking details.</p>
+                <button onclick="finishOrder()" class="mt-6 w-full bg-zed-500 hover:bg-zed-600 text-white font-bold py-3 rounded-xl transition">Continue shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= PRODUCT MODAL ======================= -->
+    <div id="productModal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" onclick="if(event.target===this) closeProduct()">
+        <div class="bg-white rounded-2xl w-full max-w-2xl overflow-hidden fade-in max-h-[90vh] overflow-y-auto">
+            <div class="grid sm:grid-cols-2">
+                <img id="pmImage" src="" alt="" class="w-full h-64 sm:h-full object-cover bg-slate-100">
+                <div class="p-5 flex flex-col">
+                    <button onclick="closeProduct()" class="self-end text-slate-400 hover:text-slate-700 -mt-1"><i class="fas fa-xmark text-xl"></i></button>
+                    <h3 id="pmTitle" class="font-bold text-lg leading-snug"></h3>
+                    <div id="pmRating" class="text-yellow-500 text-sm mt-2"></div>
+                    <div class="mt-3">
+                        <span id="pmPrice" class="text-2xl font-extrabold text-zam-green"></span>
+                        <span id="pmOldPrice" class="text-sm text-slate-400 line-through ml-2"></span>
+                    </div>
+                    <p id="pmOrders" class="text-xs text-slate-400 mt-1"></p>
+                    <div class="mt-4 flex items-center gap-3">
+                        <div class="flex items-center border rounded-xl">
+                            <button onclick="pmQty(-1)" class="px-3 py-2 text-slate-500 hover:text-zed-600">−</button>
+                            <span id="pmQtyVal" class="px-2 font-bold text-sm">1</span>
+                            <button onclick="pmQty(1)" class="px-3 py-2 text-slate-500 hover:text-zed-600">+</button>
+                        </div>
+                        <button id="pmAddBtn" class="flex-1 bg-zed-500 hover:bg-zed-600 text-white font-bold py-3 rounded-xl transition">
+                            <i class="fas fa-cart-plus mr-1"></i> Add to cart
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-4"><i class="fas fa-truck mr-1"></i> Estimated delivery to Zambia: 12–25 days</p>
+                    <p class="text-xs text-slate-400 mt-1"><i class="fas fa-shield-halved mr-1"></i> Money-back guarantee if the item never arrives</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= TOAST ======================= -->
+    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl z-[70] hidden"></div>
+
+    <style>
+        .cat-chip { flex-shrink: 0; background: #f1f5f9; border-radius: 9999px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: #475569; transition: all .2s; }
+        .cat-chip:hover { background: #ffedd5; color: #c2410c; }
+        .provider-btn.selected { border-color: #198a00 !important; background: #f0fdf4; }
+    </style>
+
+    <script>
+    /* ================================================================
+       ZEDMALL CONFIG — edit these values
+       ================================================================ */
+    const CONFIG = {
+        // Your backend API (the Vercel server.js that proxies AliExpress).
+        // Leave empty ("") to run in DEMO mode with sample products.
+        API_BASE_URL: "https://zedmall-backend.vercel.app",
+
+        USD_TO_ZMW: 27.5,                 // exchange rate USD → Kwacha
+        MARKUP_PERCENT: 18,               // your margin on top of item price
+        SERVICE_FEE_PERCENT: 5,           // fee shown at checkout (covers MoMo charges)
+        BUDGET_MAX_ZMW: 25,               // price ceiling for the "Under K25" section
+        WHATSAPP_ORDERS: "260971234567"   // orders are also sent to this WhatsApp number
+    };
+
+    /* ================================================================
+       DEMO PRODUCTS (used when API_BASE_URL is empty or unreachable)
+       ================================================================ */
+    const DEMO_PRODUCTS = [
+        { id:"d1", title:"Wireless Bluetooth Earbuds TWS with Charging Case", priceUsd:6.99, oldUsd:13.99, rating:4.6, orders:12483, img:"https://picsum.photos/seed/earbuds/400/400" },
+        { id:"d2", title:"Solar Powered LED Outdoor Light 100W with Remote", priceUsd:11.50, oldUsd:19.99, rating:4.7, orders:8912, img:"https://picsum.photos/seed/solar/400/400" },
+        { id:"d3", title:"Smart Watch Fitness Tracker Waterproof - Men & Women", priceUsd:9.20, oldUsd:18.40, rating:4.5, orders:23001, img:"https://picsum.photos/seed/watch/400/400" },
+        { id:"d4", title:"Ladies Handbag Set 4-in-1 PU Leather", priceUsd:13.80, oldUsd:24.00, rating:4.8, orders:5320, img:"https://picsum.photos/seed/handbag/400/400" },
+        { id:"d5", title:"Phone Case for iPhone / Samsung with Card Holder", priceUsd:2.10, oldUsd:4.20, rating:4.4, orders:45210, img:"https://picsum.photos/seed/case/400/400" },
+        { id:"d6", title:"Kitchen Knife Set 6pcs Stainless Steel with Stand", priceUsd:15.99, oldUsd:29.99, rating:4.7, orders:7654, img:"https://picsum.photos/seed/knives/400/400" },
+        { id:"d7", title:"Kids Educational Building Blocks 520pcs", priceUsd:8.75, oldUsd:16.00, rating:4.9, orders:11234, img:"https://picsum.photos/seed/blocks/400/400" },
+        { id:"d8", title:"HD Lace Front Wig Human Hair Blend 26 inch", priceUsd:24.90, oldUsd:45.00, rating:4.6, orders:9876, img:"https://picsum.photos/seed/wig/400/400" },
+        { id:"d9", title:"Men's Quartz Watch Luxury Stainless Steel", priceUsd:7.40, oldUsd:14.80, rating:4.5, orders:15678, img:"https://picsum.photos/seed/menwatch/400/400" },
+        { id:"d10", title:"Portable Blender USB Rechargeable 380ml", priceUsd:10.30, oldUsd:20.60, rating:4.3, orders:6543, img:"https://picsum.photos/seed/blender/400/400" },
+        { id:"d11", title:"Football Jersey 2026 Season - Breathable Fabric", priceUsd:12.00, oldUsd:22.00, rating:4.6, orders:8210, img:"https://picsum.photos/seed/jersey/400/400" },
+        { id:"d12", title:"LED Ring Light 26cm with Tripod for TikTok", priceUsd:9.99, oldUsd:17.99, rating:4.7, orders:19876, img:"https://picsum.photos/seed/ringlight/400/400" },
+        { id:"d13", title:"Power Bank 20000mAh Fast Charging Dual USB", priceUsd:13.50, oldUsd:25.00, rating:4.8, orders:31245, img:"https://picsum.photos/seed/powerbank/400/400" },
+        { id:"d14", title:"Women's Summer Dress African Print Style", priceUsd:11.20, oldUsd:19.90, rating:4.5, orders:4321, img:"https://picsum.photos/seed/dress/400/400" },
+        { id:"d15", title:"Car Phone Holder Magnetic 360° Rotation", priceUsd:3.40, oldUsd:6.80, rating:4.4, orders:27654, img:"https://picsum.photos/seed/carholder/400/400" },
+        { id:"d16", title:"USB-C Fast Charging Cable 1m Braided", priceUsd:0.69, oldUsd:1.40, rating:4.5, orders:98230, img:"https://picsum.photos/seed/usbcable/400/400" },
+        { id:"d17", title:"Gold Plated Hoop Earrings Set 6 Pairs", priceUsd:0.55, oldUsd:1.20, rating:4.6, orders:45120, img:"https://picsum.photos/seed/earrings/400/400" },
+        { id:"d18", title:"Phone Ring Holder Stand 360° Metal", priceUsd:0.45, oldUsd:0.99, rating:4.4, orders:67340, img:"https://picsum.photos/seed/phonering/400/400" },
+        { id:"d19", title:"Hair Clips Set 10pcs Pearl Style", priceUsd:0.60, oldUsd:1.30, rating:4.7, orders:38900, img:"https://picsum.photos/seed/hairclips/400/400" },
+        { id:"d20", title:"LED Mini Keychain Flashlight", priceUsd:0.52, oldUsd:1.10, rating:4.3, orders:52410, img:"https://picsum.photos/seed/keychain/400/400" },
+        { id:"d21", title:"Nail Art Stickers 12 Sheets 3D Design", priceUsd:0.39, oldUsd:0.85, rating:4.5, orders:29870, img:"https://picsum.photos/seed/nailart/400/400" },
+        { id:"d22", title:"Reusable Shopping Bag Foldable Waterproof", priceUsd:0.72, oldUsd:1.50, rating:4.6, orders:41200, img:"https://picsum.photos/seed/shopbag/400/400" },
+        { id:"d23", title:"Silicone Phone Grip Strap Adjustable", priceUsd:0.48, oldUsd:1.00, rating:4.2, orders:33150, img:"https://picsum.photos/seed/gripstrap/400/400" }
+    ];
+
+    /* ================================================================
+       STATE
+       ================================================================ */
+    let products = [];
+    let cart = JSON.parse(localStorage.getItem('zedmall_cart') || '[]');
+    let currentProduct = null;
+    let pmQtyCount = 1;
+    let selectedProvider = null;
+
+    /* ================================================================
+       HELPERS
+       ================================================================ */
+    const $ = id => document.getElementById(id);
+    const usdToKwacha = usd => usd * CONFIG.USD_TO_ZMW * (1 + CONFIG.MARKUP_PERCENT / 100);
+    const fmtK = n => 'K' + n.toLocaleString('en-ZM', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    function showToast(msg) {
+        const t = $('toast');
+        t.textContent = msg;
+        t.classList.remove('hidden');
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.classList.add('hidden'), 2500);
+    }
+
+    function setStatus(loading, text) {
+        $('statusBox').classList.toggle('hidden', !loading);
+        $('productGrid').classList.toggle('hidden', loading);
+        if (text) $('statusText').textContent = text;
+    }
+
+    /* ================================================================
+       PRODUCT LOADING — API with demo fallback
+       ================================================================ */
+    // Normalizes many possible AliExpress-API response shapes into one format.
+    // Prices: if the backend already returns Kwacha (priceZMW) we use it as-is;
+    // otherwise we treat the price as USD and convert with markup.
+    function normalizeApiProduct(p, i) {
+        const title = p.title || p.product_title || p.name || p.subject || 'Product';
+        const rawZmw = p.priceZMW || p.price_zmw || p.priceKwacha || 0;
+        const priceZmwDirect = parseFloat(String(rawZmw).replace(/[^0-9.]/g, '')) || 0;
+        const rawPrice = p.price || p.sale_price || p.app_sale_price || p.target_sale_price ||
+                         (p.prices && (p.prices.sale_price || p.prices.salePrice)) || p.min_price || 0;
+        const priceUsd = parseFloat(String(rawPrice).replace(/[^0-9.]/g, '')) || 0;
+        const rawOld = p.original_price || p.originalPrice || p.old_price || 0;
+        const oldUsd = parseFloat(String(rawOld).replace(/[^0-9.]/g, '')) || 0;
+        const img = p.image || p.product_main_image_url || p.main_image || p.img || p.imageUrl ||
+                    (p.images && p.images[0]) || 'https://picsum.photos/seed/zm' + i + '/400/400';
+        return {
+            id: String(p.product_id || p.productId || p.item_id || p.id || 'api' + i),
+            title,
+            priceZmw: priceZmwDirect || usdToKwacha(priceUsd || 5),
+            oldZmw: oldUsd ? usdToKwacha(oldUsd) : 0,
+            rating: parseFloat(p.evaluate_rate || p.rating || p.score) || (4 + Math.round(((i * 37) % 10)) / 10 * 0.9),
+            orders: parseInt(p.orders || p.sale_count || p.volume || p.lastest_volume) || 0,
+            img: String(img).startsWith('//') ? 'https:' + img : img
+        };
+    }
+
+    function extractApiList(data) {
+        if (Array.isArray(data)) return data;
+        const candidates = [
+            data.products, data.items, data.result, data.docs, data.data,
+            data.data && data.data.products, data.data && data.data.items,
+            data.result && data.result.products, data.result && data.result.items,
+            data.result && data.result.resultList
+        ];
+        for (const c of candidates) if (Array.isArray(c) && c.length) return c;
+        return [];
+    }
+
+    const normalizeDemo = p => ({ ...p, priceZmw: usdToKwacha(p.priceUsd), oldZmw: p.oldUsd ? usdToKwacha(p.oldUsd) : 0 });
+
+    async function loadProducts(query, under25Only) {
+        setStatus(true, under25Only ? 'Finding deals under K25...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
+        let list = null;
+
+        if (CONFIG.API_BASE_URL) {
+            try {
+                const apiQuery = query || (under25Only ? 'cheap deals under 1 dollar' : 'best sellers');
+                const url = CONFIG.API_BASE_URL.replace(/\/$/, '') + '/api/products?q=' + encodeURIComponent(apiQuery);
+                const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+                const data = await res.json();
+                const raw = extractApiList(data);
+                if (raw.length) list = raw.slice(0, 40).map(normalizeApiProduct);
+            } catch (e) {
+                console.warn('API unavailable, falling back to demo products:', e);
+            }
+        }
+
+        if (!list || !list.length) {
+            // Demo mode: simple client-side filter
+            let demo = query
+                ? DEMO_PRODUCTS.filter(p => p.title.toLowerCase().includes(query.toLowerCase().split(' ')[0]))
+                : DEMO_PRODUCTS;
+            if (!demo.length) demo = DEMO_PRODUCTS;
+            list = demo.map(normalizeDemo);
+        }
+
+        if (under25Only) {
+            list = list.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+            // If the live API returned nothing that cheap, fall back to demo budget items
+            if (!list.length) list = DEMO_PRODUCTS.map(normalizeDemo).filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+        }
+
+        products = list;
+        renderProducts(query, under25Only);
+        setStatus(false);
+    }
+
+    function renderProducts(query, under25Only) {
+        $('resultsTitle').textContent = under25Only ? `💸 Everything under K${CONFIG.BUDGET_MAX_ZMW}`
+            : (query ? `Results for "${query}"` : '🔥 Trending in Zambia');
+        $('resultsCount').textContent = products.length + ' products';
+        renderUnder25Strip(!query && !under25Only);
+        $('productGrid').innerHTML = products.map(p => {
+            const price = p.priceZmw;
+            const oldPrice = p.oldZmw || 0;
+            const discount = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
+            return `
+            <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition cursor-pointer group fade-in" onclick="openProduct('${p.id}')">
+                <div class="relative">
+                    <img src="${p.img}" alt="" loading="lazy" class="w-full aspect-square object-cover bg-slate-100 group-hover:scale-105 transition duration-300"
+                         onerror="this.src='https://picsum.photos/seed/fallback${p.id}/400/400'">
+                    ${discount ? `<span class="absolute top-2 left-2 bg-zam-red text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-${discount}%</span>` : ''}
+                </div>
+                <div class="p-3">
+                    <p class="text-xs sm:text-sm text-slate-600 leading-snug line-clamp-2 h-9">${p.title}</p>
+                    <div class="mt-2 flex items-baseline gap-1.5 flex-wrap">
+                        <span class="font-extrabold text-zam-green">${fmtK(price)}</span>
+                        ${oldPrice > price ? `<span class="text-[11px] text-slate-400 line-through">${fmtK(oldPrice)}</span>` : ''}
+                    </div>
+                    <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
+                        <span><i class="fas fa-star text-yellow-400"></i> ${Number(p.rating).toFixed(1)}</span>
+                        ${p.orders ? `<span>${p.orders.toLocaleString()} sold</span>` : ''}
+                    </div>
+                    <button onclick="event.stopPropagation(); addToCart('${p.id}', 1)"
+                        class="mt-2 w-full bg-zed-50 text-zed-700 hover:bg-zed-500 hover:text-white text-xs font-bold py-2 rounded-xl transition">
+                        <i class="fas fa-cart-plus mr-1"></i>Add to cart
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+        window.scrollTo({ top: (query || under25Only) ? $('heroSection').offsetHeight : 0, behavior: 'smooth' });
+    }
+
+    function renderUnder25Strip(show) {
+        const strip = $('under25Strip');
+        if (!show) { strip.classList.add('hidden'); return; }
+
+        let cheap = products.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+        if (!cheap.length) {
+            // Nothing that cheap in the live list — show demo budget items instead,
+            // and register them in `products` so clicks and add-to-cart still work
+            cheap = DEMO_PRODUCTS.map(normalizeDemo).filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+            cheap.forEach(p => { if (!products.find(x => x.id === p.id)) products.push(p); });
+        }
+        if (!cheap.length) { strip.classList.add('hidden'); return; }
+
+        $('under25Row').innerHTML = cheap.slice(0, 10).map(p => `
+            <div class="shrink-0 w-32 sm:w-36 bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer" onclick="openProduct('${p.id}')">
+                <img src="${p.img}" alt="" loading="lazy" class="w-full aspect-square object-cover bg-slate-100"
+                     onerror="this.src='https://picsum.photos/seed/u25${p.id}/200/200'">
+                <div class="p-2">
+                    <p class="text-[11px] text-slate-600 leading-snug line-clamp-2 h-7">${p.title}</p>
+                    <p class="font-extrabold text-sm text-zam-green mt-1">${fmtK(p.priceZmw)}</p>
+                </div>
+            </div>`).join('');
+        strip.classList.remove('hidden');
+    }
+
+    /* ================================================================
+       SEARCH
+       ================================================================ */
+    function showUnder25() {
+        $('searchInput').value = '';
+        loadProducts('', true);
+    }
+    function doSearch() {
+        const q = $('searchInput').value.trim();
+        loadProducts(q);
+    }
+    function searchCategory(q) {
+        $('searchInput').value = q;
+        loadProducts(q);
+    }
+    function goHome() {
+        $('searchInput').value = '';
+        loadProducts('');
+    }
+
+    /* ================================================================
+       PRODUCT MODAL
+       ================================================================ */
+    function openProduct(id) {
+        currentProduct = products.find(p => p.id === id);
+        if (!currentProduct) return;
+        pmQtyCount = 1;
+        $('pmQtyVal').textContent = 1;
+        $('pmImage').src = currentProduct.img;
+        $('pmTitle').textContent = currentProduct.title;
+        const stars = Math.round(currentProduct.rating);
+        $('pmRating').innerHTML = '★'.repeat(stars) + '<span class="text-slate-300">' + '★'.repeat(5 - stars) + '</span>' +
+            ` <span class="text-slate-400 text-xs">${Number(currentProduct.rating).toFixed(1)}</span>`;
+        $('pmPrice').textContent = fmtK(currentProduct.priceZmw);
+        $('pmOldPrice').textContent = currentProduct.oldZmw ? fmtK(currentProduct.oldZmw) : '';
+        $('pmOrders').textContent = currentProduct.orders ? currentProduct.orders.toLocaleString() + ' orders shipped' : '';
+        $('pmAddBtn').onclick = () => { addToCart(currentProduct.id, pmQtyCount); closeProduct(); };
+        $('productModal').classList.remove('hidden');
+        $('productModal').classList.add('flex');
+    }
+    function closeProduct() {
+        $('productModal').classList.add('hidden');
+        $('productModal').classList.remove('flex');
+    }
+    function pmQty(d) {
+        pmQtyCount = Math.max(1, Math.min(20, pmQtyCount + d));
+        $('pmQtyVal').textContent = pmQtyCount;
+    }
+
+    /* ================================================================
+       CART
+       ================================================================ */
+    function saveCart() {
+        localStorage.setItem('zedmall_cart', JSON.stringify(cart));
+        renderCart();
+    }
+
+    function addToCart(id, qty) {
+        const p = products.find(x => x.id === id);
+        if (!p) return;
+        const existing = cart.find(x => x.id === id);
+        if (existing) existing.qty += qty;
+        else cart.push({ id: p.id, title: p.title, priceZmw: p.priceZmw, img: p.img, qty });
+        saveCart();
+        showToast('✅ Added to cart');
+    }
+
+    function changeQty(id, d) {
+        const item = cart.find(x => x.id === id);
+        if (!item) return;
+        item.qty += d;
+        if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
+        saveCart();
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(x => x.id !== id);
+        saveCart();
+    }
+
+    // Older saved carts stored priceUsd; convert on the fly so they still work
+    const itemZmw = i => i.priceZmw != null ? i.priceZmw : usdToKwacha(i.priceUsd || 0);
+
+    function cartTotals() {
+        const subtotal = cart.reduce((s, i) => s + itemZmw(i) * i.qty, 0);
+        const fees = subtotal * CONFIG.SERVICE_FEE_PERCENT / 100;
+        return { subtotal, fees, total: subtotal + fees };
+    }
+
+    function renderCart() {
+        const count = cart.reduce((s, i) => s + i.qty, 0);
+        $('cartCount').textContent = count;
+        $('cartCount').classList.toggle('hidden', count === 0);
+
+        if (!cart.length) {
+            $('cartItems').innerHTML = `<div class="text-center text-slate-400 py-16">
+                <i class="fas fa-cart-shopping text-4xl mb-3"></i><p class="text-sm">Your cart is empty</p></div>`;
+        } else {
+            $('cartItems').innerHTML = cart.map(i => `
+            <div class="flex gap-3 bg-slate-50 rounded-xl p-3">
+                <img src="${i.img}" class="w-16 h-16 rounded-lg object-cover bg-slate-200" onerror="this.src='https://picsum.photos/seed/c${i.id}/100/100'">
+                <div class="flex-1 min-w-0">
+                    <p class="text-xs text-slate-600 line-clamp-2">${i.title}</p>
+                    <div class="flex items-center justify-between mt-2">
+                        <span class="font-bold text-sm text-zam-green">${fmtK(itemZmw(i) * i.qty)}</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQty('${i.id}',-1)" class="w-6 h-6 bg-white border rounded-md text-slate-500 hover:text-zed-600 text-sm">−</button>
+                            <span class="text-sm font-bold w-4 text-center">${i.qty}</span>
+                            <button onclick="changeQty('${i.id}',1)" class="w-6 h-6 bg-white border rounded-md text-slate-500 hover:text-zed-600 text-sm">+</button>
+                            <button onclick="removeFromCart('${i.id}')" class="text-slate-300 hover:text-zam-red ml-1"><i class="fas fa-trash-can text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>`).join('');
+        }
+
+        const t = cartTotals();
+        $('cartSubtotal').textContent = fmtK(t.subtotal);
+        $('cartFees').textContent = fmtK(t.fees);
+        $('cartTotal').textContent = fmtK(t.total);
+        $('checkoutBtn').disabled = !cart.length;
+    }
+
+    function toggleCart(open) {
+        $('cartOverlay').classList.toggle('hidden', !open);
+        $('cartDrawer').classList.toggle('translate-x-full', !open);
+        if (open) renderCart();
+    }
+
+    /* ================================================================
+       CHECKOUT — Mobile Money flow
+       (simulation for now; wire to MoMo/Airtel APIs or Flutterwave/Lenco
+        collection API in the backend when ready)
+       ================================================================ */
+    function openCheckout() {
+        if (!cart.length) return;
+        toggleCart(false);
+        selectedProvider = null;
+        document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('selected'));
+        $('payError').classList.add('hidden');
+        $('payTotal').textContent = fmtK(cartTotals().total);
+        $('payStep1').classList.remove('hidden');
+        $('payStep2').classList.add('hidden');
+        $('payStep3').classList.add('hidden');
+        $('checkoutModal').classList.remove('hidden');
+        $('checkoutModal').classList.add('flex');
+    }
+
+    function closeCheckout() {
+        $('checkoutModal').classList.add('hidden');
+        $('checkoutModal').classList.remove('flex');
+    }
+
+    function selectProvider(p, btn) {
+        selectedProvider = p;
+        document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    function submitPayment() {
+        const phone = $('payPhone').value.trim();
+        const name = $('payName').value.trim();
+        const address = $('payAddress').value.trim();
+        const err = $('payError');
+
+        if (!selectedProvider) { err.textContent = 'Please choose your mobile network.'; err.classList.remove('hidden'); return; }
+        if (!/^(9|7)\d{8}$/.test(phone)) { err.textContent = 'Enter a valid Zambian number, e.g. 971234567.'; err.classList.remove('hidden'); return; }
+        if (name.length < 3) { err.textContent = 'Please enter your full name.'; err.classList.remove('hidden'); return; }
+        if (address.length < 5) { err.textContent = 'Please enter your delivery address.'; err.classList.remove('hidden'); return; }
+        err.classList.add('hidden');
+
+        const t = cartTotals();
+        $('pay2Total').textContent = fmtK(t.total);
+        $('pay2Phone').textContent = '+260 ' + phone;
+        $('payStep1').classList.add('hidden');
+        $('payStep2').classList.remove('hidden');
+
+        // Simulated payment approval. Replace with a real call to your backend:
+        // POST CONFIG.API_BASE_URL + '/api/pay' { provider, phone, amount, cart }
+        setTimeout(() => {
+            const ref = 'ZM' + String(Math.floor(100000 + Math.random() * 900000));
+            $('orderRef').textContent = '#' + ref;
+            $('payStep2').classList.add('hidden');
+            $('payStep3').classList.remove('hidden');
+            sendOrderToWhatsApp(ref, { provider: selectedProvider, phone, name, address, total: t.total });
+        }, 4000);
+    }
+
+    function sendOrderToWhatsApp(ref, o) {
+        // Opens WhatsApp with the order summary so you receive every order
+        // even before payment APIs are connected.
+        if (!CONFIG.WHATSAPP_ORDERS) return;
+        const lines = [
+            `🛒 *New ZedMall Order ${'#' + ref}*`,
+            `👤 ${o.name}`,
+            `📱 +260${o.phone} (${o.provider.toUpperCase()})`,
+            `📍 ${o.address}`,
+            ``,
+            ...cart.map(i => `• ${i.qty}x ${i.title} — ${fmtK(itemZmw(i) * i.qty)}`),
+            ``,
+            `💰 *Total: ${fmtK(o.total)}*`
+        ];
+        const url = 'https://wa.me/' + CONFIG.WHATSAPP_ORDERS + '?text=' + encodeURIComponent(lines.join('\n'));
+        window.open(url, '_blank');
+    }
+
+    function finishOrder() {
+        cart = [];
+        saveCart();
+        closeCheckout();
+        showToast('🎉 Thank you for shopping with ZedMall!');
+    }
+
+    /* ================================================================
+       INIT
+       ================================================================ */
+    renderCart();
+    loadProducts('');
+    </script>
+</body>
+</html>
