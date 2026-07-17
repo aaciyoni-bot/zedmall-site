@@ -4,15 +4,30 @@ const axios = require('axios');
 
 const app = express();
 app.use(cors({ origin: '*' }));
+app.use(express.json());
 
-// Set RAPIDAPI_KEY in Vercel: Project Settings -> Environment Variables.
-// Never commit the key to the repository.
+// Environment variables (Vercel -> Project Settings -> Environment Variables):
+//   RAPIDAPI_KEY   - required. RapidAPI key for the product search API.
+//   RAPIDAPI_HOST  - optional. Defaults to the Aliexpress DataHub host.
+//   FLW_SECRET_KEY - optional. Flutterwave secret key; when absent, /api/pay
+//                    reports simulated mode and the storefront falls back to
+//                    its built-in payment simulation.
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
 const API_HOST = process.env.RAPIDAPI_HOST || 'aliexpress-datahub.p.rapidapi.com';
+const FLW_SECRET_KEY = process.env.FLW_SECRET_KEY;
 
 app.get('/api/health', (req, res) => {
-    res.json({ ok: true, keyConfigured: Boolean(RAPIDAPI_KEY), apiHost: API_HOST });
+    res.json({
+        ok: true,
+        keyConfigured: Boolean(RAPIDAPI_KEY),
+        apiHost: API_HOST,
+        paymentsConfigured: Boolean(FLW_SECRET_KEY)
+    });
 });
+
+/* =====================================================================
+   PRODUCT SEARCH (with in-memory cache to preserve RapidAPI quota)
+   ===================================================================== */
 
 // Flattens an Aliexpress DataHub search result into the simple shape the
 // storefront expects: { products: [{ id, title, price, image, orders, rating }] }
@@ -35,11 +50,24 @@ function mapDataHubResponse(data) {
     return { products };
 }
 
+// Same searches repeat constantly (home page, categories, budget strip) —
+// serving them from memory keeps the free RapidAPI quota for new queries.
+// Serverless instances recycle, so this is best-effort, not persistence.
+const searchCache = new Map();
+const CACHE_TTL_MS = 15 * 60 * 1000;
+
 app.get('/api/products', async (req, res) => {
     const query = req.query.q || 'best sellers';
+    const sort = req.query.sort || '';
 
     if (!RAPIDAPI_KEY) {
         return res.status(500).json({ error: 'RAPIDAPI_KEY environment variable is not set' });
+    }
+
+    const cacheKey = query + '|' + sort;
+    const hit = searchCache.get(cacheKey);
+    if (hit && Date.now() - hit.at < CACHE_TTL_MS) {
+        return res.json(hit.body);
     }
 
     const isDataHub = API_HOST.includes('datahub');
@@ -49,8 +77,7 @@ app.get('/api/products', async (req, res) => {
     const params = isDataHub
         ? { q: query, page: '1' }
         : { SearchText: query };
-    // Optional price/sales sorting, e.g. sort=priceAsc for the budget section
-    if (isDataHub && req.query.sort) params.sort = req.query.sort;
+    if (isDataHub && sort) params.sort = sort;
 
     try {
         const response = await axios.get(url, {
@@ -62,14 +89,73 @@ app.get('/api/products', async (req, res) => {
             timeout: 25000
         });
 
-        const mapped = mapDataHubResponse(response.data);
-        res.json(mapped || response.data);
+        const body = mapDataHubResponse(response.data) || response.data;
+        searchCache.set(cacheKey, { at: Date.now(), body });
+        res.json(body);
     } catch (error) {
         res.status(502).json({
             error: 'UPSTREAM_ERROR',
             message: error.message,
             response: error.response ? error.response.data : null
         });
+    }
+});
+
+/* =====================================================================
+   MOBILE MONEY PAYMENTS (Flutterwave - Zambia)
+   Without FLW_SECRET_KEY these endpoints report simulated mode, and the
+   storefront keeps using its built-in simulation.
+   ===================================================================== */
+
+const FLW_BASE = 'https://api.flutterwave.com/v3';
+const flwHeaders = () => ({ Authorization: `Bearer ${FLW_SECRET_KEY}` });
+
+// Starts a mobile money charge. The customer then gets a PIN prompt on
+// their phone; the storefront polls /api/pay/status until it resolves.
+app.post('/api/pay', async (req, res) => {
+    if (!FLW_SECRET_KEY) return res.json({ simulated: true });
+
+    const { phone, network, amount, name } = req.body || {};
+    if (!/^(9|7)\d{8}$/.test(String(phone)) || !(amount > 0)) {
+        return res.status(400).json({ error: 'INVALID_INPUT' });
+    }
+
+    const tx_ref = 'ZM-' + Date.now() + '-' + Math.floor(Math.random() * 1e6);
+    try {
+        const r = await axios.post(`${FLW_BASE}/charges?type=mobile_money_zambia`, {
+            tx_ref,
+            amount: Math.round(amount * 100) / 100,
+            currency: 'ZMW',
+            email: process.env.ORDERS_EMAIL || 'orders@zedmall.example',
+            phone_number: '260' + phone,
+            fullname: name || 'ZedMall Customer',
+            network: String(network || 'MTN').toUpperCase()
+        }, { headers: flwHeaders(), timeout: 25000 });
+
+        res.json({ tx_ref, status: r.data && r.data.status });
+    } catch (error) {
+        res.status(502).json({
+            error: 'PAYMENT_ERROR',
+            message: error.message,
+            response: error.response ? error.response.data : null
+        });
+    }
+});
+
+app.get('/api/pay/status', async (req, res) => {
+    if (!FLW_SECRET_KEY) return res.json({ simulated: true, status: 'successful' });
+
+    try {
+        const r = await axios.get(`${FLW_BASE}/transactions/verify_by_reference`, {
+            params: { tx_ref: req.query.tx_ref },
+            headers: flwHeaders(),
+            timeout: 20000
+        });
+        const d = r.data && r.data.data;
+        res.json({ status: (d && d.status) || 'pending' });
+    } catch (error) {
+        // Verification often 404s until the charge settles - treat as pending
+        res.json({ status: 'pending' });
     }
 });
 

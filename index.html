@@ -689,7 +689,45 @@
         btn.classList.add('selected');
     }
 
-    function submitPayment() {
+    // Attempts a real mobile money charge through the backend (Flutterwave).
+    // Returns true on confirmed payment, 'failed' on decline/timeout, or
+    // null when the backend runs in simulated mode / is unreachable.
+    async function tryRealPayment(order) {
+        if (!CONFIG.API_BASE_URL) return null;
+        const base = CONFIG.API_BASE_URL.replace(/\/$/, '');
+        try {
+            const res = await fetch(base + '/api/pay', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phone: order.phone,
+                    network: order.provider,
+                    amount: Math.round(order.total * 100) / 100,
+                    name: order.name
+                }),
+                signal: AbortSignal.timeout(30000)
+            });
+            const data = await res.json();
+            if (!res.ok || data.simulated || !data.tx_ref) return null;
+
+            // Poll for up to ~2 minutes while the customer approves on their phone
+            for (let i = 0; i < 24; i++) {
+                await new Promise(r => setTimeout(r, 5000));
+                try {
+                    const s = await fetch(base + '/api/pay/status?tx_ref=' + encodeURIComponent(data.tx_ref),
+                        { signal: AbortSignal.timeout(15000) }).then(r => r.json());
+                    if (s.status === 'successful') return true;
+                    if (s.status === 'failed' || s.status === 'cancelled') return 'failed';
+                } catch (e) { /* transient poll error - keep waiting */ }
+            }
+            return 'failed';
+        } catch (e) {
+            console.warn('Real payment unavailable, using simulation:', e);
+            return null;
+        }
+    }
+
+    async function submitPayment() {
         const phone = $('payPhone').value.trim();
         const name = $('payName').value.trim();
         const address = $('payAddress').value.trim();
@@ -702,20 +740,30 @@
         err.classList.add('hidden');
 
         const t = cartTotals();
+        const order = { provider: selectedProvider, phone, name, address, total: t.total };
         $('pay2Total').textContent = fmtK(t.total);
         $('pay2Phone').textContent = '+260 ' + phone;
         $('payStep1').classList.add('hidden');
         $('payStep2').classList.remove('hidden');
 
-        // Simulated payment approval. Replace with a real call to your backend:
-        // POST CONFIG.API_BASE_URL + '/api/pay' { provider, phone, amount, cart }
-        setTimeout(() => {
-            const ref = 'ZM' + String(Math.floor(100000 + Math.random() * 900000));
-            $('orderRef').textContent = '#' + ref;
+        const outcome = await tryRealPayment(order);
+
+        if (outcome === 'failed') {
             $('payStep2').classList.add('hidden');
-            $('payStep3').classList.remove('hidden');
-            sendOrderToWhatsApp(ref, { provider: selectedProvider, phone, name, address, total: t.total });
-        }, 4000);
+            $('payStep1').classList.remove('hidden');
+            err.textContent = 'The payment was not completed. Please check your phone and try again.';
+            err.classList.remove('hidden');
+            return;
+        }
+
+        // Simulated mode keeps a short "check your phone" pause for realism
+        if (outcome !== true) await new Promise(r => setTimeout(r, 4000));
+
+        const ref = 'ZM' + String(Math.floor(100000 + Math.random() * 900000));
+        $('orderRef').textContent = '#' + ref;
+        $('payStep2').classList.add('hidden');
+        $('payStep3').classList.remove('hidden');
+        sendOrderToWhatsApp(ref, order);
     }
 
     function sendOrderToWhatsApp(ref, o) {
