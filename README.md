@@ -33,11 +33,11 @@ zedmall-site/
 
 | הגדרה | ערך נוכחי | משמעות |
 |---|---|---|
-| `API_BASE_URL` | `https://zedmall-backend.vercel.app` | כתובת ה-backend. ריק = מצב דמו |
+| `API_BASE_URL` | `https://zedmall-site.vercel.app` | כתובת ה-backend. ריק = מצב דמו |
 | `USD_TO_ZMW` | 27.5 | שער דולר ← קוואצ'ה |
 | `MARKUP_PERCENT` | 18 | המרווח שלכם על מחיר הספק |
 | `SERVICE_FEE_PERCENT` | 5 | עמלת שירות בקופה (מכסה עמלות MoMo) |
-| `BUDGET_MAX_ZMW` | 25 | תקרת המחיר של אזור "Under K25" |
+| `BUDGET_MAX_ZMW` | 100 | תקרת המחיר של אזור התקציב "Under K100" |
 | `WHATSAPP_ORDERS` | — | מספר וואטסאפ שמקבל כל הזמנה |
 
 אם ה-backend לא זמין, האתר עובר אוטומטית למוצרי דמו — הלקוח לעולם לא רואה עמוד שבור.

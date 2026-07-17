@@ -72,7 +72,7 @@
 
         <!-- Categories -->
         <nav class="max-w-7xl mx-auto px-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar">
-            <button onclick="showUnder25()" class="cat-chip !bg-zam-green !text-white hover:!bg-green-800">💸 Under K25</button>
+            <button onclick="showUnder25()" class="cat-chip !bg-zam-green !text-white hover:!bg-green-800">💸 Under K100</button>
             <button onclick="searchCategory('phone accessories')" class="cat-chip">📱 Phones &amp; Accessories</button>
             <button onclick="searchCategory('women fashion dress')" class="cat-chip">👗 Fashion</button>
             <button onclick="searchCategory('home kitchen gadgets')" class="cat-chip">🏠 Home &amp; Kitchen</button>
@@ -106,10 +106,10 @@
 
     <!-- ======================= MAIN ======================= -->
     <main class="max-w-7xl mx-auto px-4 py-8 w-full flex-1">
-        <!-- Under K25 strip (shown on the home page) -->
+        <!-- Under K100 strip (shown on the home page) -->
         <section id="under25Strip" class="hidden mb-8 bg-gradient-to-r from-zam-green/10 to-emerald-50 rounded-2xl p-4">
             <div class="flex items-center justify-between mb-3">
-                <h3 class="text-lg sm:text-xl font-bold text-zam-green">💸 Everything under K25</h3>
+                <h3 class="text-lg sm:text-xl font-bold text-zam-green">💸 Everything under K100</h3>
                 <button onclick="showUnder25()" class="text-sm font-bold text-zam-green hover:underline shrink-0">See all <i class="fas fa-arrow-right text-xs"></i></button>
             </div>
             <div id="under25Row" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
@@ -305,7 +305,7 @@
         USD_TO_ZMW: 27.5,                 // exchange rate USD → Kwacha
         MARKUP_PERCENT: 18,               // your margin on top of item price
         SERVICE_FEE_PERCENT: 5,           // fee shown at checkout (covers MoMo charges)
-        BUDGET_MAX_ZMW: 25,               // price ceiling for the "Under K25" section
+        BUDGET_MAX_ZMW: 100,              // price ceiling for the "Under K100" budget section
         WHATSAPP_ORDERS: "260971234567"   // orders are also sent to this WhatsApp number
     };
 
@@ -411,7 +411,7 @@
     const normalizeDemo = p => ({ ...p, priceZmw: usdToKwacha(p.priceUsd), oldZmw: p.oldUsd ? usdToKwacha(p.oldUsd) : 0 });
 
     // Budget items need a price-ascending search — a regular search rarely
-    // returns anything under ~$0.77 ( = K25 after conversion and markup).
+    // returns anything cheap enough for the budget ceiling (incl. markup).
     // Cached so the home strip and the Under-K25 view share one API call.
     // The K3 floor drops junk/placeholder listings.
     let under25Cache = null;
@@ -432,7 +432,7 @@
     }
 
     async function loadProducts(query, under25Only) {
-        setStatus(true, under25Only ? 'Finding deals under K25...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
+        setStatus(true, under25Only ? 'Finding deals under K' + CONFIG.BUDGET_MAX_ZMW + '...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
         let list = null;
 
         if (under25Only) {
