@@ -49,6 +49,8 @@ app.get('/api/products', async (req, res) => {
     const params = isDataHub
         ? { q: query, page: '1' }
         : { SearchText: query };
+    // Optional price/sales sorting, e.g. sort=priceAsc for the budget section
+    if (isDataHub && req.query.sort) params.sort = req.query.sort;
 
     try {
         const response = await axios.get(url, {

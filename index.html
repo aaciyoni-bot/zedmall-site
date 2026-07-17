@@ -410,13 +410,36 @@
 
     const normalizeDemo = p => ({ ...p, priceZmw: usdToKwacha(p.priceUsd), oldZmw: p.oldUsd ? usdToKwacha(p.oldUsd) : 0 });
 
+    // Budget items need a price-ascending search — a regular search rarely
+    // returns anything under ~$0.77 ( = K25 after conversion and markup).
+    // Cached so the home strip and the Under-K25 view share one API call.
+    // The K3 floor drops junk/placeholder listings.
+    let under25Cache = null;
+    async function fetchUnder25() {
+        if (under25Cache && under25Cache.length) return under25Cache;
+        if (!CONFIG.API_BASE_URL) return null;
+        try {
+            const url = CONFIG.API_BASE_URL.replace(/\/$/, '') + '/api/products?q='
+                + encodeURIComponent('jewelry accessories stickers gadgets') + '&sort=priceAsc';
+            const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+            const raw = extractApiList(await res.json());
+            under25Cache = raw.map((p, i) => normalizeApiProduct(p, i))
+                .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+        } catch (e) {
+            console.warn('Under-K25 fetch failed:', e);
+        }
+        return under25Cache;
+    }
+
     async function loadProducts(query, under25Only) {
         setStatus(true, under25Only ? 'Finding deals under K25...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
         let list = null;
 
-        if (CONFIG.API_BASE_URL) {
+        if (under25Only) {
+            list = await fetchUnder25();
+        } else if (CONFIG.API_BASE_URL) {
             try {
-                const apiQuery = query || (under25Only ? 'cheap deals under 1 dollar' : 'best sellers');
+                const apiQuery = query || 'best sellers';
                 const url = CONFIG.API_BASE_URL.replace(/\/$/, '') + '/api/products?q=' + encodeURIComponent(apiQuery);
                 const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
                 const data = await res.json();
@@ -434,12 +457,7 @@
                 : DEMO_PRODUCTS;
             if (!demo.length) demo = DEMO_PRODUCTS;
             list = demo.map(normalizeDemo);
-        }
-
-        if (under25Only) {
-            list = list.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-            // If the live API returned nothing that cheap, fall back to demo budget items
-            if (!list.length) list = DEMO_PRODUCTS.map(normalizeDemo).filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+            if (under25Only) list = list.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
         }
 
         products = list;
@@ -483,15 +501,19 @@
         window.scrollTo({ top: (query || under25Only) ? $('heroSection').offsetHeight : 0, behavior: 'smooth' });
     }
 
-    function renderUnder25Strip(show) {
+    async function renderUnder25Strip(show) {
         const strip = $('under25Strip');
         if (!show) { strip.classList.add('hidden'); return; }
 
         let cheap = products.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-        if (!cheap.length) {
-            // Nothing that cheap in the live list — show demo budget items instead,
-            // and register them in `products` so clicks and add-to-cart still work
-            cheap = DEMO_PRODUCTS.map(normalizeDemo).filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+        if (cheap.length < 4) {
+            // The home list rarely has enough budget items — fetch the real
+            // price-sorted budget list from the API (demo items as last resort)
+            const fetched = await fetchUnder25();
+            cheap = (fetched && fetched.length)
+                ? fetched
+                : DEMO_PRODUCTS.map(normalizeDemo).filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+            // Register them in `products` so clicks and add-to-cart still work
             cheap.forEach(p => { if (!products.find(x => x.id === p.id)) products.push(p); });
         }
         if (!cheap.length) { strip.classList.add('hidden'); return; }
