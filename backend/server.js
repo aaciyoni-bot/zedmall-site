@@ -9,19 +9,24 @@ app.use(express.json());
 // Environment variables (Vercel -> Project Settings -> Environment Variables):
 //   RAPIDAPI_KEY   - required. RapidAPI key for the product search API.
 //   RAPIDAPI_HOST  - optional. Defaults to the Aliexpress DataHub host.
-//   FLW_SECRET_KEY - optional. Flutterwave secret key; when absent, /api/pay
+//   PAWAPAY_TOKEN  - optional. pawaPay API token; when absent, /api/pay
 //                    reports simulated mode and the storefront falls back to
 //                    its built-in payment simulation.
+//   PAWAPAY_ENV    - optional. 'sandbox' (default) or 'production'.
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
 const API_HOST = process.env.RAPIDAPI_HOST || 'aliexpress-datahub.p.rapidapi.com';
-const FLW_SECRET_KEY = process.env.FLW_SECRET_KEY;
+const PAWAPAY_TOKEN = process.env.PAWAPAY_TOKEN;
+const PAWAPAY_BASE = process.env.PAWAPAY_ENV === 'production'
+    ? 'https://api.pawapay.io'
+    : 'https://api.sandbox.pawapay.io';
 
 app.get('/api/health', (req, res) => {
     res.json({
         ok: true,
         keyConfigured: Boolean(RAPIDAPI_KEY),
         apiHost: API_HOST,
-        paymentsConfigured: Boolean(FLW_SECRET_KEY)
+        paymentsConfigured: Boolean(PAWAPAY_TOKEN),
+        paymentsEnv: process.env.PAWAPAY_ENV === 'production' ? 'production' : 'sandbox'
     });
 });
 
@@ -102,37 +107,52 @@ app.get('/api/products', async (req, res) => {
 });
 
 /* =====================================================================
-   MOBILE MONEY PAYMENTS (Flutterwave - Zambia)
-   Without FLW_SECRET_KEY these endpoints report simulated mode, and the
+   MOBILE MONEY PAYMENTS (pawaPay - Zambia)
+   Without PAWAPAY_TOKEN these endpoints report simulated mode, and the
    storefront keeps using its built-in simulation.
    ===================================================================== */
 
-const FLW_BASE = 'https://api.flutterwave.com/v3';
-const flwHeaders = () => ({ Authorization: `Bearer ${FLW_SECRET_KEY}` });
+const { randomUUID } = require('crypto');
 
-// Starts a mobile money charge. The customer then gets a PIN prompt on
+const PAWAPAY_PROVIDERS = {
+    mtn: 'MTN_MOMO_ZMB',
+    airtel: 'AIRTEL_OAPI_ZMB',
+    zamtel: 'ZAMTEL_ZMB'
+};
+
+const pawapayHeaders = () => ({
+    Authorization: `Bearer ${PAWAPAY_TOKEN}`,
+    'Content-Type': 'application/json'
+});
+
+// Starts a mobile money deposit. The customer then gets a PIN prompt on
 // their phone; the storefront polls /api/pay/status until it resolves.
 app.post('/api/pay', async (req, res) => {
-    if (!FLW_SECRET_KEY) return res.json({ simulated: true });
+    if (!PAWAPAY_TOKEN) return res.json({ simulated: true });
 
-    const { phone, network, amount, name } = req.body || {};
-    if (!/^(9|7)\d{8}$/.test(String(phone)) || !(amount > 0)) {
+    const { phone, network, amount } = req.body || {};
+    const provider = PAWAPAY_PROVIDERS[String(network || '').toLowerCase()];
+    if (!/^(9|7)\d{8}$/.test(String(phone)) || !(amount > 0) || !provider) {
         return res.status(400).json({ error: 'INVALID_INPUT' });
     }
 
-    const tx_ref = 'ZM-' + Date.now() + '-' + Math.floor(Math.random() * 1e6);
+    const depositId = randomUUID();
     try {
-        const r = await axios.post(`${FLW_BASE}/charges?type=mobile_money_zambia`, {
-            tx_ref,
-            amount: Math.round(amount * 100) / 100,
+        const r = await axios.post(`${PAWAPAY_BASE}/v2/deposits`, {
+            depositId,
+            amount: String(Math.round(amount * 100) / 100),
             currency: 'ZMW',
-            email: process.env.ORDERS_EMAIL || 'orders@zedmall.example',
-            phone_number: '260' + phone,
-            fullname: name || 'ZedMall Customer',
-            network: String(network || 'MTN').toUpperCase()
-        }, { headers: flwHeaders(), timeout: 25000 });
+            payer: {
+                type: 'MMO',
+                accountDetails: {
+                    phoneNumber: '260' + phone,
+                    provider
+                }
+            },
+            customerMessage: 'ZedMall order'
+        }, { headers: pawapayHeaders(), timeout: 25000 });
 
-        res.json({ tx_ref, status: r.data && r.data.status });
+        res.json({ tx_ref: depositId, status: r.data && r.data.status });
     } catch (error) {
         res.status(502).json({
             error: 'PAYMENT_ERROR',
@@ -142,19 +162,24 @@ app.post('/api/pay', async (req, res) => {
     }
 });
 
+// Maps pawaPay deposit statuses onto the simple states the storefront
+// understands: successful / failed / pending.
 app.get('/api/pay/status', async (req, res) => {
-    if (!FLW_SECRET_KEY) return res.json({ simulated: true, status: 'successful' });
+    if (!PAWAPAY_TOKEN) return res.json({ simulated: true, status: 'successful' });
 
     try {
-        const r = await axios.get(`${FLW_BASE}/transactions/verify_by_reference`, {
-            params: { tx_ref: req.query.tx_ref },
-            headers: flwHeaders(),
+        const r = await axios.get(`${PAWAPAY_BASE}/v2/deposits/${encodeURIComponent(req.query.tx_ref || '')}`, {
+            headers: pawapayHeaders(),
             timeout: 20000
         });
-        const d = r.data && r.data.data;
-        res.json({ status: (d && d.status) || 'pending' });
+        const d = r.data && (r.data.data || (Array.isArray(r.data) ? r.data[0] : r.data));
+        const s = String((d && d.status) || 'pending').toUpperCase();
+        const status = s === 'COMPLETED' ? 'successful'
+            : (s === 'FAILED' || s === 'REJECTED' || s === 'CANCELLED') ? 'failed'
+            : 'pending';
+        res.json({ status });
     } catch (error) {
-        // Verification often 404s until the charge settles - treat as pending
+        // Status often 404s for a moment right after initiation - treat as pending
         res.json({ status: 'pending' });
     }
 });
