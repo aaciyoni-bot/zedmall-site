@@ -64,4 +64,10 @@ zedmall-site/
 
 ## השלב הבא — תשלום Mobile Money אמיתי
 
-כרגע אישור התשלום בקופה הוא סימולציה + שליחת ההזמנה לוואטסאפ. לגבייה אמיתית מחברים ספק סליקה (Flutterwave / Lenco / MTN MoMo API) **בצד השרת**. בפונקציה `submitPayment()` ב-`index.html` מסומן בדיוק איפה מחליפים את הסימולציה בקריאה ל-backend.
+התשתית כבר בנויה מול **pawaPay** (תומך MTN, Airtel ו-Zamtel בזמביה ומקבל חברות בינלאומיות):
+
+1. יוצרים חשבון ב-pawapay.io ומפיקים API Token (קודם ב-Sandbox, אחר-כך ב-Production)
+2. ב-Vercel מוסיפים Environment Variables: `PAWAPAY_TOKEN` = הטוקן, ובייצור גם `PAWAPAY_ENV` = `production`
+3. Redeploy — והקופה עוברת אוטומטית מסימולציה לחיוב Mobile Money אמיתי (הלקוח מאשר עם PIN בטלפון)
+
+בלי טוקן, הקופה ממשיכה לרוץ בסימולציה וההזמנות מגיעות לוואטסאפ — האתר תמיד עובד.
