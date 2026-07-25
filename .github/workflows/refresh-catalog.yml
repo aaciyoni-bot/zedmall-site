@@ -1,0 +1,36 @@
+name: Refresh product catalog
+
+# Rebuilds catalog.json from the live backend twice a day so the storefront
+# serves home / categories / budget items with zero per-visitor API calls.
+on:
+  schedule:
+    - cron: '0 6,18 * * *'   # 06:00 and 18:00 UTC
+  workflow_dispatch:          # allow manual "Run workflow" from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build catalog.json
+        run: node scripts/build-catalog.js
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- catalog.json; then
+            git add catalog.json
+            git commit -m "chore: refresh product catalog [skip ci]"
+            git push
+          else
+            echo "Catalog unchanged — nothing to commit."
+          fi
