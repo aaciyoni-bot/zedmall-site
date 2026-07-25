@@ -42,16 +42,29 @@ function mapDataHubResponse(data) {
     const products = list.map(entry => {
         const it = entry.item || {};
         const sku = (it.sku && it.sku.def) || {};
+        const regular = parseFloat(sku.price) || 0;            // normal buyer price
+        const promo = parseFloat(sku.promotionPrice) || 0;     // may be a "new user" lure
+
+        // As a reseller we don't get one-time new-user lures, so base our
+        // price on the real cost. Trust a promo only when it's a genuine
+        // sale (>=50% of the regular price); otherwise use the regular price.
+        let cost = regular || promo;
+        if (regular && promo && promo < regular) {
+            cost = promo >= regular * 0.5 ? promo : regular;
+        } else if (!regular && promo) {
+            cost = promo;
+        }
+
         return {
             id: String(it.itemId || ''),
             title: it.title || '',
-            price: sku.promotionPrice || sku.price || 0,
-            original_price: sku.price || 0,
+            price: cost,
+            original_price: cost < regular ? regular : 0,       // strikethrough only for genuine sales
             image: it.image || '',
             orders: parseInt(it.sales) || 0,
             rating: parseFloat(it.averageStarRate) || 0
         };
-    }).filter(p => p.id && p.title);
+    }).filter(p => p.id && p.title && p.price > 0);
     return { products };
 }
 
