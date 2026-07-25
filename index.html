@@ -512,6 +512,12 @@
         USD_TO_ZMW: 27.5,                 // exchange rate USD → Kwacha
         MARKUP_PERCENT: 18,               // your margin on top of item price
         SERVICE_FEE_PERCENT: 5,           // fee shown at checkout (covers MoMo charges)
+        // Cheap AliExpress items (often $0.30–$0.99) carry shipping that can
+        // exceed the item itself, so selling at the raw converted price loses
+        // money. Every item gets this flat buffer added, and no item is ever
+        // shown below the floor. Tune both to protect your margin.
+        SHIPPING_BUFFER_ZMW: 25,          // flat shipping/handling added to every item
+        MIN_PRICE_ZMW: 35,                // minimum price any item can be shown at
         BUDGET_MAX_ZMW: 100,              // price ceiling for the "Under K100" budget section
         WHATSAPP_ORDERS: "260971234567",  // orders are also sent to this WhatsApp number
         WHATSAPP_SUPPORT: "260971234567"  // customer support WhatsApp (floating button + support section)
@@ -592,6 +598,9 @@
        ================================================================ */
     const $ = id => document.getElementById(id);
     const usdToKwacha = usd => usd * CONFIG.USD_TO_ZMW * (1 + CONFIG.MARKUP_PERCENT / 100);
+    // Final customer price: add the shipping/handling buffer, enforce the
+    // floor, and round to a whole kwacha for clean, realistic prices.
+    const retailZmw = zmw => Math.max(CONFIG.MIN_PRICE_ZMW, Math.round((zmw || 0) + CONFIG.SHIPPING_BUFFER_ZMW));
     const fmtK = n => 'K' + n.toLocaleString('en-ZM', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
     function showToast(msg) {
@@ -628,8 +637,8 @@
         return {
             id: String(p.product_id || p.productId || p.item_id || p.id || 'api' + i),
             title,
-            priceZmw: priceZmwDirect || usdToKwacha(priceUsd || 5),
-            oldZmw: oldUsd ? usdToKwacha(oldUsd) : 0,
+            priceZmw: retailZmw(priceZmwDirect || usdToKwacha(priceUsd || 5)),
+            oldZmw: oldUsd ? retailZmw(usdToKwacha(oldUsd)) : 0,
             rating: parseFloat(p.evaluate_rate || p.rating || p.score) || (4 + Math.round(((i * 37) % 10)) / 10 * 0.9),
             orders: parseInt(p.orders || p.sale_count || p.volume || p.lastest_volume) || 0,
             img: String(img).startsWith('//') ? 'https:' + img : img
@@ -648,7 +657,7 @@
         return [];
     }
 
-    const normalizeDemo = p => ({ ...p, priceZmw: usdToKwacha(p.priceUsd), oldZmw: p.oldUsd ? usdToKwacha(p.oldUsd) : 0, img: phData(p.title) });
+    const normalizeDemo = p => ({ ...p, priceZmw: retailZmw(usdToKwacha(p.priceUsd)), oldZmw: p.oldUsd ? retailZmw(usdToKwacha(p.oldUsd)) : 0, img: phData(p.title) });
 
     /* ================================================================
        STATIC CATALOG — a GitHub Action refreshes catalog.json a couple of
