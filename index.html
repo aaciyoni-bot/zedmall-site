@@ -13,6 +13,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="ZedMall">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -212,7 +214,7 @@
                     <div class="text-4xl">🎉</div>
                     <div class="mt-3 text-xs font-bold text-zed-500">STEP 4</div>
                     <h4 class="font-bold mt-1">Delivered to you</h4>
-                    <p class="text-sm text-slate-500 mt-1">Your order arrives in 12–25 days. We keep you updated by SMS and WhatsApp.</p>
+                    <p class="text-sm text-slate-500 mt-1">Your order arrives in 12–25 days. We keep you updated by email.</p>
                 </div>
             </div>
         </div>
@@ -238,7 +240,7 @@
                 </div>
                 <div class="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm">
                     <div class="text-3xl">💬</div>
-                    <div><h4 class="font-bold">Real human support</h4><p class="text-sm text-slate-500">Questions? Our Zambian team answers on WhatsApp, 7 days a week.</p></div>
+                    <div><h4 class="font-bold">Real human support</h4><p class="text-sm text-slate-500">Questions? Our Zambian team answers by email, 7 days a week.</p></div>
                 </div>
             </div>
         </div>
@@ -255,7 +257,7 @@
                 </details>
                 <details class="faq-item">
                     <summary>How long does delivery take?</summary>
-                    <p>Most orders arrive within 12–25 days, depending on the product and your location in Zambia. We send you updates by SMS and WhatsApp along the way.</p>
+                    <p>Most orders arrive within 12–25 days, depending on the product and your location in Zambia. We email you tracking updates along the way.</p>
                 </details>
                 <details class="faq-item">
                     <summary>Is the price I see the final price?</summary>
@@ -267,11 +269,11 @@
                 </details>
                 <details class="faq-item">
                     <summary>What if my order never arrives or is damaged?</summary>
-                    <p>You're covered by our money-back guarantee: if your order doesn't arrive, or arrives broken, we refund you in full to your mobile money wallet. Just message us on WhatsApp with your order number.</p>
+                    <p>You're covered by our money-back guarantee: if your order doesn't arrive, or arrives broken, we refund you in full to your mobile money wallet. Just email us at office@orizisgroup.com with your order number.</p>
                 </details>
                 <details class="faq-item">
                     <summary>How do I talk to a real person?</summary>
-                    <p>Tap the green WhatsApp button at the bottom of your screen — our support team replies 7 days a week, 08:00–20:00. Keep your order number handy so we can help faster.</p>
+                    <p>Email us at office@orizisgroup.com — our support team replies 7 days a week, 08:00–20:00. Keep your order number handy so we can help faster.</p>
                 </details>
             </div>
         </div>
@@ -281,10 +283,10 @@
     <section id="support" class="bg-zam-green text-white">
         <div class="max-w-7xl mx-auto px-4 py-10 text-center">
             <h3 class="text-2xl font-extrabold">Need help? We're one message away 💬</h3>
-            <p class="mt-2 text-emerald-100">Orders, tracking, refunds or just a question — chat with our team on WhatsApp, 7 days a week, 08:00–20:00.</p>
-            <a id="waSupportBtn" href="#" target="_blank" rel="noopener"
-               class="inline-flex items-center gap-2 mt-5 bg-white text-zam-green font-extrabold px-8 py-3.5 rounded-full hover:bg-emerald-50 transition">
-                <i class="fab fa-whatsapp text-2xl"></i> Chat on WhatsApp
+            <p class="mt-2 text-emerald-100">Orders, tracking, refunds or just a question — email our team at office@orizisgroup.com, 7 days a week, 08:00–20:00.</p>
+            <a href="mailto:office@orizisgroup.com?subject=Support%20request" rel="noopener"
+               class="inline-flex items-center gap-2 mt-5 bg-white text-slate-900 font-extrabold px-8 py-3.5 rounded-full hover:bg-slate-100 transition">
+                <i class="fas fa-envelope text-xl"></i> Email our support team
             </a>
         </div>
     </section>
@@ -538,8 +540,17 @@
         SHIPPING_BUFFER_ZMW: 25,          // flat shipping/handling added to every item
         MIN_PRICE_ZMW: 35,                // minimum price any item can be shown at
         BUDGET_MAX_ZMW: 100,              // price ceiling for the "Under K100" budget section
-        WHATSAPP_ORDERS: "260971234567",  // orders are also sent to this WhatsApp number
-        WHATSAPP_SUPPORT: "260971234567"  // customer support WhatsApp (floating button + support section)
+        STORE_ID: "zedmall",                // order records + admin dashboard filter
+        STORE_NAME: "ZedMall",
+        ORDER_EMAIL: "office@orizisgroup.com",   // every order is emailed here (via FormSubmit)
+        FIREBASE: {                        // shared "Zed Zambia" project — orders dashboard
+            apiKey: "AIzaSyAqkEfNwKZzofId0XCGcs17sVFh5NYryrM",
+            authDomain: "zedmall-4301c.firebaseapp.com",
+            projectId: "zedmall-4301c",
+            storageBucket: "zedmall-4301c.firebasestorage.app",
+            messagingSenderId: "24400915808",
+            appId: "1:24400915808:web:cd5675e846250c4e808205"
+        }
     };
 
     /* ================================================================
@@ -1072,25 +1083,48 @@
         $('orderRef').textContent = '#' + ref;
         $('payStep2').classList.add('hidden');
         $('payStep3').classList.remove('hidden');
-        sendOrderToWhatsApp(ref, order);
+        saveOrder(ref, order);
     }
 
-    function sendOrderToWhatsApp(ref, o) {
-        // Opens WhatsApp with the order summary so you receive every order
-        // even before payment APIs are connected.
-        if (!CONFIG.WHATSAPP_ORDERS) return;
-        const lines = [
-            `🛒 *New ZedMall Order ${'#' + ref}*`,
-            `👤 ${o.name}`,
-            `📱 +260${o.phone} (${o.provider.toUpperCase()})`,
-            `📍 ${o.address}`,
-            ``,
-            ...cart.map(i => `• ${i.qty}x ${i.title} — ${fmtK(itemZmw(i) * i.qty)}`),
-            ``,
-            `💰 *Total: ${fmtK(o.total)}*`
-        ];
-        const url = 'https://wa.me/' + CONFIG.WHATSAPP_ORDERS + '?text=' + encodeURIComponent(lines.join('\n'));
-        window.open(url, '_blank');
+    function saveOrder(ref, o) {
+        // Capture every order two ways so nothing is ever lost:
+        //  1) Firestore (shared "Zed Zambia" project) -> admin dashboard
+        //  2) email to ORDER_EMAIL via FormSubmit, with a direct AliExpress link per item
+        const items = cart.map(i => ({
+            id: String(i.id), title: i.title, qty: i.qty,
+            priceZmw: Math.round(itemZmw(i) * i.qty * 100) / 100,
+            aliLink: aliLink(i.id) || ''
+        }));
+        const order = {
+            store: CONFIG.STORE_ID, storeName: CONFIG.STORE_NAME, ref,
+            name: o.name, phone: o.phone ? '260' + o.phone : '', provider: o.provider || o.method || '',
+            address: o.address, items, total: Math.round(o.total * 100) / 100,
+            status: 'new'
+        };
+        // 1) Firestore
+        try {
+            if (CONFIG.FIREBASE && CONFIG.FIREBASE.apiKey && window.firebase) {
+                if (!firebase.apps.length) firebase.initializeApp(CONFIG.FIREBASE);
+                firebase.firestore().collection('orders').add(
+                    Object.assign({}, order, { createdAt: firebase.firestore.FieldValue.serverTimestamp() })
+                ).catch(e => console.warn('Order save failed:', e));
+            }
+        } catch (e) { console.warn('Firestore unavailable:', e); }
+        // 2) Email via FormSubmit (no backend credentials needed)
+        if (CONFIG.ORDER_EMAIL) {
+            const itemText = items.map(it => `${it.qty}x ${it.title} — ${fmtK(it.priceZmw)}${it.aliLink ? '  ' + it.aliLink : ''}`).join('\n');
+            fetch('https://formsubmit.co/ajax/' + encodeURIComponent(CONFIG.ORDER_EMAIL), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    _subject: `New ${CONFIG.STORE_NAME} order ${ref}`,
+                    _template: 'table',
+                    Store: CONFIG.STORE_NAME, Order: ref, Customer: o.name,
+                    Phone: o.phone ? '260' + o.phone : '', Network: (o.provider || o.method || '').toUpperCase(),
+                    Address: o.address, Total: fmtK(o.total), Items: itemText
+                })
+            }).catch(e => console.warn('Email failed:', e));
+        }
     }
 
     function finishOrder() {
@@ -1161,12 +1195,6 @@
     /* ================================================================
        INIT
        ================================================================ */
-    (function initSupportLinks() {
-        const msg = encodeURIComponent('Hello ZedMall! 👋 I need some help.');
-        const wa = 'https://wa.me/' + CONFIG.WHATSAPP_SUPPORT + '?text=' + msg;
-        $('waFloat').href = wa;
-        $('waSupportBtn').href = wa;
-    })();
     renderCart();
     loadProducts('');
     </script>
