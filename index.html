@@ -6,7 +6,7 @@
     <title>ZedMall - Shop Global, Pay with Mobile Money</title>
     <meta name="description" content="ZedMall - Zambia's gateway to global shopping. Browse millions of products and pay easily with MTN Mobile Money, Airtel Money or Zamtel Kwacha.">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f97316">
+    <meta name="theme-color" content="#6d28d9">
     <link rel="icon" type="image/png" href="icon-192.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -15,7 +15,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -23,14 +23,14 @@
                 extend: {
                     colors: {
                         zed: {
-                            50: '#fff7ed', 100: '#ffedd5', 500: '#f97316',
-                            600: '#ea580c', 700: '#c2410c'
+                            50: '#f5f3ff', 100: '#ede9fe', 500: '#7c3aed',
+                            600: '#6d28d9', 700: '#5b21b6'
                         },
                         zam: {
-                            green: '#198a00', red: '#de2010', black: '#000000', orange: '#ef7d00'
+                            green: '#6d28d9', red: '#e11d48', black: '#0b0710', orange: '#a855f7'
                         }
                     },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
+                    fontFamily: { sans: ['Sora', 'sans-serif'] }
                 }
             }
         }
@@ -40,10 +40,10 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .spinner { border: 3px solid #ffedd5; border-top-color: #f97316; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; }
+        .spinner { border: 3px solid #ede9fe; border-top-color: #7c3aed; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .pulse-ring { animation: pulseRing 1.5s ease-out infinite; }
-        @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(25,138,0,0.4); } 100% { box-shadow: 0 0 0 16px rgba(25,138,0,0); } }
+        @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); } 100% { box-shadow: 0 0 0 16px rgba(124,58,237,0); } }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
@@ -81,7 +81,7 @@
 
         <!-- Categories (horizontal — mobile/tablet only; desktop uses the left sidebar) -->
         <nav class="lg:hidden max-w-7xl mx-auto px-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar">
-            <button onclick="showUnder25()" class="cat-chip !bg-zam-green !text-white hover:!bg-green-800">💸 Under K100</button>
+            <button onclick="showUnder25()" class="cat-chip !bg-zam-green !text-white hover:!bg-zed-700">💸 Under K100</button>
             <button onclick="searchCategory('phone accessories')" class="cat-chip">📱 Phones &amp; Accessories</button>
             <button onclick="searchCategory('women fashion dress')" class="cat-chip">👗 Fashion</button>
             <button onclick="searchCategory('home kitchen gadgets')" class="cat-chip">🏠 Home &amp; Kitchen</button>
@@ -95,7 +95,7 @@
 
     <!-- ======================= HERO (slim band — store-first) ======================= -->
     <section id="heroSection" class="relative overflow-hidden bg-zam-green text-white">
-        <div class="absolute inset-0 bg-gradient-to-r from-zam-green via-emerald-700 to-zam-green"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-zam-green via-zed-600 to-zam-green"></div>
         <div class="relative max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
             <p class="font-extrabold text-base sm:text-lg leading-tight shrink-0">
                 The whole world's marketplace, in <span class="text-zam-orange">Zambia</span> 🇿🇲
@@ -150,6 +150,14 @@
         </div>
 
         <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3"></div>
+
+        <!-- Infinite scroll: sentinel auto-loads the next page; button is a manual fallback -->
+        <div id="loadMoreWrap" class="hidden text-center py-8">
+            <button id="loadMoreBtn" onclick="loadMoreProducts()" class="bg-zed-50 text-zed-700 hover:bg-zed-500 hover:text-white font-bold px-8 py-3.5 rounded-full transition shadow-sm">
+                <i class="fas fa-plus mr-1"></i> Show more products
+            </button>
+        </div>
+        <div id="loadMoreSentinel" class="h-4"></div>
         </main>
     </div>
 
@@ -745,36 +753,52 @@
         return under25Cache;
     }
 
+    // --- pagination state (added: "Show more" + infinite scroll for search & deals) ---
+    let currentQuery = '', currentUnder25 = false, currentPage = 1, hasMore = false, loadingMore = false, liveMode = false;
+    const BUDGET_QUERY = 'jewelry accessories stickers gadgets';
+    async function fetchBudgetPage(page) {
+        const raw = await liveFetch('q=' + encodeURIComponent(BUDGET_QUERY) + '&sort=priceAsc&page=' + (page || 1));
+        return raw || [];
+    }
+
     async function loadProducts(query, under25Only) {
+        currentQuery = query || '';
+        currentUnder25 = !!under25Only;
+        currentPage = 1; hasMore = false; loadingMore = false; liveMode = false;
+        hideLoadMore();
         setStatus(true, under25Only ? 'Finding deals under K' + CONFIG.BUDGET_MAX_ZMW + '...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
         let list = null;
         const cat = await loadCatalog();
 
         if (under25Only) {
-            list = await fetchUnder25();
+            // Live price-ascending pages so "Show more" keeps loading cheaper items.
+            if (CONFIG.API_BASE_URL) {
+                const raw = await fetchBudgetPage(1);
+                if (raw && raw.length) {
+                    list = raw.map((p, i) => normalizeApiProduct(p, i))
+                        .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+                    liveMode = true; hasMore = raw.length >= 15;
+                }
+            }
+            if (!list || !list.length) list = await fetchUnder25();          // catalog/demo fallback (finite)
         } else if (!query && cat && cat.home && cat.home.length) {
-            list = cat.home.map(normalizeApiProduct);                       // home from catalog (0 API calls)
+            list = cat.home.map(normalizeApiProduct);                        // home from catalog (0 API calls, curated set)
         } else if (query && cat && cat.categories && cat.categories[query] && cat.categories[query].length) {
-            list = cat.categories[query].map(normalizeApiProduct);          // category from catalog (0 API calls)
+            list = cat.categories[query].map(normalizeApiProduct);           // category from catalog (0 API calls, curated set)
         } else if (CONFIG.API_BASE_URL) {
             try {
-                const raw = await liveFetch('q=' + encodeURIComponent(query || 'best sellers'));
-                if (raw.length) list = raw.slice(0, 40).map(normalizeApiProduct);
+                const raw = await liveFetch('q=' + encodeURIComponent(query || 'best sellers') + '&page=1');
+                if (raw.length) { list = raw.map(normalizeApiProduct); liveMode = true; hasMore = raw.length >= 15; }
             } catch (e) {
                 console.warn('API unavailable, falling back to demo products:', e);
             }
         }
 
         // A transient upstream error should not empty the shop - reuse the last good catalogue.
-
-        if ((!list || !list.length) && !budgetOnly) {
-
+        if (!list || !list.length) {
             const cached = readCatalogCache(currentQuery);
-
-            if (cached && cached.length) { list = cached; apiMode = false; hasMore = false; }
-
+            if (cached && cached.length) { list = cached; liveMode = false; hasMore = false; }
         }
-
 
         if (!list || !list.length) {
             // Demo fallback: branded placeholders, never random photos
@@ -791,18 +815,14 @@
         products = list;
         renderProducts(query, under25Only);
         setStatus(false);
+        updateLoadMore();
     }
 
-    function renderProducts(query, under25Only) {
-        $('resultsTitle').textContent = under25Only ? `💸 Everything under K${CONFIG.BUDGET_MAX_ZMW}`
-            : (query ? `Results for "${query}"` : '🔥 Trending in Zambia');
-        $('resultsCount').textContent = products.length + ' products';
-        renderUnder25Strip(!query && !under25Only);
-        $('productGrid').innerHTML = products.map(p => {
-            const price = p.priceZmw;
-            const oldPrice = p.oldZmw || 0;
-            const discount = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
-            return `
+    function productCardHtml(p) {
+        const price = p.priceZmw;
+        const oldPrice = p.oldZmw || 0;
+        const discount = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
+        return `
             <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition cursor-pointer group fade-in" onclick="openProduct('${p.id}')">
                 <div class="relative">
                     <img src="${p.img}" alt="" loading="lazy" class="w-full aspect-square object-cover bg-slate-100 group-hover:scale-105 transition duration-300"
@@ -825,9 +845,57 @@
                     </button>
                 </div>
             </div>`;
-        }).join('');
+    }
+
+    function renderProducts(query, under25Only) {
+        $('resultsTitle').textContent = under25Only ? `💸 Everything under K${CONFIG.BUDGET_MAX_ZMW}`
+            : (query ? `Results for "${query}"` : '🔥 Trending in Zambia');
+        $('resultsCount').textContent = products.length + ' products';
+        renderUnder25Strip(!query && !under25Only);
+        $('productGrid').innerHTML = products.map(productCardHtml).join('');
         window.scrollTo({ top: (query || under25Only) ? $('heroSection').offsetHeight : 0, behavior: 'smooth' });
     }
+
+    // Appends the next page without rebuilding the grid (keeps scroll position).
+    function appendProducts(items) {
+        $('resultsCount').textContent = products.length + ' products';
+        $('productGrid').insertAdjacentHTML('beforeend', items.map(productCardHtml).join(''));
+    }
+
+    async function loadMoreProducts() {
+        if (!liveMode || loadingMore || !hasMore) return;
+        loadingMore = true;
+        const btn = $('loadMoreBtn');
+        if (btn) { btn.classList.add('opacity-60'); btn.textContent = 'Loading more…'; }
+        let mapped = [], rawLen = 0;
+        try {
+            if (currentUnder25) {
+                const raw = await fetchBudgetPage(currentPage + 1);
+                rawLen = raw.length;
+                mapped = raw.map((p, i) => normalizeApiProduct(p, i))
+                    .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
+            } else {
+                const raw = await liveFetch('q=' + encodeURIComponent(currentQuery || 'best sellers') + '&page=' + (currentPage + 1));
+                rawLen = raw.length;
+                mapped = raw.map(normalizeApiProduct);
+            }
+        } catch (e) { console.warn('Load more failed:', e); rawLen = 0; }
+        const fresh = mapped.filter(p => !products.find(x => x.id === p.id));
+        if (fresh.length) {
+            currentPage += 1;
+            products = products.concat(fresh);
+            appendProducts(fresh);
+            hasMore = rawLen >= 15;
+        } else {
+            hasMore = false;
+        }
+        loadingMore = false;
+        if (btn) { btn.classList.remove('opacity-60'); btn.innerHTML = '<i class="fas fa-plus mr-1"></i> Show more products'; }
+        updateLoadMore();
+    }
+
+    function updateLoadMore() { const w = $('loadMoreWrap'); if (w) w.classList.toggle('hidden', !(liveMode && hasMore)); }
+    function hideLoadMore() { const w = $('loadMoreWrap'); if (w) w.classList.add('hidden'); }
 
     async function renderUnder25Strip(show) {
         const strip = $('under25Strip');
@@ -1204,6 +1272,12 @@
        INIT
        ================================================================ */
     renderCart();
+    // Infinite scroll: auto-load the next page when the sentinel nears the viewport
+    if ('IntersectionObserver' in window && $('loadMoreSentinel')) {
+        new IntersectionObserver((entries) => {
+            if (entries.some(e => e.isIntersecting)) loadMoreProducts();
+        }, { rootMargin: '600px' }).observe($('loadMoreSentinel'));
+    }
     loadProducts('');
     </script>
 <!--reljob-legal-injected-->

@@ -77,12 +77,13 @@ const CACHE_TTL_MS = 15 * 60 * 1000;
 app.get('/api/products', async (req, res) => {
     const query = req.query.q || 'best sellers';
     const sort = req.query.sort || '';
+    const page = String(parseInt(req.query.page) || 1);
 
     if (!RAPIDAPI_KEY) {
         return res.status(500).json({ error: 'RAPIDAPI_KEY environment variable is not set' });
     }
 
-    const cacheKey = query + '|' + sort;
+    const cacheKey = query + '|' + sort + '|' + page;
     const hit = searchCache.get(cacheKey);
     if (hit && Date.now() - hit.at < CACHE_TTL_MS) {
         return res.json(hit.body);
@@ -93,8 +94,8 @@ app.get('/api/products', async (req, res) => {
         ? `https://${API_HOST}/item_search_2`
         : `https://${API_HOST}/search`;
     const params = isDataHub
-        ? { q: query, page: '1' }
-        : { SearchText: query };
+        ? { q: query, page }
+        : { SearchText: query, page };
     if (isDataHub && sort) params.sort = sort;
 
     try {
