@@ -547,6 +547,25 @@
   .bk-status.active{background:var(--green-soft);color:var(--green)}
   .bk-status.done{background:#f0eef4;color:var(--ink-2)}
 
+  /* ---------- Guided tour ---------- */
+  .tour-hole{
+    position:fixed;z-index:300;border-radius:16px;pointer-events:none;
+    box-shadow:0 0 0 9999px rgba(28,18,32,.62), 0 0 0 3px rgba(230,106,160,.95);
+    transition:all .35s cubic-bezier(.2,.9,.3,1);
+  }
+  .tour-tip{
+    position:fixed;z-index:301;background:var(--surface);border-radius:18px;
+    box-shadow:var(--shadow-lg);padding:18px 20px;width:min(360px,calc(100vw - 32px));
+    animation:pop .3s cubic-bezier(.2,1.2,.4,1);
+  }
+  .tour-tip .t-count{font-size:.72rem;font-weight:800;color:var(--brand-dark);background:var(--brand-soft);border-radius:99px;padding:2px 10px;display:inline-block;margin-bottom:8px}
+  .tour-tip h3{font-size:1.05rem;font-weight:800;margin-bottom:4px}
+  .tour-tip p{font-size:.88rem;color:var(--ink-2)}
+  .tour-tip .t-btns{display:flex;gap:8px;margin-top:14px;align-items:center}
+  .tour-next{background:linear-gradient(135deg,#c94f7c,#a83a64);color:#fff;font-weight:700;padding:9px 20px;border-radius:10px;font-size:.9rem}
+  .tour-back{background:var(--bg);border:1.5px solid var(--line);color:var(--ink-2);font-weight:700;padding:8px 14px;border-radius:10px;font-size:.9rem}
+  .t-skip{margin-inline-start:auto;font-size:.8rem;color:var(--ink-3);text-decoration:underline}
+
   /* ---------- Toast ---------- */
   .toast{
     position:fixed;bottom:24px;right:50%;transform:translateX(50%) translateY(20px);
@@ -580,6 +599,7 @@
       <span>byoutoyou<small>ביוטי עד הבית</small></span>
     </a>
     <div class="header-actions">
+      <button class="btn-ghost" onclick="startTour()">🎓 סיור</button>
       <button class="btn-ghost hide-m" onclick="scrollToId('how')">איך זה עובד</button>
       <button class="btn-ghost hide-m" onclick="scrollToId('gifts')">🎁 מתנות</button>
       <a class="btn-ghost hide-m" href="join.html">הצטרפי כמטפלת</a>
@@ -2467,6 +2487,90 @@ function openBookings(){
   openModal('bookingsOverlay');
 }
 
+/* ================= GUIDED TOUR (הדרכה כמו במשחק) ================= */
+const TOUR_KEY = 'byoutoyou_tour_done';
+const TOUR_STEPS = [
+  {el:null, title:'ברוכה הבאה ל-byoutoyou! 💜', text:'רוצה סיור קצר בכל מה שהפלטפורמה יודעת לעשות? כמו הדרכה במשחק — צעד אחרי צעד, פחות מ-2 דקות.', cta:'התחילי סיור 🎓'},
+  {el:'.search-card', title:'מתחילים בכתובת 📍', text:'מקלידים לאן להגיע — ורואים מיד את כל המטפלות הזמינות באזור, עם זמן הגעה משוער לכל אחת.'},
+  {el:'#cats', title:'5 עולמות של יופי במקום אחד', text:'מניקור, שיער, איפור, גבות וריסים וטיפולי פנים — 25 מטפלות מוסמכות ומאומתות, הכול עד הבית.'},
+  {el:'#grid .card', title:'כרטיס מטפלת חכם 🏆', text:'דירוג אמיתי, תג "מאומתת", זמינות חיה ותגיות חכמות כמו "המובילה באזור". לחיצה על הלב ❤️ שומרת במועדפות.'},
+  {el:'.filters', title:'מסננים בקליק', text:'זמינות עכשיו, דירוג 4.8+, מאומתות או תקציב — ומיון לפי מחיר, דירוג או זמן הגעה. מוצאים בדיוק את המתאימה.'},
+  {el:'#events .grid', title:'אירועים וחבילות 🎉', text:'חבילת כלה, בת מצווה, איפור כל המשפחה וערב פינוק קבוצתי — משאירים פרטים ומנהלת אירועים חוזרת עם הצעה תוך שעתיים.'},
+  {el:'#hospital .hosp-banner', title:'byoutoyou care 🏥💜', text:'הפיצ\'ר שאנחנו הכי גאות בו: פינוק ליולדות ולמאושפזות עד מיטת בית החולים — כי לכל אישה מגיע להרגיש יפה, בכל מצב.'},
+  {el:'#gifts .grid', title:'שוברי מתנה 🎁', text:'שולחים שובר עם הקדשה אישית בדקה — ללידה, ליום הולדת או לכל העובדות בארגון. השובר נפדה בקופה כמו קופון, כולל יתרה.'},
+  {el:'#bookingsBtn', title:'הכול נשמר אצלך 🗓️', text:'אחרי הזמנה: מעקב חי על המפה כמו ב-Wolt, צ\'אט עם המטפלת, קבלה דיגיטלית ונקודות 💎 — 5% חזרה על כל טיפול.'},
+  {el:null, title:'ויש עוד! 🚀', text:'דשבורד אישי למטפלות (קוד דמו 1234), דשבורד ניהול (קוד 2026) והמצגת המלאה — הכול בקישורים למטה בעמוד. עכשיו תורך: הזמיני טיפול ותראי את הקסם ✨', cta:'סיימי סיור'},
+];
+let tourIdx = -1, tourHole = null, tourTip = null;
+
+function startTour(){
+  tourIdx = 0;
+  document.querySelectorAll('.overlay.open').forEach(o => closeModal(o.id));
+  drawTour();
+}
+function endTour(){
+  tourIdx = -1;
+  if(tourHole) tourHole.remove();
+  if(tourTip) tourTip.remove();
+  tourHole = tourTip = null;
+  lsSet(TOUR_KEY, 1);
+}
+function tourNext(){ tourIdx < TOUR_STEPS.length - 1 ? (tourIdx++, drawTour()) : endTour(); }
+function tourBack(){ if(tourIdx > 0){ tourIdx--; drawTour(); } }
+
+function positionTour(){
+  if(tourIdx < 0 || !tourHole || !tourTip) return;
+  const s = TOUR_STEPS[tourIdx];
+  const tipW = Math.min(360, window.innerWidth - 32);
+  if(!s.el){
+    /* צעד מרכזי — כהות מלאה בלי חור */
+    Object.assign(tourHole.style, {top:'50%', left:'50%', width:'0px', height:'0px', borderRadius:'99px'});
+    Object.assign(tourTip.style, {top:'50%', left:'50%', transform:'translate(-50%,-50%)'});
+    return;
+  }
+  const el = document.querySelector(s.el);
+  if(!el){ tourNext(); return; }
+  const r = el.getBoundingClientRect();
+  const pad = 8;
+  Object.assign(tourHole.style, {
+    top:(r.top - pad) + 'px', left:(r.left - pad) + 'px',
+    width:(r.width + pad*2) + 'px', height:(r.height + pad*2) + 'px', borderRadius:'16px',
+  });
+  const tipH = tourTip.offsetHeight || 170;
+  const below = r.bottom + tipH + 26 < window.innerHeight;
+  const top = below ? r.bottom + 16 : Math.max(12, r.top - tipH - 16);
+  const left = Math.min(Math.max(16, r.left + r.width/2 - tipW/2), window.innerWidth - tipW - 16);
+  Object.assign(tourTip.style, {top: top + 'px', left: left + 'px', transform:'none'});
+}
+
+function drawTour(){
+  const s = TOUR_STEPS[tourIdx];
+  if(!tourHole){ tourHole = document.createElement('div'); tourHole.className = 'tour-hole'; document.body.appendChild(tourHole); }
+  if(!tourTip){ tourTip = document.createElement('div'); tourTip.className = 'tour-tip'; document.body.appendChild(tourTip); }
+  const first = tourIdx === 0, last = tourIdx === TOUR_STEPS.length - 1;
+  tourTip.innerHTML = `
+    <span class="t-count">${tourIdx + 1} / ${TOUR_STEPS.length}</span>
+    <h3>${s.title}</h3>
+    <p>${s.text}</p>
+    <div class="t-btns">
+      ${!first ? '<button class="tour-back" onclick="tourBack()">הקודם</button>' : ''}
+      <button class="tour-next" onclick="tourNext()">${s.cta || 'הבא ←'}</button>
+      ${!last ? '<button class="t-skip" onclick="endTour()">דלגי על הסיור</button>' : ''}
+    </div>`;
+  if(s.el){
+    const el = document.querySelector(s.el);
+    if(el) el.scrollIntoView({block:'center'});
+  } else if(first){
+    window.scrollTo({top:0});
+  }
+  positionTour();
+  /* מיקום מדויק אחרי שה-tip קיבל גובה אמיתי */
+  requestAnimationFrame(positionTour);
+}
+window.addEventListener('scroll', () => { if(tourIdx >= 0) positionTour(); }, {passive:true});
+window.addEventListener('resize', () => { if(tourIdx >= 0) positionTour(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && tourIdx >= 0) endTour(); });
+
 /* ================= INIT ================= */
 (async () => {
   $('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
@@ -2476,6 +2580,8 @@ function openBookings(){
   await refreshBookings();
   updateActiveBar();
   setInterval(updateActiveBar, 1000);
+  /* ביקור ראשון? מציעים את הסיור המודרך */
+  if(!lsGet(TOUR_KEY, 0)) setTimeout(startTour, 1200);
 })();
 </script>
 </body>
