@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>GlamGo — ביוטי עד הבית</title>
-<meta name="description" content="GlamGo — מזמינים מניקוריסטית מקצועית עד הבית, תוך דקות. בוחרים, משווים, מזמינים — והיא בדרך אלייך.">
+<title>byoutoyou — ביוטי עד הבית</title>
+<meta name="description" content="byoutoyou — מזמינים מטפלת ביוטי מקצועית עד הבית: מניקור, שיער, איפור, ריסים וטיפולי פנים. בוחרים, משווים, מזמינים — והיא בדרך אלייך.">
 <meta name="theme-color" content="#1c1420">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -185,7 +185,9 @@
   .avatar{
     width:58px;height:58px;border-radius:18px;flex:none;
     display:grid;place-items:center;font-size:1.5rem;color:#fff;font-weight:800;
+    position:relative;overflow:hidden;
   }
+  .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit}
   .card-top .info{flex:1;min-width:0}
   .card-top h3{font-size:1.08rem;font-weight:800;display:flex;align-items:center;gap:6px}
   .verified{color:#3b82f6;flex:none}
@@ -335,7 +337,9 @@
   .portfolio{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
   .portfolio .tile{
     aspect-ratio:1;border-radius:14px;display:grid;place-items:center;font-size:1.7rem;
+    position:relative;overflow:hidden;
   }
+  .portfolio .tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   h4.block-title{font-size:.98rem;font-weight:800;margin:0 0 10px}
   .svc-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
   .svc{
@@ -485,9 +489,9 @@
 
 <header>
   <div class="container header-in">
-    <a class="logo" href="#" onclick="return false" aria-label="GlamGo">
+    <a class="logo" href="#" onclick="return false" aria-label="byoutoyou">
       <span class="mark">💅</span>
-      <span>GlamGo<small>ביוטי עד הבית</small></span>
+      <span>byoutoyou<small>ביוטי עד הבית</small></span>
     </a>
     <div class="header-actions">
       <button class="btn-ghost hide-m" onclick="scrollToId('how')">איך זה עובד</button>
@@ -501,9 +505,9 @@
 <div class="hero">
   <div class="container hero-grid">
     <div>
-      <span class="eyebrow"><span class="dot"></span> <span id="nowCount">–</span> מניקוריסטיות זמינות עכשיו באזורך</span>
-      <h1>מניקור מקצועי,<br><span class="grad">עד הבית שלך.</span></h1>
-      <p class="sub">בוחרים מניקוריסטית מוסמכת, משווים מחירים ודירוגים, מזמינים — והיא בדרך אלייך. בלי לצאת מהבית, בלי לחכות בתור.</p>
+      <span class="eyebrow"><span class="dot"></span> <span id="nowCount">–</span> מטפלות זמינות עכשיו באזורך</span>
+      <h1>ביוטי מקצועי,<br><span class="grad">עד הבית שלך.</span></h1>
+      <p class="sub">מניקור, שיער, איפור, ריסים או טיפול פנים — בוחרים מטפלת מוסמכת, משווים מחירים ודירוגים, מזמינים. והיא בדרך אלייך.</p>
       <div class="search-card">
         <div class="search-field">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -516,6 +520,7 @@
       </div>
       <div class="hero-stats">
         <div class="stat"><b>4.9★</b><span>דירוג ממוצע</span></div>
+        <div class="stat"><b>25</b><span>מטפלות מוסמכות</span></div>
         <div class="stat"><b>+2,400</b><span>טיפולים החודש</span></div>
         <div class="stat"><b>~35 דק'</b><span>זמן הגעה ממוצע</span></div>
       </div>
@@ -524,7 +529,7 @@
       <div class="hero-blob"></div>
       <div class="float-card fc1">
         <div class="avatar" style="background:linear-gradient(135deg,#e66aa0,#b34fc9)">נ</div>
-        <div><b>נועה הגיעה! 🎉</b><span>המניקוריסטית שלך בדלת</span></div>
+        <div><b>נועה הגיעה! 🎉</b><span>המטפלת שלך בדלת</span></div>
       </div>
       <div class="float-card fc2">
         <div class="avatar" style="background:linear-gradient(135deg,#4fc9a8,#3b82f6)">★</div>
@@ -548,13 +553,7 @@
       </div>
     </div>
 
-    <div class="cats" role="tablist" aria-label="קטגוריות שירות">
-      <button class="cat active">💅 מניקור־פדיקור</button>
-      <button class="cat soon" onclick="toast('מספרות עד הבית — בקרוב! 💇‍♀️')">💇‍♀️ עיצוב שיער</button>
-      <button class="cat soon" onclick="toast('איפור מקצועי — בקרוב! 💄')">💄 איפור</button>
-      <button class="cat soon" onclick="toast('עיצוב גבות וריסים — בקרוב! ✨')">✨ גבות וריסים</button>
-      <button class="cat soon" onclick="toast('קוסמטיקה וטיפולי פנים — בקרוב! 🧖‍♀️')">🧖‍♀️ טיפולי פנים</button>
-    </div>
+    <div class="cats" id="cats" role="tablist" aria-label="קטגוריות שירות"></div>
 
     <div class="toolbar">
       <div class="search-mini">
@@ -564,7 +563,7 @@
       <div class="filters">
         <button class="pill" data-filter="now" onclick="toggleFilter(this)">🟢 זמינות עכשיו</button>
         <button class="pill" data-filter="top" onclick="toggleFilter(this)">⭐ 4.8 ומעלה</button>
-        <button class="pill" data-filter="gel" onclick="toggleFilter(this)">💎 לק ג'ל</button>
+        <button class="pill" data-filter="verified" onclick="toggleFilter(this)">✔️ מאומתות</button>
         <button class="pill" data-filter="budget" onclick="toggleFilter(this)">₪ עד 150 ₪</button>
       </div>
       <div class="sort-wrap">
@@ -594,14 +593,14 @@
     <div class="section-head">
       <div>
         <h2>איך זה עובד?</h2>
-        <p>מהזמנה ועד ציפורניים מושלמות — בארבעה צעדים</p>
+        <p>מהזמנה ועד תוצאה מושלמת — בארבעה צעדים</p>
       </div>
     </div>
     <div class="steps">
       <div class="step"><div class="num">1</div><h3>בוחרים 💅</h3><p>מעיינים בפרופילים, בתמונות עבודות, במחירים ובדירוגים אמיתיים.</p></div>
       <div class="step"><div class="num">2</div><h3>מזמינים 📅</h3><p>עכשיו או בתיאום מראש — בוחרים שירות, שעה וכתובת.</p></div>
       <div class="step"><div class="num">3</div><h3>משלמים 🔒</h3><p>תשלום מאובטח באפליקציה. מחיר סגור מראש, בלי הפתעות.</p></div>
-      <div class="step"><div class="num">4</div><h3>נהנים ✨</h3><p>המניקוריסטית מגיעה עם כל הציוד — ואת לא זזה מהספה.</p></div>
+      <div class="step"><div class="num">4</div><h3>נהנים ✨</h3><p>המטפלת מגיעה עם כל הציוד המקצועי — ואת לא זזה מהספה.</p></div>
     </div>
   </div>
 </section>
@@ -611,8 +610,8 @@
   <div class="container">
     <div class="pros-banner">
       <div>
-        <h2>מניקוריסטית? בואי לעבוד איתנו 💼</h2>
-        <p>כמו שנהגת Uber לא צריכה תחנת מוניות — את לא צריכה קליניקה. אנחנו מביאים את הלקוחות, מנהלים את היומן והתשלומים, ואת קובעת מתי ואיפה לעבוד.</p>
+        <h2>מטפלת ביוטי? בואי לעבוד איתנו 💼</h2>
+        <p>ספרית, מאפרת, מניקוריסטית או קוסמטיקאית — כמו שנהגת Uber לא צריכה תחנת מוניות, את לא צריכה כיסא בסלון. אנחנו מביאים את הלקוחות, מנהלים את היומן והתשלומים, ואת קובעת מתי ואיפה לעבוד.</p>
       </div>
       <button class="btn-light" onclick="toast('נרשמת לרשימת ההמתנה לנותנות שירות! נחזור אלייך 💜')">הצטרפי כנותנת שירות</button>
     </div>
@@ -621,8 +620,8 @@
 
 <footer>
   <div class="container footer-in">
-    <span>GlamGo © 2026 · ביוטי עד הבית · דמו — פרויקט מיזם</span>
-    <span>נבנה באהבה 💜 · התשלום בדמו אינו אמיתי</span>
+    <span>byoutoyou © 2026 · ביוטי עד הבית</span>
+    <span>נבנה באהבה 💜 · גרסת דמו — התשלום אינו אמיתי</span>
   </div>
 </footer>
 
@@ -670,14 +669,37 @@
 <script>
 'use strict';
 
-/* ================= DATA ================= */
+/* ================= CONFIG =================
+   DEMO_MODE=true — הכול רץ מקומית: נתוני דמו, "תשלום" מדומה ומעקב מדומה.
+   להשקה: DEMO_MODE=false + כתובת ה-API — כל הקריאות כבר עוברות דרך
+   שכבת ה-api למטה, כך שאין צורך לגעת בקוד ה-UI. ראו LAUNCH.md. */
+const CONFIG = {
+  DEMO_MODE: true,
+  API_BASE_URL: '',                                  // למשל: 'https://api.byoutoyou.com/v1'
+  PAYMENT: { provider: 'demo', publicKey: '' },      // 'grow' | 'payplus' | 'tranzila' | 'stripe'
+};
+
+/* ================= DATA (דמו) =================
+   בפרודקשן הרשימה מגיעה מ-GET /providers — ראו LAUNCH.md. */
+const IMG = id => `https://images.unsplash.com/photo-${id}?w=400&h=400&fit=crop&q=70`;
+const FACE = n => `https://randomuser.me/api/portraits/women/${n}.jpg`;
+const PICS = {
+  nails: ['1604654894610-df63bc536371','1610992015732-2449b76344bc','1519014816548-bf5fe059798b','1607779097040-26e80aa78e66','1632345031435-8727f6897d53','1636018943957-0e4f9d9d5dc6'].map(IMG),
+  hair: ['1560066984-138dadb4c035','1522337660859-02fbefca4702','1562322140-8baeececf3df','1595476108010-b4d1f102b1b1','1580618672591-eb180b1a973f','1605497788044-5a32c7078486'].map(IMG),
+  makeup: ['1596462502278-27bfdc403348','1487412947147-5cebf100ffc2','1512496015851-a90fb38ba796','1522335789203-aabd1fc54bc9','1583241800698-e8ab01c85918','1571781926291-c477ebfd024b'].map(IMG),
+  brows: ['1583001931096-959e9a1a6223','1616394584738-fc6e612e71b9','1526045478516-99145907023c','1588514912908-8f5891714f8d','1620331311520-246422fd82f9','1509967419530-da38b4704bc6'].map(IMG),
+  face: ['1544161515-4ab6ce6db874','1570172619644-dfd03ed5d881','1596178065887-1198b6148b2b','1519824145371-296894a0daa9','1512290923902-8a9f81dc236c','1515377905703-c4788e51af15'].map(IMG),
+};
+const pick = (cat, ...idx) => idx.map(i => PICS[cat][i % PICS[cat].length]);
+
 const PROVIDERS = [
+  /* ---------- מניקור־פדיקור ---------- */
   {
-    id:'noa', name:'נועה לוי', initial:'נ', grad:'linear-gradient(135deg,#e66aa0,#b34fc9)',
+    id:'noa', cat:'nails', name:'נועה לוי', initial:'נ', grad:'linear-gradient(135deg,#e66aa0,#b34fc9)', photo:FACE(44),
     role:'מניקוריסטית בכירה · 7 שנות ניסיון', rating:4.9, reviews:312, etaMin:25, availableNow:true, verified:true,
     tags:['לק ג\'ל','בניית ציפורניים','מניקור רוסי'],
     bio:'מתמחה במניקור רוסי מדויק ובלק ג\'ל שמחזיק שבועות. מגיעה עם עמדת עבודה ניידת מלאה, מנורת UV וערכת חיטוי אישית לכל לקוחה.',
-    portfolio:['💅','✨','🌸','💎'],
+    portfolio:['💅','✨','🌸','💎'], pics:pick('nails',0,1,2,3),
     services:[
       {id:'gel', name:'לק ג\'ל ידיים', dur:60, price:120},
       {id:'ruspedi', name:'מניקור רוסי + לק ג\'ל', dur:75, price:160},
@@ -691,11 +713,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'yasmin', name:'יסמין אבו־ריא', initial:'י', grad:'linear-gradient(135deg,#4fc9a8,#3b82f6)',
+    id:'yasmin', cat:'nails', name:'יסמין אבו־ריא', initial:'י', grad:'linear-gradient(135deg,#4fc9a8,#3b82f6)', photo:FACE(65),
     role:'אמנית ציפורניים · מתמחה בציורי לק', rating:5.0, reviews:187, etaMin:40, availableNow:true, verified:true,
     tags:['נייל ארט','לק ג\'ל','ציורים בעבודת יד'],
     bio:'כל ציפורן היא קנבס. מתמחה בנייל ארט בעבודת יד — מציורים עדינים ועד עיצובים מטורפים. עובדת רק עם מותגים היפואלרגניים.',
-    portfolio:['🎨','🌈','🦋','⭐'],
+    portfolio:['🎨','🌈','🦋','⭐'], pics:pick('nails',1,2,3,4),
     services:[
       {id:'gel', name:'לק ג\'ל ידיים', dur:60, price:130},
       {id:'art', name:'לק ג\'ל + נייל ארט (2 ציפורניים)', dur:80, price:180},
@@ -707,11 +729,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'olga', name:'אולגה פטרוב', initial:'א', grad:'linear-gradient(135deg,#e8a33d,#e66a6a)',
+    id:'olga', cat:'nails', name:'אולגה פטרוב', initial:'א', grad:'linear-gradient(135deg,#e8a33d,#e66a6a)', photo:FACE(32),
     role:'מומחית מניקור רוסי · 12 שנות ניסיון', rating:4.8, reviews:428, etaMin:30, availableNow:true, verified:true,
     tags:['מניקור רוסי','פדיקור רפואי','לק ג\'ל'],
     bio:'הוותיקה בצוות. מניקור רוסי ברמת דיוק כירורגית ופדיקור רפואי עדין. מאות לקוחות קבועות ברחבי גוש דן.',
-    portfolio:['💅','🌟','🤍','💫'],
+    portfolio:['💅','🌟','🤍','💫'], pics:pick('nails',2,3,4,5),
     services:[
       {id:'rus', name:'מניקור רוסי + לק ג\'ל', dur:75, price:150},
       {id:'medi', name:'פדיקור רפואי', dur:60, price:170},
@@ -724,11 +746,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'shani', name:'שני כהן', initial:'ש', grad:'linear-gradient(135deg,#8e4fc9,#c94f7c)',
+    id:'shani', cat:'nails', name:'שני כהן', initial:'ש', grad:'linear-gradient(135deg,#8e4fc9,#c94f7c)', photo:FACE(68),
     role:'מניקוריסטית · מחירים נגישים', rating:4.7, reviews:96, etaMin:20, availableNow:true, verified:false,
     tags:['לק ג\'ל','מניקור קלאסי','מחיר משתלם'],
     bio:'מאמינה שמניקור מושלם לא חייב לעלות הון. שירות מהיר, נקי ומקצועי — במחירים הכי הוגנים באזור.',
-    portfolio:['💖','🌷','✨','🍑'],
+    portfolio:['💖','🌷','✨','🍑'], pics:pick('nails',3,4,5,0),
     services:[
       {id:'classic', name:'מניקור קלאסי', dur:40, price:80},
       {id:'gel', name:'לק ג\'ל ידיים', dur:55, price:100},
@@ -740,11 +762,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'marina', name:'מרינה גולן', initial:'מ', grad:'linear-gradient(135deg,#3b82f6,#4fc9a8)',
+    id:'marina', cat:'nails', name:'מרינה גולן', initial:'מ', grad:'linear-gradient(135deg,#3b82f6,#4fc9a8)', photo:FACE(12),
     role:'טכנאית ציפורניים · מומחית בנייה', rating:4.9, reviews:254, etaMin:55, availableNow:false, nextSlot:'היום, 19:30', verified:true,
     tags:['בניית ציפורניים','ג\'ל','אקריל','תיקונים'],
     bio:'מומחית בנייה והשלמות — ג\'ל, אקריל ופוליג\'ל. בונה ציפורניים חזקות שנראות טבעיות ומחזיקות חודש+.',
-    portfolio:['💎','🩷','🌙','🫧'],
+    portfolio:['💎','🩷','🌙','🫧'], pics:pick('nails',4,5,0,1),
     services:[
       {id:'build', name:'בנייה חדשה מלאה', dur:150, price:320},
       {id:'fill', name:'מילוי / חידוש בנייה', dur:100, price:200},
@@ -756,11 +778,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'lihi', name:'ליהי ברק', initial:'ל', grad:'linear-gradient(135deg,#e66a6a,#e8a33d)',
+    id:'lihi', cat:'nails', name:'ליהי ברק', initial:'ל', grad:'linear-gradient(135deg,#e66a6a,#e8a33d)', photo:FACE(26),
     role:'מניקוריסטית ופדיקוריסטית מוסמכת', rating:4.8, reviews:143, etaMin:35, availableNow:true, verified:true,
     tags:['פדיקור מפנק','לק ג\'ל','טיפול פרפין'],
     bio:'חוויית ספא מלאה עד הבית: פדיקור מפנק עם פילינג, מסכת פרפין ועיסוי כף רגל. את רק צריכה כורסה נוחה.',
-    portfolio:['🧖‍♀️','🌺','🕯️','💆‍♀️'],
+    portfolio:['🧖‍♀️','🌺','🕯️','💆‍♀️'], pics:pick('nails',5,0,1,2),
     services:[
       {id:'spa', name:'פדיקור ספא מפנק', dur:80, price:180},
       {id:'gel', name:'לק ג\'ל ידיים', dur:60, price:115},
@@ -772,11 +794,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'sofia', name:'סופיה מור', initial:'ס', grad:'linear-gradient(135deg,#b34fc9,#3b82f6)',
+    id:'sofia', cat:'nails', name:'סופיה מור', initial:'ס', grad:'linear-gradient(135deg,#b34fc9,#3b82f6)', photo:FACE(47),
     role:'מניקוריסטית · מתמחה בכלות ואירועים', rating:5.0, reviews:78, etaMin:50, availableNow:false, nextSlot:'מחר, 10:00', verified:true,
     tags:['כלות','אירועים','לק ג\'ל','עיצוב עדין'],
     bio:'מלווה כלות ביום הכי חשוב — עיצובים עדינים ונצנצים במידה. מגיעה גם לצילומי בוקר כלה ואירועים.',
-    portfolio:['👰‍♀️','🤍','✨','🥂'],
+    portfolio:['👰‍♀️','🤍','✨','🥂'], pics:pick('nails',0,2,4,1),
     services:[
       {id:'bride', name:'חבילת כלה — מניקור + פדיקור', dur:140, price:350},
       {id:'gel', name:'לק ג\'ל ידיים', dur:60, price:135},
@@ -788,11 +810,11 @@ const PROVIDERS = [
     ]
   },
   {
-    id:'tamar', name:'תמר אשכנזי', initial:'ת', grad:'linear-gradient(135deg,#1fa97a,#e8a33d)',
+    id:'tamar', cat:'nails', name:'תמר אשכנזי', initial:'ת', grad:'linear-gradient(135deg,#1fa97a,#e8a33d)', photo:FACE(58),
     role:'מניקוריסטית ירוקה · מוצרים טבעיים', rating:4.6, reviews:64, etaMin:45, availableNow:true, verified:false,
     tags:['מוצרים טבעיים','ללא אקריל','ידידותי לסביבה'],
     bio:'מניקור עדין לציפורן ולסביבה: לקים נטולי רעלים (7-free), מוצרים טבעוניים וכלים רב־פעמיים מעוקרים.',
-    portfolio:['🌿','🍃','🌼','🫒'],
+    portfolio:['🌿','🍃','🌼','🫒'], pics:pick('nails',1,3,5,2),
     services:[
       {id:'natural', name:'מניקור טבעי + לק 7-free', dur:50, price:110},
       {id:'gel', name:'לק ג\'ל טבעוני', dur:65, price:130},
@@ -803,10 +825,361 @@ const PROVIDERS = [
       {name:'רות', date:'לפני 3 שבועות', stars:4, text:'גישה נהדרת ותוצאה יפה ועדינה.'},
     ]
   },
+
+  /* ---------- עיצוב שיער ---------- */
+  {
+    id:'adi', cat:'hair', name:'עדי מזרחי', initial:'ע', grad:'linear-gradient(135deg,#c94f7c,#e8a33d)', photo:FACE(21),
+    role:'מעצבת שיער בכירה · 10 שנות ניסיון', rating:4.9, reviews:276, etaMin:30, availableNow:true, verified:true,
+    tags:['תספורות','פן מעוצב','צבע'],
+    bio:'מעצבת שיער עם ניסיון מסלוני הדגל בתל אביב. מגיעה עם עמדת עבודה מלאה — מספריים מקצועיות, פן וכל חומרי הצבע.',
+    portfolio:['💇‍♀️','✂️','✨','🪞'], pics:pick('hair',0,1,2,3),
+    services:[
+      {id:'cut', name:'תספורת נשים + עיצוב', dur:45, price:150},
+      {id:'blow', name:'פן מעוצב', dur:40, price:120},
+      {id:'cutblow', name:'תספורת + פן', dur:75, price:220},
+      {id:'roots', name:'צבע שורש + פן', dur:90, price:260},
+    ],
+    reviewsList:[
+      {name:'מירי', date:'לפני יומיים', stars:5, text:'תספורת מושלמת בסלון של הבית. לא חוזרת למספרה.'},
+      {name:'אורית', date:'לפני שבוע', stars:5, text:'הפן החזיק שלושה ימים. מקצוענית אמיתית.'},
+    ]
+  },
+  {
+    id:'yael-o', cat:'hair', name:'יעל אוחיון', initial:'י', grad:'linear-gradient(135deg,#2a6fb8,#4fc9a8)', photo:FACE(33),
+    role:'ספרית גברים וילדים · מכונה ומספריים', rating:4.8, reviews:342, etaMin:20, availableNow:true, verified:true,
+    tags:['תספורת גבר','פייד','ילדים','זקן'],
+    bio:'פייד חד כמו סכין, ילדים יושבים אצלי בלי דמעות. מושלם לפני אירועים — כל המשפחה מסתפרת בבית בערב אחד.',
+    portfolio:['💈','✂️','👦','🧔'], pics:pick('hair',3,1,4,5),
+    services:[
+      {id:'man', name:'תספורת גבר (מכונה + מספריים)', dur:30, price:90},
+      {id:'beard', name:'עיצוב זקן', dur:15, price:40},
+      {id:'manbeard', name:'תספורת + זקן', dur:45, price:110},
+      {id:'kid', name:'תספורת ילד/ה', dur:25, price:70},
+    ],
+    reviewsList:[
+      {name:'אבי', date:'אתמול', stars:5, text:'הפייד הכי טוב שעשיתי, והבן שלי סוף סוף לא בכה בתספורת.'},
+      {name:'רועי', date:'לפני 5 ימים', stars:5, text:'באה אלינו לפני החתונה של אח שלי — כל הגברים יצאו חדשים.'},
+    ]
+  },
+  {
+    id:'julie', cat:'hair', name:'ג\'ולי אזולאי', initial:'ג', grad:'linear-gradient(135deg,#8e4fc9,#e66aa0)', photo:FACE(52),
+    role:'מומחית החלקות ושיקום שיער', rating:4.9, reviews:158, etaMin:60, availableNow:false, nextSlot:'היום, 18:00', verified:true,
+    tags:['החלקת קראטין','החלקה אורגנית','שיקום'],
+    bio:'מתמחה בהחלקות קראטין ואורגניות ובטיפולי שיקום עמוקים. עובדת רק עם חומרים מקצועיים נטולי פורמלין.',
+    portfolio:['💁‍♀️','✨','🌊','💧'], pics:pick('hair',1,2,0,4),
+    services:[
+      {id:'keratin', name:'החלקת קראטין מלאה', dur:180, price:700},
+      {id:'organic', name:'החלקה אורגנית', dur:180, price:850},
+      {id:'repair', name:'טיפול שיקום עמוק + פן', dur:75, price:280},
+    ],
+    reviewsList:[
+      {name:'לימור', date:'לפני 4 ימים', stars:5, text:'ההחלקה מחזיקה כבר 4 חודשים. שווה כל שקל.'},
+      {name:'ספיר', date:'לפני חודש', stars:5, text:'השיער שלי חזר לחיים. תותחית.'},
+    ]
+  },
+  {
+    id:'mor', cat:'hair', name:'מור פרץ', initial:'מ', grad:'linear-gradient(135deg,#e8a33d,#c94f7c)', photo:FACE(17),
+    role:'תסרוקות ערב ואירועים', rating:5.0, reviews:94, etaMin:45, availableNow:true, verified:true,
+    tags:['תסרוקות ערב','כלות','צמות','אירועים'],
+    bio:'תסרוקות ערב שמחזיקות עד סוף הריקודים. מלווה כלות, מלוות ואמהות — עם ניסיון של מאות אירועים.',
+    portfolio:['👰‍♀️','🌸','✨','💫'], pics:pick('hair',2,4,1,5),
+    services:[
+      {id:'evening', name:'תסרוקת ערב', dur:60, price:280},
+      {id:'braids', name:'צמות מעוצבות', dur:45, price:180},
+      {id:'bride', name:'תסרוקת כלה (כולל ניסיון)', dur:120, price:450},
+    ],
+    reviewsList:[
+      {name:'שיר', date:'לפני 3 ימים', stars:5, text:'התסרוקת החזיקה עד 4 לפנות בוקר. פשוט אמנית.'},
+      {name:'נופר', date:'לפני שבועיים', stars:5, text:'עשתה לי ולשלוש החברות תסרוקות לחתונה — כולן מושלמות.'},
+    ]
+  },
+  {
+    id:'rinat', cat:'hair', name:'רינת שלו', initial:'ר', grad:'linear-gradient(135deg,#b8860b,#e66a6a)', photo:FACE(63),
+    role:'קולוריסטית · בליאז\' וגוונים', rating:4.8, reviews:187, etaMin:50, availableNow:false, nextSlot:'מחר, 09:00', verified:true,
+    tags:['בליאז\'','גוונים','צבע מלא','אומברה'],
+    bio:'קולוריסטית שחיה צבע. בליאז\' טבעי שנראה כאילו נולדת איתו, גוונים מדויקים והתאמה אישית לגוון העור.',
+    portfolio:['🎨','☀️','🍯','✨'], pics:pick('hair',4,0,3,2),
+    services:[
+      {id:'balayage', name:'בליאז\' מלא + פן', dur:150, price:550},
+      {id:'highlights', name:'גוונים + פן', dur:120, price:380},
+      {id:'color', name:'צבע מלא + פן', dur:100, price:300},
+    ],
+    reviewsList:[
+      {name:'דנית', date:'לפני שבוע', stars:5, text:'הבליאז\' הכי טבעי שהיה לי. כולם בטוחים שזה מהשמש.'},
+      {name:'אלה', date:'לפני 3 שבועות', stars:4, text:'צבע מדהים, לקח קצת יותר זמן מהמתוכנן אבל היה שווה.'},
+    ]
+  },
+  {
+    id:'keren', cat:'hair', name:'קרן ביטון', initial:'ק', grad:'linear-gradient(135deg,#1fa97a,#3b82f6)', photo:FACE(29),
+    role:'מעצבת שיער · מחירים נגישים', rating:4.7, reviews:112, etaMin:25, availableNow:true, verified:false,
+    tags:['פן','תספורת','מחיר משתלם'],
+    bio:'פן ותספורת בלי לרוקן את הארנק. מהירה, מקצועית ותמיד עם חיוך — מושלם לפני ערב או ראיון עבודה.',
+    portfolio:['💇‍♀️','💨','🌟','💜'], pics:pick('hair',5,3,0,1),
+    services:[
+      {id:'blow', name:'פן', dur:35, price:90},
+      {id:'cut', name:'תספורת נשים', dur:40, price:110},
+      {id:'cutblow', name:'תספורת + פן', dur:65, price:170},
+    ],
+    reviewsList:[
+      {name:'רותם', date:'לפני יומיים', stars:5, text:'פן מהיר ומושלם לפני אירוע. מחיר הוגן בטירוף.'},
+      {name:'לינוי', date:'לפני שבוע', stars:4, text:'נחמדה ומקצועית, אזמין שוב.'},
+    ]
+  },
+
+  /* ---------- איפור ---------- */
+  {
+    id:'lior', cat:'makeup', name:'ליאור בן חמו', initial:'ל', grad:'linear-gradient(135deg,#c94f7c,#8e4fc9)', photo:FACE(41),
+    role:'מאפרת כלות בכירה', rating:5.0, reviews:121, etaMin:55, availableNow:false, nextSlot:'מחר, 08:00', verified:true,
+    tags:['כלות','איפור עמיד','ליווי אירוע'],
+    bio:'מאפרת כלות עם מאות חתונות מאחוריה. איפור עמיד שנראה מושלם גם במצלמה וגם בדמעות של האמא.',
+    portfolio:['👰‍♀️','💄','✨','🤍'], pics:pick('makeup',0,1,2,3),
+    services:[
+      {id:'bride', name:'איפור כלה (כולל ניסיון)', dur:150, price:700},
+      {id:'evening', name:'איפור ערב', dur:60, price:350},
+      {id:'escort', name:'ליווי לאירוע (תיקונים)', dur:180, price:450},
+    ],
+    reviewsList:[
+      {name:'עדי', date:'לפני שבוע', stars:5, text:'האיפור החזיק מ-7 בבוקר עד 3 בלילה. מושלם בכל תמונה.'},
+      {name:'תאיר', date:'לפני חודש', stars:5, text:'הרגשתי הכי יפה שהייתי אי פעם. מקצוענית ומרגיעה.'},
+    ]
+  },
+  {
+    id:'natali', cat:'makeup', name:'נטלי גרוס', initial:'נ', grad:'linear-gradient(135deg,#e66aa0,#e8a33d)', photo:FACE(56),
+    role:'מאפרת ערב ואירועים', rating:4.8, reviews:167, etaMin:35, availableNow:true, verified:true,
+    tags:['איפור ערב','סמוקי','איפור טבעי'],
+    bio:'מסמוקי דרמטי ועד נו-מייקאפ מושלם. מגיעה עם מזוודת איפור מקצועית מלאה ומתאימה את הלוק לאירוע ולסגנון שלך.',
+    portfolio:['💄','🌙','✨','🥀'], pics:pick('makeup',1,2,3,4),
+    services:[
+      {id:'evening', name:'איפור ערב מלא', dur:60, price:320},
+      {id:'natural', name:'איפור טבעי / יום', dur:45, price:250},
+      {id:'lashes', name:'איפור ערב + ריסים חד־פעמיים', dur:75, price:380},
+    ],
+    reviewsList:[
+      {name:'שלי', date:'אתמול', stars:5, text:'הסמוקי הכי מדויק שעשו לי. קיבלתי מיליון מחמאות.'},
+      {name:'ים', date:'לפני 4 ימים', stars:5, text:'הבינה בדיוק מה רציתי. באה בזמן, סופר נעימה.'},
+    ]
+  },
+  {
+    id:'shiran', cat:'makeup', name:'שירן דוד', initial:'ש', grad:'linear-gradient(135deg,#8e4fc9,#4fc9a8)', photo:FACE(24),
+    role:'איפור + שיער · חבילה משתלמת', rating:4.9, reviews:143, etaMin:40, availableNow:true, verified:true,
+    tags:['איפור ושיער','חבילת ערב','אירועים'],
+    bio:'הכול באחת: איפור מלא + תסרוקת בביקור אחד. חוסכת לך זמן, כסף ותיאומים — יוצאת מהבית מוכנה לגמרי.',
+    portfolio:['💃','💄','💇‍♀️','✨'], pics:pick('makeup',2,4,0,5),
+    services:[
+      {id:'combo', name:'חבילת ערב — איפור + תסרוקת', dur:110, price:550},
+      {id:'makeup', name:'איפור ערב', dur:60, price:300},
+      {id:'hair', name:'תסרוקת ערב', dur:50, price:270},
+    ],
+    reviewsList:[
+      {name:'מורן', date:'לפני 3 ימים', stars:5, text:'שעה וחצי ויצאתי מהבית מהממת. הכי נוח שיש.'},
+      {name:'אגם', date:'לפני שבועיים', stars:5, text:'החבילה הכי משתלמת. איפור ושיער ברמה של סלון.'},
+    ]
+  },
+  {
+    id:'inbal', cat:'makeup', name:'ענבל קדוש', initial:'ע', grad:'linear-gradient(135deg,#3b82f6,#c94f7c)', photo:FACE(37),
+    role:'איפור לצילומים ומסכי HD', rating:4.9, reviews:88, etaMin:45, availableNow:false, nextSlot:'היום, 17:00', verified:false,
+    tags:['צילומים','HD','קמפיינים','הפקות'],
+    bio:'מאפרת הפקות: קמפיינים, צילומי גיוס לינקדאין וימי צילום. איפור שנראה מושלם בעדשה — בלי ברק ובלי קווים.',
+    portfolio:['📸','🎬','💄','⭐'], pics:pick('makeup',3,5,1,0),
+    services:[
+      {id:'photo', name:'איפור לצילומים', dur:60, price:340},
+      {id:'linkedin', name:'איפור + ליווי צילום תדמית', dur:90, price:420},
+      {id:'touch', name:'ריענון וטאץ\'-אפ בסט', dur:120, price:380},
+    ],
+    reviewsList:[
+      {name:'הדר', date:'לפני שבוע', stars:5, text:'הצילומים יצאו מטורפים. יודעת בדיוק מה עובד מול מצלמה.'},
+      {name:'גל', date:'לפני חודש', stars:5, text:'ליוותה יום צילום שלם של החברה. מקצוענית על.'},
+    ]
+  },
+
+  /* ---------- גבות וריסים ---------- */
+  {
+    id:'tal', cat:'brows', name:'טל אמסלם', initial:'ט', grad:'linear-gradient(135deg,#e8a33d,#8e4fc9)', photo:FACE(9),
+    role:'מעצבת גבות · שיטת החוט', rating:4.8, reviews:253, etaMin:20, availableNow:true, verified:true,
+    tags:['גבות בחוט','שעווה','צביעה','למינציה'],
+    bio:'מעצבת גבות בשיטת החוט המסורתית — מדויק, עדין ומחזיק יותר. מתאימה את צורת הגבה למבנה הפנים שלך.',
+    portfolio:['🧵','👁️','✨','🪞'], pics:pick('brows',0,1,2,3),
+    services:[
+      {id:'thread', name:'עיצוב גבות בחוט', dur:25, price:80},
+      {id:'wax', name:'עיצוב גבות בשעווה', dur:20, price:70},
+      {id:'tint', name:'עיצוב + צביעת גבות', dur:40, price:130},
+      {id:'lami', name:'למינציית גבות מלאה', dur:60, price:220},
+    ],
+    reviewsList:[
+      {name:'אופיר', date:'לפני יומיים', stars:5, text:'סוף סוף מישהי שמבינה גבות. הצורה מושלמת לפנים שלי.'},
+      {name:'שני', date:'לפני שבוע', stars:5, text:'הלמינציה שינתה לי את הפנים. מקצוענית אמיתית.'},
+    ]
+  },
+  {
+    id:'kim', cat:'brows', name:'קים אברמוב', initial:'ק', grad:'linear-gradient(135deg,#c94f7c,#1fa97a)', photo:FACE(72),
+    role:'מומחית הרמת ריסים', rating:4.9, reviews:171, etaMin:30, availableNow:true, verified:true,
+    tags:['הרמת ריסים','למינציה','צביעת ריסים'],
+    bio:'הרמת ריסים שנראית טבעית לגמרי — כאילו נולדת עם ריסים מסולסלים. מחזיק 6-8 שבועות, בלי מסקרה ובלי מאמץ.',
+    portfolio:['👁️','🦋','✨','🌙'], pics:pick('brows',1,3,4,0),
+    services:[
+      {id:'lift', name:'הרמת ריסים', dur:60, price:250},
+      {id:'lifttint', name:'הרמה + צביעת ריסים', dur:75, price:300},
+      {id:'browlash', name:'חבילה: ריסים + גבות', dur:100, price:380},
+    ],
+    reviewsList:[
+      {name:'ליאת', date:'לפני 3 ימים', stars:5, text:'קמה ככה בבוקר כבר חודשיים. ההשקעה הכי טובה שעשיתי.'},
+      {name:'דין', date:'לפני שבועיים', stars:5, text:'עדינה, מקצועית, והתוצאה טבעית ומהממת.'},
+    ]
+  },
+  {
+    id:'anastasia', cat:'brows', name:'אנסטסיה קגן', initial:'א', grad:'linear-gradient(135deg,#4fc9a8,#8e4fc9)', photo:FACE(80),
+    role:'בניית ריסים · קלאסי ווליום', rating:5.0, reviews:205, etaMin:50, availableNow:false, nextSlot:'היום, 20:00', verified:true,
+    tags:['ריסים קלאסי','וליום','מגה וליום','מילוי'],
+    bio:'בניית ריסים ברמה אחרת — מקלאסי עדין ועד מגה-וליום דרמטי. עובדת עם סיבים קלים שלא מכבידים על הריס הטבעי.',
+    portfolio:['👁️','💜','✨','🖤'], pics:pick('brows',2,4,5,1),
+    services:[
+      {id:'classic', name:'בניית ריסים קלאסי', dur:90, price:280},
+      {id:'volume', name:'בניית ריסים וליום', dur:120, price:380},
+      {id:'refill', name:'מילוי (עד 3 שבועות)', dur:60, price:180},
+    ],
+    reviewsList:[
+      {name:'ולריה', date:'אתמול', stars:5, text:'הוליום הכי יפה שעשיתי. עדין אבל וואו.'},
+      {name:'שירלי', date:'לפני שבוע', stars:5, text:'מדויקת בטירוף, הריסים מחזיקים מעולה.'},
+    ]
+  },
+  {
+    id:'hodaya', cat:'brows', name:'הודיה ברוך', initial:'ה', grad:'linear-gradient(135deg,#e66a6a,#3b82f6)', photo:FACE(90),
+    role:'מיקרובליידינג ועיצוב קבוע', rating:4.7, reviews:97, etaMin:60, availableNow:false, nextSlot:'מחר, 11:00', verified:true,
+    tags:['מיקרובליידינג','איפור קבוע','שפתיים'],
+    bio:'מיקרובליידינג בטכניקת שערה-שערה שנראה טבעי לחלוטין. מוסמכת ומבוטחת, עם תיק עבודות של מאות לקוחות.',
+    portfolio:['✏️','👁️','💋','✨'], pics:pick('brows',3,5,0,2),
+    services:[
+      {id:'micro', name:'מיקרובליידינג גבות מלא', dur:150, price:900},
+      {id:'retouch', name:'ריטאצ\' (עד 8 שבועות)', dur:75, price:350},
+      {id:'lips', name:'עיצוב שפתיים קבוע', dur:120, price:850},
+    ],
+    reviewsList:[
+      {name:'אסתר', date:'לפני שבועיים', stars:5, text:'הגבות נראות טבעיות לגמרי. אף אחד לא מאמין שזה קבוע.'},
+      {name:'חן', date:'לפני חודש', stars:4, text:'תוצאה מעולה, תהליך קצת ארוך אבל שווה.'},
+    ]
+  },
+
+  /* ---------- טיפולי פנים ---------- */
+  {
+    id:'maya-r', cat:'face', name:'מאיה רוזן', initial:'מ', grad:'linear-gradient(135deg,#1fa97a,#c94f7c)', photo:FACE(15),
+    role:'קוסמטיקאית מוסמכת · 9 שנות ניסיון', rating:4.9, reviews:232, etaMin:40, availableNow:true, verified:true,
+    tags:['טיפול פנים קלאסי','אנטי אייג\'ינג','עיסוי פנים'],
+    bio:'קוסמטיקאית פרא-רפואית עם מיטת טיפולים ניידת. טיפולי פנים עמוקים עם מוצרים מקצועיים — ספא אמיתי בסלון שלך.',
+    portfolio:['🧖‍♀️','🌿','💆‍♀️','✨'], pics:pick('face',0,1,2,3),
+    services:[
+      {id:'classic', name:'טיפול פנים קלאסי', dur:75, price:280},
+      {id:'deep', name:'טיפול פנים עמוק + מסכה', dur:90, price:350},
+      {id:'antiage', name:'טיפול אנטי אייג\'ינג', dur:100, price:420},
+    ],
+    reviewsList:[
+      {name:'ורד', date:'לפני יומיים', stars:5, text:'העור שלי זוהר כבר שבוע. מגיעה עם מיטה מקצועית — חוויית ספא מלאה.'},
+      {name:'איילת', date:'לפני שבוע', stars:5, text:'הטיפול הכי מפנק שעשיתי. נרדמתי באמצע 😅'},
+    ]
+  },
+  {
+    id:'lena', cat:'face', name:'לנה וולקוב', initial:'ל', grad:'linear-gradient(135deg,#3b82f6,#e8a33d)', photo:FACE(85),
+    role:'קוסמטיקה רפואית · אקנה ופיגמנטציה', rating:4.8, reviews:144, etaMin:45, availableNow:true, verified:true,
+    tags:['אקנה','פילינג','פיגמנטציה','עור רגיש'],
+    bio:'מתמחה בעור בעייתי: אקנה, פיגמנטציה ורגישות. בונה תוכנית טיפול אישית ומלווה עד לתוצאות — עם מעקב בין טיפולים.',
+    portfolio:['🔬','🧴','✨','🤍'], pics:pick('face',1,3,4,0),
+    services:[
+      {id:'acne', name:'טיפול אקנה + ניקוי עמוק', dur:90, price:320},
+      {id:'peel', name:'פילינג כימי עדין', dur:60, price:380},
+      {id:'consult', name:'אבחון עור + טיפול ראשון', dur:100, price:350},
+    ],
+    reviewsList:[
+      {name:'נועה', date:'לפני 5 ימים', stars:5, text:'אחרי 3 טיפולים העור שלי אחר לגמרי. מקצועית ואמיתית.'},
+      {name:'יובל', date:'לפני 3 שבועות', stars:5, text:'סוף סוף מישהי שמבינה עור רגיש. ממליץ בחום.'},
+    ]
+  },
+  {
+    id:'dana-s', cat:'face', name:'דנה שרעבי', initial:'ד', grad:'linear-gradient(135deg,#e66aa0,#1fa97a)', photo:FACE(50),
+    role:'ספא פנים מפנק · ערבי פינוק', rating:4.9, reviews:76, etaMin:50, availableNow:false, nextSlot:'היום, 20:00', verified:false,
+    tags:['ספא','מסכות','עיסוי פנים','ערבי כלה'],
+    bio:'ערב ספא שלם בבית: טיפול פנים מפנק עם אבנים חמות, מסכות פרימיום ומוזיקה מרגיעה. אפשר גם לזוגות וערבי כלה.',
+    portfolio:['🕯️','🌺','🧖‍♀️','🍵'], pics:pick('face',2,4,5,1),
+    services:[
+      {id:'spa', name:'ספא פנים מפנק (90 דק\')', dur:90, price:340},
+      {id:'couple', name:'ספא זוגי — 2 טיפולים', dur:100, price:600},
+      {id:'bride', name:'ערב כלה — עד 4 משתתפות', dur:180, price:1100},
+    ],
+    reviewsList:[
+      {name:'מיטל', date:'לפני שבוע', stars:5, text:'עשינו ערב כלה מטורף. כל הבנות עדיין מדברות על זה.'},
+      {name:'שרון', date:'לפני חודש', stars:5, text:'הספא הזוגי היה מתנת יום הנישואין המושלמת.'},
+    ]
+  },
 ];
 
 const SERVICE_FEE = 10;                    // דמי שירות קבועים לפלטפורמה
-const LS_KEY = 'glamgo_bookings_v1';
+const LS_KEY = 'byoutoyou_bookings_v1';
+
+const CATEGORIES = [
+  {id:'all',    label:'הכל',            em:'💜'},
+  {id:'nails',  label:'מניקור־פדיקור', em:'💅'},
+  {id:'hair',   label:'עיצוב שיער',    em:'💇‍♀️'},
+  {id:'makeup', label:'איפור',          em:'💄'},
+  {id:'brows',  label:'גבות וריסים',   em:'✨'},
+  {id:'face',   label:'טיפולי פנים',   em:'🧖‍♀️'},
+];
+
+/* ================= API LAYER =================
+   כל פעולה שנוגעת בנתונים עוברת דרך השכבה הזו. בדמו — מימוש מקומי
+   (localStorage + סימולציה); בפרודקשן — קריאות REST לשרת לפי החוזה
+   המתועד ב-LAUNCH.md. ההחלפה נעשית בדגל CONFIG.DEMO_MODE בלבד. */
+async function apiFetch(path, opts = {}){
+  const res = await fetch(CONFIG.API_BASE_URL + path, {
+    headers: {'Content-Type': 'application/json'},
+    method: opts.method || 'GET',
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  if(!res.ok) throw new Error('API error ' + res.status);
+  return res.json();
+}
+
+const api = {
+  async listProviders(){
+    if(CONFIG.DEMO_MODE) return PROVIDERS;
+    return apiFetch('/providers');
+  },
+  async listBookings(){
+    if(CONFIG.DEMO_MODE){
+      try{ return JSON.parse(localStorage.getItem(LS_KEY)) || []; }catch{ return []; }
+    }
+    return apiFetch('/bookings');
+  },
+  async createBooking(order){
+    if(CONFIG.DEMO_MODE){
+      const all = await this.listBookings();
+      all.unshift(order);
+      localStorage.setItem(LS_KEY, JSON.stringify(all));
+      return order;
+    }
+    return apiFetch('/bookings', {method:'POST', body:order});
+  },
+  async updateBooking(id, patch){
+    if(CONFIG.DEMO_MODE){
+      const all = await this.listBookings();
+      const o = all.find(x => x.id === id);
+      if(o) Object.assign(o, patch);
+      localStorage.setItem(LS_KEY, JSON.stringify(all));
+      return o;
+    }
+    return apiFetch('/bookings/' + encodeURIComponent(id), {method:'PATCH', body:patch});
+  },
+  /* בפרודקשן: השרת יוצר עסקה מול ספק הסליקה ומחזיר אישור.
+     לדפדפן לעולם לא מגיע מספר כרטיס גלוי — רק טוקן מה-SDK של הספק. */
+  async processPayment({amount, cardToken}){
+    if(CONFIG.DEMO_MODE){
+      return new Promise(r => setTimeout(() =>
+        r({ok:true, txId:'DEMO-' + Math.random().toString(36).slice(2,10).toUpperCase()}), 1400));
+    }
+    return apiFetch('/payments', {method:'POST', body:{amount, cardToken, provider:CONFIG.PAYMENT.provider}});
+  },
+};
+
+/* cache מקומי של ההזמנות — מתרענן דרך שכבת ה-api */
+let BOOKINGS = [];
+async function refreshBookings(){ BOOKINGS = await api.listBookings(); updateBadge(); }
 
 /* ================= STATE ================= */
 let activeFilters = new Set();
@@ -834,20 +1207,35 @@ document.addEventListener('keydown', e => {
   if(e.key === 'Escape') document.querySelectorAll('.overlay.open').forEach(o => closeModal(o.id));
 });
 
-function loadBookings(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)) || []; }catch{ return []; } }
-function saveBookings(list){ localStorage.setItem(LS_KEY, JSON.stringify(list)); updateBadge(); }
-function updateBadge(){ $('bookingsBtn').dataset.count = loadBookings().length; }
+function loadBookings(){ return BOOKINGS; }
+function updateBadge(){ $('bookingsBtn').dataset.count = BOOKINGS.length; }
+
+/* אווטאר: תמונה אמיתית עם נפילה חיננית לאותיות על גרדיאנט */
+function avatarHTML(p){
+  return `<div class="avatar" style="background:${p.grad}">${p.initial}${p.photo ? `<img src="${p.photo}" alt="" loading="lazy" onerror="this.remove()">` : ''}</div>`;
+}
 
 /* ================= SEARCH ================= */
 function startSearch(){
   const addr = $('addrInput').value.trim();
   if(addr){
     $('areaLabel').innerHTML = 'מציגות זמינות ל: <b>' + esc(addr) + '</b>';
-    toast('נמצאו ' + PROVIDERS.length + ' מניקוריסטיות באזורך 💅');
+    toast('נמצאו ' + PROVIDERS.length + ' מטפלות באזורך 💅');
   }
   scrollToId('browse');
 }
 $('addrInput').addEventListener('keydown', e => { if(e.key === 'Enter') startSearch(); });
+
+/* ================= CATEGORIES ================= */
+let activeCat = 'all';
+function setCat(c){ activeCat = c; renderCats(); render(); }
+function renderCats(){
+  $('cats').innerHTML = CATEGORIES.map(c => {
+    const n = c.id === 'all' ? PROVIDERS.length : PROVIDERS.filter(p => p.cat === c.id).length;
+    return `<button class="cat ${activeCat === c.id ? 'active' : ''}" role="tab" aria-selected="${activeCat === c.id}"
+      onclick="setCat('${c.id}')">${c.em} ${c.label} <span style="opacity:.65;font-size:.8em">(${n})</span></button>`;
+  }).join('');
+}
 
 /* ================= FILTERS & RENDER ================= */
 function toggleFilter(btn){
@@ -859,13 +1247,14 @@ function toggleFilter(btn){
 
 function filteredProviders(){
   let list = [...PROVIDERS];
+  if(activeCat !== 'all') list = list.filter(p => p.cat === activeCat);
   const q = $('qInput').value.trim();
   if(q) list = list.filter(p =>
     (p.name + ' ' + p.role + ' ' + p.tags.join(' ') + ' ' + p.services.map(s => s.name).join(' ')).includes(q));
-  if(activeFilters.has('now'))    list = list.filter(p => p.availableNow);
-  if(activeFilters.has('top'))    list = list.filter(p => p.rating >= 4.8);
-  if(activeFilters.has('gel'))    list = list.filter(p => p.tags.some(t => t.includes('ג\'ל')) || p.services.some(s => s.name.includes('ג\'ל')));
-  if(activeFilters.has('budget')) list = list.filter(p => Math.min(...p.services.map(s => s.price)) <= 150);
+  if(activeFilters.has('now'))      list = list.filter(p => p.availableNow);
+  if(activeFilters.has('top'))      list = list.filter(p => p.rating >= 4.8);
+  if(activeFilters.has('verified')) list = list.filter(p => p.verified);
+  if(activeFilters.has('budget'))   list = list.filter(p => Math.min(...p.services.map(s => s.price)) <= 150);
   const sort = $('sortSel').value;
   if(sort === 'rating') list.sort((a,b) => b.rating - a.rating || b.reviews - a.reviews);
   else if(sort === 'price') list.sort((a,b) => Math.min(...a.services.map(s=>s.price)) - Math.min(...b.services.map(s=>s.price)));
@@ -893,7 +1282,7 @@ function render(){
         <div class="veil"></div>
       </div>
       <div class="card-top">
-        <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+        ${avatarHTML(p)}
         <div class="info">
           <h3>${esc(p.name)} ${p.verified ? '<svg class="verified" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-label="מאומתת"><path d="M12 1l2.7 2.2 3.5-.3 1 3.4 3 1.8-1.3 3.3L22.2 15l-2.6 2.4.1 3.5-3.4.7L14.5 24 12 21.8 9.5 24l-1.8-2.4-3.4-.7.1-3.5L1.8 15l1.3-3.6L1.8 8.1l3-1.8 1-3.4 3.5.3z"/><path d="M10.6 15.4l-3-3 1.4-1.4 1.6 1.6 4.4-4.4 1.4 1.4z" fill="#fff"/></svg>' : ''}</h3>
           <div class="role">${esc(p.role)}</div>
@@ -921,7 +1310,7 @@ function openProfile(pid){
   const tiles = ['#fbeef3','#eef3fb','#f0fbee','#fbf6ee'];
   $('profileBody').innerHTML = `
     <div class="profile-top">
-      <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+      ${avatarHTML(p)}
       <div>
         <h3>${esc(p.name)} ${p.verified ? '<svg class="verified" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.7 2.2 3.5-.3 1 3.4 3 1.8-1.3 3.3L22.2 15l-2.6 2.4.1 3.5-3.4.7L14.5 24 12 21.8 9.5 24l-1.8-2.4-3.4-.7.1-3.5L1.8 15l1.3-3.6L1.8 8.1l3-1.8 1-3.4 3.5.3z"/><path d="M10.6 15.4l-3-3 1.4-1.4 1.6 1.6 4.4-4.4 1.4 1.4z" fill="#fff"/></svg>' : ''}</h3>
         <div class="profile-meta">
@@ -933,7 +1322,8 @@ function openProfile(pid){
     </div>
     <div class="profile-bio">${esc(p.bio)}</div>
     <h4 class="block-title">עבודות אחרונות</h4>
-    <div class="portfolio">${p.portfolio.map((e,i) => '<div class="tile" style="background:' + tiles[i%4] + '">' + e + '</div>').join('')}</div>
+    <div class="portfolio">${p.portfolio.map((e,i) =>
+      `<div class="tile" style="background:${tiles[i%4]}">${e}${p.pics && p.pics[i] ? `<img src="${p.pics[i]}" alt="עבודה של ${esc(p.name)}" loading="lazy" onerror="this.remove()">` : ''}</div>`).join('')}</div>
     <h4 class="block-title">בחרי שירות</h4>
     <div class="svc-list">
       ${p.services.map(s => `
@@ -1131,7 +1521,7 @@ function validateStep2(){
   renderBookStep(3);
 }
 
-function submitBooking(){
+async function submitBooking(){
   const card = $('bCard').value.replace(/\s/g,'');
   const exp = $('bExp').value;
   const cvv = $('bCvv').value;
@@ -1145,10 +1535,16 @@ function submitBooking(){
   btn.disabled = true;
   btn.textContent = 'מעבדים את התשלום…';
 
-  setTimeout(() => {
+  try{
     const total = booking.services.reduce((a,s) => a + s.price, 0) + SERVICE_FEE;
+    /* בפרודקשן: ה-SDK של ספק הסליקה ממיר את פרטי הכרטיס לטוקן,
+       ורק הטוקן נשלח לשרת. מספר הכרטיס לא עוזב את הדפדפן. */
+    const payment = await api.processPayment({amount: total, cardToken: 'tok_demo'});
+    if(!payment.ok) throw new Error('payment declined');
+
     const order = {
-      id: 'GG-' + Math.random().toString(36).slice(2,7).toUpperCase(),
+      id: 'BY-' + Math.random().toString(36).slice(2,7).toUpperCase(),
+      txId: payment.txId,
       providerId: booking.provider.id,
       providerName: booking.provider.name,
       services: booking.services.map(s => s.name),
@@ -1156,17 +1552,22 @@ function submitBooking(){
       when: booking.when === 'now' ? 'עכשיו' : 'היום ' + booking.slot,
       address: booking.address,
       customerName: booking.name,
+      phone: booking.phone,
+      notes: booking.notes,
       etaMin: booking.provider.etaMin,
       createdAt: Date.now(),
       status: 'active',
     };
-    const all = loadBookings();
-    all.unshift(order);
-    saveBookings(all);
+    await api.createBooking(order);
+    await refreshBookings();
     closeModal('bookOverlay');
     updateActiveBar();
     openTracking(order.id);
-  }, 1400);
+  }catch(err){
+    btn.disabled = false;
+    btn.textContent = 'נסי שוב';
+    toast('התשלום נכשל — נסי שוב 💳');
+  }
 }
 
 /* ================= LIVE TRACKING (Wolt-style) ================= */
@@ -1238,7 +1639,7 @@ function trackStepsHTML(o){
   const idx = ph === 'prep' ? 1 : ph === 'drive' ? 2 : 3;
   const steps = [
     {label:'ההזמנה אושרה', sub:'התשלום עבר בהצלחה'},
-    {label:'מתארגנת ואורזת ציוד', sub:'לקים, מנורה וערכה סטרילית'},
+    {label:'מתארגנת ואורזת ציוד', sub:'כל הציוד המקצועי וערכה סטרילית'},
     {label:'בדרך אלייך', sub:'עוקבים אחריה על המפה למעלה'},
     {label:'הגיעה!', sub:'פתחי את הדלת ותתחילי ליהנות 💅'},
   ];
@@ -1267,7 +1668,7 @@ function drawTracking(orderId){
     </div>
     <div class="track-line">${trackStepsHTML(o)}</div>
     <div class="track-provider">
-      <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+      ${avatarHTML(p)}
       <div><b>${esc(p.name)}</b><span>${esc(o.services.join(' + '))}</span></div>
       <button class="call" onclick="toast('בדמו אין שיחות — אבל היא כבר בדרך 😉')" aria-label="התקשרות">📞</button>
     </div>
@@ -1290,12 +1691,11 @@ function lightStars(n){
   document.querySelectorAll('.stars button').forEach((b,i) => b.classList.toggle('lit', i < n));
 }
 
-function rateOrder(orderId, n){
-  const all = loadBookings();
-  const o = all.find(x => x.id === orderId);
-  if(o){ o.status = 'done'; o.rating = n; }
-  saveBookings(all);
+async function rateOrder(orderId, n){
+  await api.updateBooking(orderId, {status:'done', rating:n});
+  await refreshBookings();
   closeModal('trackOverlay');
+  updateActiveBar();
   toast('תודה על הדירוג! ' + '★'.repeat(n) + ' נשמח לראותך שוב 💜');
 }
 
@@ -1320,7 +1720,7 @@ function updateActiveBar(){
   bar.style.display = 'flex';
   bar.onclick = () => openTracking(o.id);
   bar.innerHTML = `
-    <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+    ${avatarHTML(p)}
     <div style="flex:1;min-width:0">
       <b>${esc(o.providerName)} · ${ph === 'prep' ? 'מתארגנת' : ph === 'drive' ? 'בדרך אלייך' : 'הגיעה! לחצי לדירוג'}</b>
       <span>${etaLabel(o)}</span>
@@ -1339,7 +1739,7 @@ function openBookings(){
         const p = PROVIDERS.find(x => x.id === o.providerId) || PROVIDERS[0];
         return `
         <div class="bk-item" onclick="closeModal('bookingsOverlay');openTracking('${o.id}')">
-          <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+          ${avatarHTML(p)}
           <div class="bi">
             <b>${esc(o.providerName)}</b>
             <span>${esc(o.services.join(' + '))} · ${fmt(o.total)}</span>
@@ -1351,11 +1751,14 @@ function openBookings(){
 }
 
 /* ================= INIT ================= */
-$('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
-render();
-updateBadge();
-updateActiveBar();
-setInterval(updateActiveBar, 1000);
+(async () => {
+  $('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
+  renderCats();
+  render();
+  await refreshBookings();
+  updateActiveBar();
+  setInterval(updateActiveBar, 1000);
+})();
 </script>
 </body>
 </html>
