@@ -78,6 +78,17 @@
   .svc-row input{border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--bg);outline:none;width:100%;font-weight:600}
   .svc-row input:focus{border-color:var(--brand);background:#fff}
   .save-note{font-size:.78rem;color:var(--green);font-weight:700;display:none;margin-top:6px}
+  /* ---- day schedule ---- */
+  .sched{display:flex;flex-direction:column;gap:8px;min-width:0}
+  .slot-row{display:flex;gap:12px}
+  .slot-time{width:50px;flex:none;font-weight:700;font-size:.84rem;color:var(--ink-2);padding-top:11px}
+  .slot-card{flex:1;border-radius:13px;padding:10px 14px;display:flex;align-items:center;gap:10px;min-width:0}
+  .slot-card.busy{background:var(--brand-soft);border:1.5px solid #f3d5e1}
+  .slot-card.busy b{font-size:.88rem;display:block;line-height:1.3}
+  .slot-card.busy span{font-size:.76rem;color:var(--ink-2)}
+  .slot-card .s-price{margin-right:auto;font-weight:800;font-size:.9rem;flex:none}
+  .slot-card.gap{background:var(--green-soft);border:1.5px dashed #bfe8d8;color:var(--green);font-weight:700;font-size:.84rem;justify-content:center;cursor:pointer;transition:.2s;text-align:center}
+  .slot-card.gap:hover{background:#d8f3e8}
   .payout{background:linear-gradient(135deg,#2a1e30,#4a2440);border-radius:18px;color:#fff;padding:22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px}
   .payout b{font-size:1.3rem}
   .payout span{opacity:.75;font-size:.85rem;display:block}
@@ -126,6 +137,9 @@
   <div class="container">
     <div class="prof-head" id="profHead"></div>
     <div class="kpis" id="kpis"></div>
+
+    <h2 class="sec">היומן שלך — היום · לחיצה על מרווח פנוי מציעה אותו ללקוחות "עכשיו" ⚡</h2>
+    <div class="panel"><div class="sched" id="daySched"></div></div>
 
     <h2 class="sec">הרווחים שלך — 14 ימים אחרונים (נטו, אחרי עמלה)</h2>
     <div class="panel">
@@ -207,6 +221,8 @@ function show(){
       <span class="dot"></span><span id="availLabel">${avail ? 'זמינה עכשיו' : 'לא זמינה'}</span>
     </button>`;
 
+  renderDaySched();
+
   const orders = myOrders();
   const gross = orders.reduce((a,o) => a + o.total, 0);
   const tips = orders.reduce((a,o) => a + (o.tip || 0), 0);
@@ -267,6 +283,42 @@ function show(){
       <input value="${esc(s.name)}" data-i="${i}" data-k="name">
       <input value="${s.price}" type="number" min="0" data-i="${i}" data-k="price">
       <input value="${s.dur || ''}" type="number" min="5" placeholder="דקות" data-i="${i}" data-k="dur">
+    </div>`).join('');
+}
+
+/* יומן יומי דטרמיניסטי — טיפולים היום + מרווחים פנויים שאפשר להציע ללקוחות */
+function renderDaySched(){
+  let seed = [...me.id].reduce((a,c) => a + c.charCodeAt(0), 7);
+  const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const names = ['רוני ק.','מיכל ב.','שרון א.','טל מ.','יעל ר.','דנה פ.','נועה ש.','הילה ג.'];
+  const rows = [];
+  let hour = 9 + Math.floor(rnd() * 2), busyCount = 0;
+  while(hour <= 18){
+    if(rnd() < 0.68 || (hour >= 16 && busyCount < 3)){
+      const s = me.services[Math.floor(rnd() * me.services.length)];
+      rows.push({busy:true, t:String(hour).padStart(2,'0') + ':00', client:names[Math.floor(rnd() * names.length)], svc:s.name, price:s.price, dur:s.dur});
+      hour += Math.max(1, Math.round((s.dur || 60) / 60));
+      busyCount++;
+    } else {
+      const start = hour; hour += 1;
+      if(hour <= 18 && rnd() < 0.3) hour += 1;
+      rows.push({busy:false, t:String(start).padStart(2,'0') + ':00', until:String(Math.min(hour,19)).padStart(2,'0') + ':00'});
+    }
+  }
+  $('daySched').innerHTML = rows.map(r => r.busy ? `
+    <div class="slot-row">
+      <div class="slot-time">${r.t}</div>
+      <div class="slot-card busy">
+        <span style="font-size:1.1rem">💅</span>
+        <div style="min-width:0"><b>${esc(r.client)}</b><span>${esc(r.svc)} · ${r.dur || 60} דק'</span></div>
+        <span class="s-price">${fmt(r.price)}</span>
+      </div>
+    </div>` : `
+    <div class="slot-row">
+      <div class="slot-time">${r.t}</div>
+      <div class="slot-card gap" onclick="toast('המרווח ${r.t}–${r.until} מוצע עכשיו ללקוחות באזור שלך! ⚡')">
+        ⚡ מרווח פנוי ${r.t}–${r.until} — לחצי להציע ללקוחות "עכשיו"
+      </div>
     </div>`).join('');
 }
 

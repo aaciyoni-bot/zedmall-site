@@ -11,7 +11,7 @@ window.BYT_GEN_ORDERS = function(){
   const orders = [];
   const now = Date.now(), DAY = 86400000;
   for(let d = 30; d >= 1; d--){
-    const perDay = 2 + Math.floor(rnd() * 5);
+    const perDay = 10 + Math.floor(rnd() * 6);
     for(let i = 0; i < perDay; i++){
       const p = window.BYT_PROVIDERS[Math.floor(rnd() * window.BYT_PROVIDERS.length)];
       const svc = p.services[Math.floor(rnd() * p.services.length)];
