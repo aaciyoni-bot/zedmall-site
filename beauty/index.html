@@ -337,6 +337,40 @@
   .step h3{font-size:1rem;font-weight:800;margin-bottom:4px}
   .step p{font-size:.86rem;color:var(--ink-2)}
 
+  /* ---------- Hospital care ---------- */
+  .hosp-banner{
+    background:linear-gradient(135deg,#fdf3f7,#f1eafb);border:1px solid var(--line);
+    border-radius:24px;padding:34px;display:grid;grid-template-columns:1.2fr .8fr;gap:26px;align-items:center;
+  }
+  .hosp-banner h2{font-size:1.5rem;font-weight:800;letter-spacing:-.4px}
+  .hosp-banner .lead{color:var(--ink-2);margin:8px 0 14px;font-size:.95rem;max-width:56ch}
+  .hosp-list{list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:18px}
+  .hosp-list li{display:flex;gap:8px;font-size:.9rem;color:var(--ink-2)}
+  .hosp-list li::before{content:'✓';color:var(--green);font-weight:800;flex:none}
+  .hosp-visual{text-align:center;user-select:none;line-height:1}
+  .hosp-visual .big{font-size:4.6rem;display:block}
+  .hosp-visual .small{font-size:2rem;opacity:.8}
+  .hosp-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  @media(max-width:860px){.hosp-banner{grid-template-columns:1fr;padding:26px 22px}.hosp-visual{display:none}}
+
+  /* ---------- Gifts ---------- */
+  .amount-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .amount-opt{flex:1;min-width:72px;border:1.5px solid var(--line);border-radius:12px;padding:12px 0;text-align:center;font-weight:800;transition:.2s;cursor:pointer}
+  .amount-opt.selected{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-dark)}
+  .svc-check{display:flex;gap:10px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:600;font-size:.92rem;margin-bottom:8px}
+  .svc-check input{width:18px;height:18px;accent-color:var(--brand);flex:none}
+  .gift-voucher{
+    background:linear-gradient(135deg,#2a1e30,#4a2440);color:#fff;border-radius:20px;
+    padding:26px 22px;text-align:center;position:relative;overflow:hidden;
+  }
+  .gift-voucher::before{content:'🎁';position:absolute;font-size:6rem;opacity:.12;left:-14px;top:-18px;transform:rotate(-15deg)}
+  .gift-voucher .v-brand{font-weight:900;font-size:1.1rem;letter-spacing:-.3px}
+  .gift-voucher .amount{font-size:2.3rem;font-weight:900;margin-top:4px}
+  .gift-voucher .to{font-size:.95rem;opacity:.9;margin-top:6px}
+  .gift-voucher .dedication{font-style:italic;color:rgba(255,255,255,.85);margin-top:10px;font-size:.95rem;max-width:40ch;margin-inline:auto}
+  .gift-voucher .code{background:rgba(255,255,255,.12);border:1.5px dashed rgba(255,255,255,.45);border-radius:12px;padding:10px 20px;font-weight:800;letter-spacing:2.5px;display:inline-block;margin-top:14px;font-size:1.05rem}
+  .gift-voucher .v-note{font-size:.76rem;opacity:.7;margin-top:12px}
+
   /* ---------- Pros section ---------- */
   .pros-banner{
     background:linear-gradient(135deg,#2a1e30,#4a2440);
@@ -547,6 +581,7 @@
     </a>
     <div class="header-actions">
       <button class="btn-ghost hide-m" onclick="scrollToId('how')">איך זה עובד</button>
+      <button class="btn-ghost hide-m" onclick="scrollToId('gifts')">🎁 מתנות</button>
       <a class="btn-ghost hide-m" href="join.html">הצטרפי כמטפלת</a>
       <button class="btn-ghost" id="pointsBtn" onclick="toast('צוברים 5% נקודות על כל טיפול — ומשלמים איתן בקופה 💎')">💎 <span id="ptsCount">0</span></button>
       <button class="btn-ghost bookings-badge" id="bookingsBtn" data-count="0" onclick="openBookings()">ההזמנות שלי</button>
@@ -717,6 +752,96 @@
   </div>
 </section>
 
+<!-- ============ HOSPITAL CARE ============ -->
+<section id="hospital">
+  <div class="container">
+    <div class="hosp-banner">
+      <div>
+        <h2>יופי שמגיע עד מיטת בית החולים 🏥💜</h2>
+        <p class="lead">ילדת הרגע את הדבר הכי יפה בעולם — ומגיע לך להרגיש יפה גם את, בתמונות הראשונות עם הבייבי. ובאשפוז ארוך? כמה ימים בלי פן, בלי מניקור, בלי להרגיש עצמך. <b>byoutoyou care</b> מביאה את הטיפוח עד המיטה — בעדינות, בסטריליות ובאהבה.</p>
+        <ul class="hosp-list">
+          <li>פן וסידור שיער ליד המיטה — בלי לקום</li>
+          <li>מניקור עדין וניקוי ידיים מפנק</li>
+          <li>איפור עדין לצילומים הראשונים עם התינוק 📸</li>
+          <li>ציוד סטרילי חד־פעמי ותיאום מראש עם הצוות הסיעודי</li>
+          <li>מתאים ליולדות, מאושפזות ומחלקות שיקום</li>
+        </ul>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-primary" onclick="openHospital(false)">הזמיני ביקור טיפוח 🏥</button>
+          <button class="btn-secondary" onclick="openHospital(true)">שלחי כמתנה ליולדת 🎁</button>
+        </div>
+        <div class="hosp-chips">
+          <span class="tag">איכילוב</span><span class="tag">שיבא תל השומר</span><span class="tag">בילינסון</span>
+          <span class="tag">אסותא</span><span class="tag">הדסה</span><span class="tag">וולפסון</span><span class="tag">+ כל בתי החולים במרכז</span>
+        </div>
+      </div>
+      <div class="hosp-visual" aria-hidden="true">
+        <span class="small">✨ 💅</span>
+        <span class="big">🤱</span>
+        <span class="small">💜 🌸</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GIFTS ============ -->
+<section id="gifts">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <h2>מתנה שאף אחת לא שוכחת 🎁</h2>
+        <p>שובר byoutoyou — שולחים בדקה, מרגישים אותו שבועות. ללידה, ליום הולדת, לחברה — או לכל העובדות בארגון.</p>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+      <article class="card" onclick="openGift('birth')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#e66aa0,#b34fc9)">
+          <span class="em" style="right:10%;top:4px">🤱</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🍼</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>מתנת לידה</h3>
+          <div class="role">פינוק ליולדת — בבית החולים או בבית. המתנה שהיא באמת צריכה עכשיו</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־150 ₪</b><span>שובר מתנה</span></div><button class="btn-book">שלחי מתנה</button></div>
+      </article>
+      <article class="card" onclick="openGift('birthday')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#e8a33d,#e66aa0)">
+          <span class="em" style="right:10%;top:4px">🎂</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🎈</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>יום הולדת</h3>
+          <div class="role">שובר בסכום לבחירתך + הקדשה אישית — והיא בוחרת בדיוק את הפינוק שבא לה</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־150 ₪</b><span>שובר מתנה</span></div><button class="btn-book">שלחי מתנה</button></div>
+      </article>
+      <article class="card" onclick="openGift('spa')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#1fa97a,#4fc9a8)">
+          <span class="em" style="right:10%;top:4px">💆‍♀️</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🕯️</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>חבילת פינוק</h3>
+          <div class="role">מניקור + פן + טיפול פנים עד הבית — יום ספא שלם בלי לצאת מהדלת</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־400 ₪</b><span>שובר מתנה</span></div><button class="btn-book">שלחי מתנה</button></div>
+      </article>
+      <article class="card" onclick="openEventForm('חבילות לוועדי עובדים וארגונים 🏢')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#3b82f6,#8e4fc9)">
+          <span class="em" style="right:10%;top:4px">🏢</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">💝</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>ועדי עובדים וארגונים</h3>
+          <div class="role">שוברים לעובדות בכמויות — ימי הולדת, לידות וחגים. מחירים מיוחדים לארגונים</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>הצעה מותאמת</b><span>לפי כמות</span></div><button class="btn-book">בקשי הצעה</button></div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ============ PROS BANNER ============ -->
 <section id="pros">
   <div class="container">
@@ -801,6 +926,50 @@
       <div class="field"><label>פרטים נוספים (לא חובה)</label><textarea id="evNotes" rows="2" placeholder="למשל: חתונה ב-19:00, צריכות איפור + שיער ל-5 נשים"></textarea></div>
       <button class="btn-primary" style="width:100%" onclick="submitEventLead()">שלחי בקשה 🎉</button>
     </div>
+  </div>
+</div>
+
+<!-- ============ HOSPITAL CARE MODAL ============ -->
+<div class="overlay" id="hospOverlay" onclick="closeOnBackdrop(event,'hospOverlay')">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="הזמנת ביקור טיפוח בבית חולים">
+    <div class="sheet-head"><b>byoutoyou care — ביקור בבית חולים 🏥</b><button class="btn-close" onclick="closeModal('hospOverlay')" aria-label="סגירה">✕</button></div>
+    <div class="sheet-body">
+      <p style="color:var(--ink-2);font-size:.92rem;margin-bottom:16px">רכזת byoutoyou care מתאמת מראש עם המחלקה ושולחת מטפלת עם ערכה סטרילית מותאמת. נחזור אלייך תוך שעה לתיאום 💜</p>
+      <div class="row-2">
+        <div class="field" id="fHospName"><label>שם מלא</label><input id="hospName" type="text" placeholder="השם שלך"></div>
+        <div class="field" id="fHospPhone"><label>טלפון</label><input id="hospPhone" type="tel" placeholder="050-0000000" dir="rtl"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>בית חולים</label>
+          <select id="hospWhere">
+            <option>איכילוב</option><option>שיבא תל השומר</option><option>בילינסון</option><option>אסותא</option>
+            <option>וולפסון</option><option>הדסה עין כרם</option><option>רמב"ם</option><option>סורוקה</option><option>אחר</option>
+          </select>
+        </div>
+        <div class="field"><label>מחלקה</label>
+          <select id="hospWard">
+            <option>יולדות 🤱</option><option>נשים</option><option>אשפוז כללי</option><option>שיקום</option><option>אחר</option>
+          </select>
+        </div>
+      </div>
+      <h4 class="block-title">מה בא לך? (אפשר לסמן כמה)</h4>
+      <label class="svc-check"><input type="checkbox" class="hosp-svc" value="פן וסידור שיער" checked> 💇‍♀️ פן וסידור שיער ליד המיטה</label>
+      <label class="svc-check"><input type="checkbox" class="hosp-svc" value="מניקור עדין"> 💅 מניקור עדין וטיפוח ידיים</label>
+      <label class="svc-check"><input type="checkbox" class="hosp-svc" value="איפור עדין לצילומים"> 📸 איפור עדין לצילומים עם הבייבי</label>
+      <label class="svc-check"><input type="checkbox" class="hosp-svc" value="טיפוח פנים מרגיע"> 🧖‍♀️ טיפוח פנים מרגיע</label>
+      <label class="svc-check" style="margin-top:6px"><input type="checkbox" id="hospGift" onchange="toggleHospGift()"> 🎁 זו מתנה למישהי אחרת</label>
+      <div class="field" id="hospGiftNameWrap" style="display:none"><label>למי המתנה? (שם היולדת / המאושפזת)</label><input id="hospGiftName" type="text" placeholder="שם המקבלת"></div>
+      <div class="field"><label>מתי נוח? (לא חובה)</label><input id="hospWhen" type="text" placeholder="למשל: מחר בבוקר, אחרי ביקור הרופאים"></div>
+      <button class="btn-primary" style="width:100%" onclick="submitHospital()">שלחי בקשה 💜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ GIFT MODAL ============ -->
+<div class="overlay" id="giftOverlay" onclick="closeOnBackdrop(event,'giftOverlay')">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="שליחת שובר מתנה">
+    <div class="sheet-head"><b id="giftTitle">שובר מתנה 🎁</b><button class="btn-close" onclick="closeModal('giftOverlay')" aria-label="סגירה">✕</button></div>
+    <div class="sheet-body" id="giftBody"></div>
   </div>
 </div>
 
@@ -1598,7 +1767,7 @@ function goToBooking(){
     day: 'היום', slot: null,
     address: $('addrInput').value.trim(),
     name: '', phone: '', notes: '',
-    tip: 0, coupon: null, usePoints: false,
+    tip: 0, coupon: null, giftCode: null, usePoints: false,
   };
   closeModal('profileOverlay');
   openModal('bookOverlay');
@@ -1606,13 +1775,17 @@ function goToBooking(){
 }
 
 /* חישוב סכומים אחיד לקופה, להזמנה ולקבלה */
+function giftByCode(code){ return lsGet(GIFTS_KEY, []).find(g => g.code === code && g.balance > 0); }
 function bookingTotals(){
   const subtotal = booking.services.reduce((a,s) => a + s.price, 0);
   const discount = booking.coupon ? Math.round(subtotal * 0.10) : 0;
   const maxPts = Math.min(getPoints(), Math.floor((subtotal - discount) * 0.5));
   const pointsUsed = booking.usePoints ? maxPts : 0;
-  const total = subtotal - discount - pointsUsed + SERVICE_FEE + booking.tip;
-  return {subtotal, discount, pointsUsed, maxPts, total};
+  const base = subtotal - discount - pointsUsed + SERVICE_FEE + booking.tip;
+  const g = booking.giftCode ? giftByCode(booking.giftCode) : null;
+  const giftUsed = g ? Math.min(g.balance, base) : 0;
+  const total = base - giftUsed;
+  return {subtotal, discount, pointsUsed, maxPts, giftUsed, total};
 }
 
 function setWizard(step){
@@ -1697,6 +1870,7 @@ function renderBookStep(step){
         ${booking.tip ? `<div class="s-row"><span>טיפ למטפלת 💜</span><b>${fmt(booking.tip)}</b></div>` : ''}
         ${t.discount ? `<div class="s-row good"><span>קופון ${esc(booking.coupon)}</span><b>−${fmt(t.discount)}</b></div>` : ''}
         ${t.pointsUsed ? `<div class="s-row good"><span>נקודות byoutoyou 💎</span><b>−${fmt(t.pointsUsed)}</b></div>` : ''}
+        ${t.giftUsed ? `<div class="s-row good"><span>שובר מתנה 🎁 ${esc(booking.giftCode)}</span><b>−${fmt(t.giftUsed)}</b></div>` : ''}
         <div class="s-row total-row"><b>סה"כ לתשלום</b><b style="color:var(--brand-dark)">${fmt(t.total)}</b></div>
       </div>
 
@@ -1706,7 +1880,7 @@ function renderBookStep(step){
       </div>
 
       <div class="coupon-row">
-        <input id="couponInput" type="text" placeholder="קוד קופון (נסי: WELCOME10)" value="${esc(booking.coupon || '')}" dir="ltr" style="text-align:left">
+        <input id="couponInput" type="text" placeholder="קוד קופון או שובר מתנה (נסי: WELCOME10)" value="${esc(booking.coupon || booking.giftCode || '')}" dir="ltr" style="text-align:left">
         <button onclick="applyCoupon()">החילי</button>
       </div>
 
@@ -1733,7 +1907,7 @@ function renderBookStep(step){
       <div class="pay-note">🔒 <span>זהו דמו — לא מתבצע חיוב אמיתי ולא נשמרים פרטי אשראי. בלחיצה על התשלום את מאשרת את <a href="legal.html" target="_blank" style="text-decoration:underline">התקנון ומדיניות הביטולים</a>.</span></div>
       <div class="btn-row">
         <button class="btn-secondary" onclick="renderBookStep(2)">חזרה</button>
-        <button class="btn-primary" id="payBtn" onclick="submitBooking()">שלמי ${fmt(t.total)} והזמיני 💜</button>
+        <button class="btn-primary" id="payBtn" onclick="submitBooking()">${t.total === 0 ? 'ההזמנה מכוסה בשובר — אשרי 🎁' : 'שלמי ' + fmt(t.total) + ' והזמיני 💜'}</button>
       </div>`;
     $('bCard').addEventListener('input', e => {
       e.target.value = e.target.value.replace(/\D/g,'').slice(0,16).replace(/(\d{4})(?=\d)/g,'$1 ');
@@ -1766,9 +1940,11 @@ function setTip(v){ saveCardFields(); booking.tip = v; renderBookStep(3); }
 function applyCoupon(){
   saveCardFields();
   const code = $('couponInput').value.trim().toUpperCase();
-  if(code === 'WELCOME10'){ booking.coupon = code; toast('הקופון הופעל — 10% הנחה! 🎉'); }
-  else if(!code){ booking.coupon = null; }
-  else { booking.coupon = null; toast('קוד לא מוכר — נסי WELCOME10'); }
+  const g = giftByCode(code);
+  if(code === 'WELCOME10'){ booking.coupon = code; booking.giftCode = null; toast('הקופון הופעל — 10% הנחה! 🎉'); }
+  else if(g){ booking.giftCode = code; booking.coupon = null; toast('שובר מתנה על ' + fmt(g.balance) + ' הופעל! 🎁'); }
+  else if(!code){ booking.coupon = null; booking.giftCode = null; }
+  else { booking.coupon = null; booking.giftCode = null; toast('קוד לא מוכר — נסי WELCOME10 או קוד שובר מתנה'); }
   renderBookStep(3);
 }
 function togglePoints(on){ saveCardFields(); booking.usePoints = on; renderBookStep(3); }
@@ -1796,14 +1972,17 @@ function validateStep2(){
 }
 
 async function submitBooking(){
-  const card = $('bCard').value.replace(/\s/g,'');
-  const exp = $('bExp').value;
-  const cvv = $('bCvv').value;
-  const badCard = card.length < 14;
-  const badExp = !/^\d{2}\/\d{2}$/.test(exp) || +exp.slice(0,2) < 1 || +exp.slice(0,2) > 12;
-  const badCvv = cvv.length < 3;
-  markInvalid('fCard', badCard); markInvalid('fExp', badExp); markInvalid('fCvv', badCvv);
-  if(badCard || badExp || badCvv){ toast('בדקי את פרטי הכרטיס 💳'); return; }
+  const coveredByGift = bookingTotals().total === 0;
+  if(!coveredByGift){
+    const card = $('bCard').value.replace(/\s/g,'');
+    const exp = $('bExp').value;
+    const cvv = $('bCvv').value;
+    const badCard = card.length < 14;
+    const badExp = !/^\d{2}\/\d{2}$/.test(exp) || +exp.slice(0,2) < 1 || +exp.slice(0,2) > 12;
+    const badCvv = cvv.length < 3;
+    markInvalid('fCard', badCard); markInvalid('fExp', badExp); markInvalid('fCvv', badCvv);
+    if(badCard || badExp || badCvv){ toast('בדקי את פרטי הכרטיס 💳'); return; }
+  }
 
   const btn = $('payBtn');
   btn.disabled = true;
@@ -1829,6 +2008,8 @@ async function submitBooking(){
       coupon: booking.coupon,
       discount: t.discount,
       pointsUsed: t.pointsUsed,
+      giftCode: booking.giftCode,
+      giftUsed: t.giftUsed,
       total: t.total,
       when: booking.when === 'now' ? 'עכשיו' : booking.day + ' ' + booking.slot,
       address: booking.address,
@@ -1840,6 +2021,11 @@ async function submitBooking(){
       status: 'active',
     };
     if(t.pointsUsed) setPoints(getPoints() - t.pointsUsed);
+    if(t.giftUsed){
+      const gifts = lsGet(GIFTS_KEY, []);
+      const g = gifts.find(x => x.code === booking.giftCode);
+      if(g){ g.balance -= t.giftUsed; lsSet(GIFTS_KEY, gifts); }
+    }
     await api.createBooking(order);
     await refreshBookings();
     closeModal('bookOverlay');
@@ -2043,6 +2229,107 @@ function submitEventLead(){
   toast('הבקשה נשלחה! מנהלת אירועים תחזור אלייך בקרוב 💜');
 }
 
+/* ================= HOSPITAL CARE ================= */
+const HOSP_KEY = 'byoutoyou_hospital_leads';
+function openHospital(isGift){
+  $('hospGift').checked = !!isGift;
+  toggleHospGift();
+  openModal('hospOverlay');
+}
+function toggleHospGift(){ $('hospGiftNameWrap').style.display = $('hospGift').checked ? 'block' : 'none'; }
+function submitHospital(){
+  const name = $('hospName').value.trim(), phone = $('hospPhone').value.trim();
+  const badName = name.length < 2, badPhone = !/^0\d{1,2}[- ]?\d{7}$/.test(phone.replace(/\s/g,''));
+  markInvalid('fHospName', badName); markInvalid('fHospPhone', badPhone);
+  if(badName || badPhone){ toast('בדקי שם וטלפון 📱'); return; }
+  const services = [...document.querySelectorAll('.hosp-svc:checked')].map(c => c.value);
+  if(!services.length){ toast('בחרי לפחות פינוק אחד 💜'); return; }
+  const leads = lsGet(HOSP_KEY, []);
+  leads.unshift({
+    id: 'HC-' + Math.random().toString(36).slice(2,7).toUpperCase(),
+    name, phone,
+    hospital: $('hospWhere').value, ward: $('hospWard').value,
+    services,
+    isGift: $('hospGift').checked, giftTo: $('hospGiftName').value.trim(),
+    when: $('hospWhen').value.trim(),
+    createdAt: Date.now(), status: 'new',
+  });
+  lsSet(HOSP_KEY, leads);
+  closeModal('hospOverlay');
+  toast('הבקשה התקבלה! רכזת byoutoyou care תחזור אלייך תוך שעה 💜');
+}
+
+/* ================= GIFT VOUCHERS ================= */
+const GIFTS_KEY = 'byoutoyou_gifts';
+const GIFT_TYPES = {
+  birth:    {title:'מתנת לידה 🤱',   sub:'פינוק ליולדת — בבית החולים או בבית', amounts:[150,250,400,600], def:250},
+  birthday: {title:'יום הולדת 🎂',   sub:'שובר בסכום לבחירתך — היא בוחרת את הפינוק', amounts:[150,250,400,600], def:250},
+  spa:      {title:'חבילת פינוק 💆‍♀️', sub:'מניקור + פן + טיפול פנים עד הבית', amounts:[400,500,700,900], def:400},
+};
+let gift = {};
+function openGift(type){
+  const t = GIFT_TYPES[type] || GIFT_TYPES.birthday;
+  gift = {type, amount: t.def, from:'', to:'', toPhone:'', dedication:''};
+  $('giftTitle').textContent = 'שובר מתנה — ' + t.title;
+  renderGiftForm(t);
+  openModal('giftOverlay');
+}
+function renderGiftForm(t){
+  $('giftBody').innerHTML = `
+    <p style="color:var(--ink-2);font-size:.92rem;margin-bottom:16px">${t.sub}. השובר נשלח למקבלת ב-SMS עם ההקדשה שלך, וניתן למימוש על כל שירות באתר 🎁</p>
+    <h4 class="block-title">סכום השובר</h4>
+    <div class="amount-row">
+      ${t.amounts.map(a => `<div class="amount-opt ${gift.amount===a?'selected':''}" onclick="setGiftAmount(${a})">${a} ₪</div>`).join('')}
+    </div>
+    <div class="row-2">
+      <div class="field" id="fGFrom"><label>ממי המתנה?</label><input id="gFrom" type="text" placeholder="השם שלך" value="${esc(gift.from)}"></div>
+      <div class="field" id="fGTo"><label>למי המתנה?</label><input id="gTo" type="text" placeholder="שם המקבלת" value="${esc(gift.to)}"></div>
+    </div>
+    <div class="field" id="fGPhone"><label>הטלפון שלה (לשליחת השובר ב-SMS)</label><input id="gPhone" type="tel" placeholder="050-0000000" dir="rtl" value="${esc(gift.toPhone)}"></div>
+    <div class="field"><label>הקדשה אישית 💌</label><textarea id="gDedication" rows="2" placeholder="מזל טוב! מגיע לך רגע של פינוק…">${esc(gift.dedication)}</textarea></div>
+    <div class="pay-note">🔒 <span>זהו דמו — לא מתבצע חיוב אמיתי. בלחיצה נדמה תשלום ונציג את השובר.</span></div>
+    <button class="btn-primary" style="width:100%;margin-top:8px" id="giftPayBtn" onclick="buyGift()">שלמי <span id="giftAmountLbl">${gift.amount}</span> ₪ ושלחי את המתנה 🎁</button>`;
+}
+function setGiftAmount(a){
+  gift.amount = a;
+  document.querySelectorAll('.amount-opt').forEach(el => el.classList.toggle('selected', +el.textContent.replace(/\D/g,'') === a));
+  $('giftAmountLbl').textContent = a;
+}
+function buyGift(){
+  gift.from = $('gFrom').value.trim(); gift.to = $('gTo').value.trim();
+  gift.toPhone = $('gPhone').value.trim(); gift.dedication = $('gDedication').value.trim();
+  const badFrom = gift.from.length < 2, badTo = gift.to.length < 2,
+        badPhone = !/^0\d{1,2}[- ]?\d{7}$/.test(gift.toPhone.replace(/\s/g,''));
+  markInvalid('fGFrom', badFrom); markInvalid('fGTo', badTo); markInvalid('fGPhone', badPhone);
+  if(badFrom || badTo || badPhone){ toast('כמה פרטים חסרים או לא תקינים'); return; }
+  const btn = $('giftPayBtn');
+  btn.disabled = true; btn.textContent = 'מעבדים את התשלום…';
+  setTimeout(() => {
+    const code = 'GIFT-' + Math.random().toString(36).slice(2,7).toUpperCase();
+    const gifts = lsGet(GIFTS_KEY, []);
+    gifts.unshift({code, type: gift.type, amount: gift.amount, balance: gift.amount,
+      from: gift.from, to: gift.to, toPhone: gift.toPhone, dedication: gift.dedication,
+      createdAt: Date.now()});
+    lsSet(GIFTS_KEY, gifts);
+    $('giftTitle').textContent = 'המתנה בדרך! 🎉';
+    $('giftBody').innerHTML = `
+      <div class="gift-voucher">
+        <div class="v-brand">💅 byoutoyou · שובר מתנה</div>
+        <div class="amount">${fmt(gift.amount)}</div>
+        <div class="to">ל<b>${esc(gift.to)}</b> · מאת <b>${esc(gift.from)}</b></div>
+        ${gift.dedication ? `<div class="dedication">"${esc(gift.dedication)}"</div>` : ''}
+        <div class="code" dir="ltr">${code}</div>
+        <div class="v-note">למימוש: מזינים את הקוד בשדה הקופון בקופה · בדמו השובר נשמר בדפדפן הזה</div>
+      </div>
+      <p style="text-align:center;color:var(--ink-2);font-size:.88rem;margin-top:14px">בדמו: השובר "נשלח" ב-SMS ל־<b dir="ltr">${esc(gift.toPhone)}</b> 📲<br>רוצה לנסות? הזמיני טיפול והזיני את הקוד בקופה 😉</p>
+      <div class="btn-row" style="margin-top:12px">
+        <button class="btn-secondary" style="flex:1" onclick="closeModal('giftOverlay')">סגירה</button>
+        <button class="btn-primary" onclick="closeModal('giftOverlay');scrollToId('browse')">להזמנת טיפול עם השובר ←</button>
+      </div>`;
+    toast('השובר נוצר ונשלח! 🎁');
+  }, 1200);
+}
+
 /* ================= CHAT ================= */
 const CHAT_REPLIES = [
   'מעולה, רשמתי לעצמי! 📝',
@@ -2117,6 +2404,7 @@ function openReceipt(orderId){
     ${o.tip ? `<div class="s-row"><span>טיפ למטפלת</span><b>${fmt(o.tip)}</b></div>` : ''}
     ${o.discount ? `<div class="s-row good"><span>הנחת קופון ${esc(o.coupon || '')}</span><b>−${fmt(o.discount)}</b></div>` : ''}
     ${o.pointsUsed ? `<div class="s-row good"><span>מימוש נקודות</span><b>−${fmt(o.pointsUsed)}</b></div>` : ''}
+    ${o.giftUsed ? `<div class="s-row good"><span>שובר מתנה 🎁 ${esc(o.giftCode || '')}</span><b>−${fmt(o.giftUsed)}</b></div>` : ''}
     <div class="s-row total-row"><b>סה"כ שולם</b><b>${fmt(o.total)}</b></div>
     <div style="border-top:1px dashed var(--ink-3);margin:10px 0"></div>
     <div class="s-row"><span>אסמכתה</span><b dir="ltr">${esc(o.txId || '—')}</b></div>

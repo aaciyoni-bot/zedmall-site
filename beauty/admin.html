@@ -129,6 +129,12 @@
     <h2 class="sec">פניות אירועים וחבילות</h2>
     <div class="panel" id="leadsPanel"></div>
 
+    <h2 class="sec">בקשות byoutoyou care — בתי חולים 🏥</h2>
+    <div class="panel" id="hospPanel"></div>
+
+    <h2 class="sec">שוברי מתנה 🎁</h2>
+    <div class="panel" id="giftsPanel"></div>
+
     <h2 class="sec">מטפלות פעילות (25)</h2>
     <div class="panel"><table id="provTable"></table></div>
   </div>
@@ -256,6 +262,41 @@ function draw(){
       <td><span class="chip new">חדשה</span></td>
     </tr>`).join('') + '</table>'
     : '<div class="empty">אין עדיין פניות אירועים — נסו את "אירועים וחבילות" באתר 🎉</div>';
+
+  /* בקשות בתי חולים */
+  const hosp = lsGet('byoutoyou_hospital_leads', []);
+  $('hospPanel').innerHTML = hosp.length ? `<table>
+    <tr><th>מס'</th><th>שם</th><th>טלפון</th><th>בית חולים</th><th>מחלקה</th><th>שירותים</th><th>מתנה?</th><th>מתי</th><th>סטטוס</th></tr>` +
+    hosp.map(h => `
+    <tr>
+      <td dir="ltr">${esc(h.id)}</td>
+      <td><b>${esc(h.name)}</b></td>
+      <td dir="ltr">${esc(h.phone)}</td>
+      <td>${esc(h.hospital)}</td>
+      <td>${esc(h.ward)}</td>
+      <td>${(h.services || []).map(esc).join(', ')}</td>
+      <td>${h.isGift ? '🎁 ל' + esc(h.giftTo || '—') : '—'}</td>
+      <td>${esc(h.when || '—')}</td>
+      <td><span class="chip new">חדשה</span></td>
+    </tr>`).join('') + '</table>'
+    : '<div class="empty">אין עדיין בקשות — נסו את "byoutoyou care" באתר 🏥</div>';
+
+  /* שוברי מתנה */
+  const gifts = lsGet('byoutoyou_gifts', []);
+  $('giftsPanel').innerHTML = gifts.length ? `<table>
+    <tr><th>קוד</th><th>סכום</th><th>יתרה</th><th>מאת</th><th>למי</th><th>טלפון</th><th>הקדשה</th><th>סטטוס</th></tr>` +
+    gifts.map(g => `
+    <tr>
+      <td dir="ltr"><b>${esc(g.code)}</b></td>
+      <td>${fmt(g.amount)}</td>
+      <td><b style="color:${g.balance > 0 ? 'var(--green)' : 'var(--ink-3)'}">${fmt(g.balance)}</b></td>
+      <td>${esc(g.from)}</td>
+      <td>${esc(g.to)}</td>
+      <td dir="ltr">${esc(g.toPhone)}</td>
+      <td>${esc(g.dedication || '—')}</td>
+      <td><span class="chip ${g.balance > 0 ? 'active' : 'done'}">${g.balance > 0 ? (g.balance < g.amount ? 'מומש חלקית' : 'פעיל') : 'מומש'}</span></td>
+    </tr>`).join('') + '</table>'
+    : '<div class="empty">אין עדיין שוברים — נסו לשלוח מתנה מהאתר 🎁</div>';
 
   /* מטפלות */
   const provRevenue = {};
