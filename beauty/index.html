@@ -221,6 +221,57 @@
   .empty-state{text-align:center;padding:60px 20px;color:var(--ink-3)}
   .empty-state .big{font-size:2.6rem;margin-bottom:8px}
 
+  /* ---------- Card cover (Wolt-style) ---------- */
+  .card-cover{height:86px;position:relative;overflow:hidden;flex:none}
+  .card-cover .em{position:absolute;font-size:3rem;opacity:.4;transform:rotate(-10deg);user-select:none}
+  .card-cover .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.22),rgba(255,255,255,0) 65%)}
+  .card .card-top{padding:0 18px;margin-top:-26px;position:relative}
+  .card .card-top .avatar{border:3px solid var(--surface);box-shadow:var(--shadow)}
+  .card .card-top .info{padding-top:30px}
+
+  /* ---------- Mini search ---------- */
+  .search-mini{
+    display:flex;align-items:center;gap:7px;background:var(--surface);
+    border:1.5px solid var(--line);border-radius:99px;padding:7px 14px;min-width:200px;flex:1;max-width:280px;
+  }
+  .search-mini svg{flex:none;color:var(--ink-3)}
+  .search-mini input{border:none;background:none;outline:none;font-size:.88rem;width:100%;font-weight:500}
+
+  /* ---------- Live map tracking ---------- */
+  .map-wrap{position:relative;border-radius:18px;overflow:hidden;border:1px solid var(--line);margin-bottom:16px;background:#f0f3ec}
+  .map-wrap svg{display:block;width:100%;height:auto}
+  .eta-chip{
+    position:absolute;top:12px;right:12px;background:var(--ink);color:#fff;
+    font-weight:700;font-size:.85rem;padding:7px 14px;border-radius:99px;box-shadow:var(--shadow-lg);
+  }
+  .track-status{text-align:center;margin-bottom:14px}
+  .track-status h3{font-size:1.25rem;font-weight:800}
+  .track-status p{color:var(--ink-2);font-size:.88rem}
+  @keyframes ringpulse{0%{r:14;opacity:.5}100%{r:26;opacity:0}}
+  .pulse-ring{animation:ringpulse 1.6s ease-out infinite}
+
+  /* ---------- Rating ---------- */
+  .rate-box{background:var(--brand-soft);border-radius:16px;padding:18px;text-align:center;margin-top:16px}
+  .rate-box b{font-size:1rem}
+  .stars{display:flex;gap:8px;justify-content:center;margin-top:10px}
+  .stars button{font-size:2rem;line-height:1;color:#dcc9d2;transition:.15s;transform-origin:center}
+  .stars button:hover{transform:scale(1.2)}
+  .stars button.lit{color:var(--gold)}
+
+  /* ---------- Active order bar (Wolt-style) ---------- */
+  .active-bar{
+    position:fixed;bottom:14px;right:14px;left:14px;max-width:540px;margin:0 auto;
+    background:var(--ink);color:#fff;border-radius:18px;padding:12px 16px 14px;
+    display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow-lg);z-index:60;
+    animation:up .35s cubic-bezier(.2,.9,.3,1);overflow:hidden;
+  }
+  .active-bar .avatar{width:42px;height:42px;font-size:1.05rem;border-radius:13px;flex:none}
+  .active-bar b{font-size:.92rem;display:block;line-height:1.3}
+  .active-bar span{font-size:.78rem;opacity:.75}
+  .active-bar .chev{flex:none;font-size:1.1rem;opacity:.7}
+  .active-bar .bar-track{position:absolute;bottom:0;right:0;left:0;height:4px;background:rgba(255,255,255,.15)}
+  .active-bar .bar-fill{position:absolute;bottom:0;right:0;height:4px;background:linear-gradient(90deg,#c94f7c,#e66aa0);transition:width 1s linear}
+
   /* ---------- How it works ---------- */
   .how{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
@@ -506,6 +557,10 @@
     </div>
 
     <div class="toolbar">
+      <div class="search-mini">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="qInput" type="search" placeholder="חיפוש: שם, טיפול, התמחות…" oninput="render()">
+      </div>
       <div class="filters">
         <button class="pill" data-filter="now" onclick="toggleFilter(this)">🟢 זמינות עכשיו</button>
         <button class="pill" data-filter="top" onclick="toggleFilter(this)">⭐ 4.8 ומעלה</button>
@@ -607,6 +662,8 @@
     <div class="sheet-body" id="bookingsBody"></div>
   </div>
 </div>
+
+<div class="active-bar" id="activeBar" style="display:none" role="button" aria-label="הזמנה פעילה — מעקב חי"></div>
 
 <div class="toast" id="toast"></div>
 
@@ -802,6 +859,9 @@ function toggleFilter(btn){
 
 function filteredProviders(){
   let list = [...PROVIDERS];
+  const q = $('qInput').value.trim();
+  if(q) list = list.filter(p =>
+    (p.name + ' ' + p.role + ' ' + p.tags.join(' ') + ' ' + p.services.map(s => s.name).join(' ')).includes(q));
   if(activeFilters.has('now'))    list = list.filter(p => p.availableNow);
   if(activeFilters.has('top'))    list = list.filter(p => p.rating >= 4.8);
   if(activeFilters.has('gel'))    list = list.filter(p => p.tags.some(t => t.includes('ג\'ל')) || p.services.some(s => s.name.includes('ג\'ל')));
@@ -826,6 +886,12 @@ function render(){
     return `
     <article class="card" onclick="openProfile('${p.id}')" role="button" tabindex="0" aria-label="פרופיל של ${esc(p.name)}"
              onkeydown="if(event.key==='Enter')openProfile('${p.id}')">
+      <div class="card-cover" style="background:${p.grad}" aria-hidden="true">
+        <span class="em" style="right:6%;top:2px">${p.portfolio[0]}</span>
+        <span class="em" style="left:12%;bottom:-14px;font-size:2.3rem">${p.portfolio[1]}</span>
+        <span class="em" style="left:44%;top:-10px;font-size:2rem">${p.portfolio[2]}</span>
+        <div class="veil"></div>
+      </div>
       <div class="card-top">
         <div class="avatar" style="background:${p.grad}">${p.initial}</div>
         <div class="info">
@@ -1098,66 +1164,169 @@ function submitBooking(){
     all.unshift(order);
     saveBookings(all);
     closeModal('bookOverlay');
-    openTracking(order);
+    updateActiveBar();
+    openTracking(order.id);
   }, 1400);
 }
 
-/* ================= TRACKING ================= */
-const TRACK_STEPS = [
-  {key:'confirmed', label:'ההזמנה אושרה', sub:'התשלום עבר בהצלחה'},
-  {key:'prep', label:'מתארגנת ואורזת ציוד', sub:'לקים, מנורה וערכה סטרילית'},
-  {key:'onway', label:'בדרך אלייך', sub:'אפשר לעקוב ולהתקשר'},
-  {key:'arrived', label:'הגיעה!', sub:'פתחי את הדלת ותתחילי ליהנות 💅'},
-];
+/* ================= LIVE TRACKING (Wolt-style) ================= */
+/* ציר הזמן של הדמו דחוס: "הנסיעה" כולה אורכת ~90 שניות, אבל הספירה
+   לאחור מוצגת בדקות אמיתיות לפי ה-ETA של נותנת השירות. */
+const DEMO_PREP_SEC = 12, DEMO_TOTAL_SEC = 90;
 let trackTimer = null;
 
-function openTracking(order){
-  clearInterval(trackTimer);
-  let stage = 0;
-  const p = PROVIDERS.find(x => x.id === order.providerId) || PROVIDERS[0];
-
-  function draw(){
-    const done = stage >= TRACK_STEPS.length - 1;
-    $('trackBody').innerHTML = `
-      <div class="track-hero">
-        <div class="big-icon">${done ? '🎉' : '💅'}</div>
-        <h3>${done ? p.name.split(' ')[0] + ' הגיעה!' : 'ההזמנה בדרך אלייך'}</h3>
-        <p>הזמנה <b dir="ltr">${order.id}</b> · ${esc(order.when)} · סה"כ ${fmt(order.total)}</p>
-      </div>
-      <div class="track-line">
-        ${TRACK_STEPS.map((s,i) => `
-          <div class="t-step ${i < stage ? 'done' : i === stage ? (done ? 'done' : 'current') : 'pending'}">
-            <div class="t-dot">✓</div>
-            <div><b>${s.label}</b><span>${s.sub}</span></div>
-          </div>`).join('')}
-      </div>
-      <div class="track-provider">
-        <div class="avatar" style="background:${p.grad}">${p.initial}</div>
-        <div><b>${esc(p.name)}</b><span>${esc(order.services.join(' + '))}</span></div>
-        <button class="call" onclick="toast('בדמו אין שיחות — אבל היא כבר בדרך 😉')" aria-label="התקשרות">📞</button>
-      </div>
-      ${done ? `<div class="btn-row" style="margin-top:16px">
-        <button class="btn-primary" onclick="finishOrder('${order.id}')">סיימנו — דרגי את החוויה ★</button>
-      </div>` : ''}
-    `;
-  }
-
-  draw();
-  openModal('trackOverlay');
-  trackTimer = setInterval(() => {
-    stage++;
-    if(stage >= TRACK_STEPS.length - 1){ clearInterval(trackTimer); stage = TRACK_STEPS.length - 1; }
-    if($('trackOverlay').classList.contains('open')) draw();
-  }, 3200);
+function getOrder(id){ return loadBookings().find(o => o.id === id); }
+function orderElapsed(o){ return (Date.now() - o.createdAt) / 1000; }
+function orderPhase(o){
+  if(o.status === 'done') return 'arrived';
+  const e = orderElapsed(o);
+  return e < DEMO_PREP_SEC ? 'prep' : e < DEMO_TOTAL_SEC ? 'drive' : 'arrived';
+}
+function driveFrac(o){
+  if(orderPhase(o) === 'arrived') return 1;
+  return Math.min(1, Math.max(0, (orderElapsed(o) - DEMO_PREP_SEC) / (DEMO_TOTAL_SEC - DEMO_PREP_SEC)));
+}
+function etaLabel(o){
+  const ph = orderPhase(o);
+  if(ph === 'prep') return 'אורזת ציוד · יוצאת בעוד רגע';
+  if(ph === 'drive') return 'מגיעה בעוד ~' + Math.max(1, Math.round(o.etaMin * (1 - driveFrac(o)))) + ' דק\'';
+  return 'הגיעה! 🎉';
 }
 
-function finishOrder(orderId){
+const ROUTE_D = 'M 28 218 C 90 218 96 158 148 150 C 200 142 208 176 254 150 C 300 124 300 84 352 60';
+function mapSVG(p){
+  return `
+  <svg viewBox="0 0 400 250" role="img" aria-label="מפת מעקב חי">
+    <rect width="400" height="250" fill="#f0f3ec"/>
+    <rect x="8" y="8" width="92" height="72" rx="8" fill="#e3e7dd"/>
+    <rect x="118" y="8" width="118" height="58" rx="8" fill="#e3e7dd"/>
+    <rect x="254" y="8" width="90" height="34" rx="8" fill="#e3e7dd"/>
+    <rect x="118" y="92" width="100" height="70" rx="8" fill="#d9ecd2"/>
+    <text x="168" y="132" font-size="16" text-anchor="middle">🌳</text>
+    <rect x="8" y="118" width="82" height="100" rx="8" fill="#e3e7dd"/>
+    <rect x="252" y="182" width="140" height="60" rx="8" fill="#e3e7dd"/>
+    <rect x="360" y="96" width="32" height="66" rx="8" fill="#e3e7dd"/>
+    <rect x="118" y="196" width="106" height="46" rx="8" fill="#e3e7dd"/>
+    <path id="routeCase" d="${ROUTE_D}" fill="none" stroke="#ffffff" stroke-width="11" stroke-linecap="round" opacity=".9"/>
+    <path id="routeBase" d="${ROUTE_D}" fill="none" stroke="rgba(201,79,124,.25)" stroke-width="5" stroke-linecap="round"/>
+    <path id="routeProg" d="${ROUTE_D}" fill="none" stroke="#c94f7c" stroke-width="5" stroke-linecap="round"/>
+    <circle class="pulse-ring" cx="352" cy="60" r="14" fill="none" stroke="#c94f7c" stroke-width="2"/>
+    <circle cx="352" cy="60" r="14" fill="#fff" stroke="#efe7ea" stroke-width="1.5"/>
+    <text x="352" y="65" font-size="14" text-anchor="middle">🏠</text>
+    <g id="carG">
+      <circle r="14" fill="#231a26"/>
+      <text y="5" font-size="14" text-anchor="middle">🚗</text>
+    </g>
+  </svg>`;
+}
+
+function positionCar(o){
+  const base = document.getElementById('routeBase');
+  const prog = document.getElementById('routeProg');
+  const car = document.getElementById('carG');
+  if(!base || !prog || !car) return;
+  const L = base.getTotalLength();
+  const f = driveFrac(o);
+  prog.style.strokeDasharray = L;
+  prog.style.strokeDashoffset = L * (1 - f);
+  const pt = base.getPointAtLength(L * f);
+  car.setAttribute('transform', `translate(${pt.x},${pt.y})`);
+}
+
+function trackStepsHTML(o){
+  const ph = orderPhase(o);
+  const idx = ph === 'prep' ? 1 : ph === 'drive' ? 2 : 3;
+  const steps = [
+    {label:'ההזמנה אושרה', sub:'התשלום עבר בהצלחה'},
+    {label:'מתארגנת ואורזת ציוד', sub:'לקים, מנורה וערכה סטרילית'},
+    {label:'בדרך אלייך', sub:'עוקבים אחריה על המפה למעלה'},
+    {label:'הגיעה!', sub:'פתחי את הדלת ותתחילי ליהנות 💅'},
+  ];
+  const arrived = ph === 'arrived';
+  return steps.map((s,i) => `
+    <div class="t-step ${i < idx || arrived ? 'done' : i === idx ? 'current' : 'pending'}">
+      <div class="t-dot">✓</div>
+      <div><b>${s.label}</b><span>${s.sub}</span></div>
+    </div>`).join('');
+}
+
+function drawTracking(orderId){
+  const o = getOrder(orderId);
+  if(!o) return;
+  const p = PROVIDERS.find(x => x.id === o.providerId) || PROVIDERS[0];
+  const ph = orderPhase(o);
+  const titles = {prep:'ההזמנה התקבלה! 💜', drive:p.name.split(' ')[0] + ' בדרך אלייך', arrived:p.name.split(' ')[0] + ' הגיעה! 🎉'};
+  $('trackBody').innerHTML = `
+    <div class="map-wrap">
+      ${mapSVG(p)}
+      <div class="eta-chip">${etaLabel(o)}</div>
+    </div>
+    <div class="track-status">
+      <h3>${titles[ph]}</h3>
+      <p>הזמנה <b dir="ltr">${o.id}</b> · ${esc(o.when)} · סה"כ ${fmt(o.total)}</p>
+    </div>
+    <div class="track-line">${trackStepsHTML(o)}</div>
+    <div class="track-provider">
+      <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+      <div><b>${esc(p.name)}</b><span>${esc(o.services.join(' + '))}</span></div>
+      <button class="call" onclick="toast('בדמו אין שיחות — אבל היא כבר בדרך 😉')" aria-label="התקשרות">📞</button>
+    </div>
+    ${ph === 'arrived' && o.status === 'active' ? `
+      <div class="rate-box">
+        <b>איך היה? דרגי את ${esc(p.name.split(' ')[0])}</b>
+        <div class="stars">${[1,2,3,4,5].map(n =>
+          `<button aria-label="${n} כוכבים" onmouseenter="lightStars(${n})" onmouseleave="lightStars(0)" onclick="rateOrder('${o.id}',${n})">★</button>`).join('')}
+        </div>
+      </div>` : ''}
+    ${o.status === 'done' ? `
+      <div class="rate-box">
+        <b>הטיפול הושלם ${o.rating ? '· דירגת ' + '★'.repeat(o.rating) : ''} 💜</b>
+      </div>` : ''}
+  `;
+  positionCar(o);
+}
+
+function lightStars(n){
+  document.querySelectorAll('.stars button').forEach((b,i) => b.classList.toggle('lit', i < n));
+}
+
+function rateOrder(orderId, n){
   const all = loadBookings();
   const o = all.find(x => x.id === orderId);
-  if(o) o.status = 'done';
+  if(o){ o.status = 'done'; o.rating = n; }
   saveBookings(all);
   closeModal('trackOverlay');
-  toast('תודה! נשמח לראותך שוב 💜');
+  toast('תודה על הדירוג! ' + '★'.repeat(n) + ' נשמח לראותך שוב 💜');
+}
+
+function openTracking(orderId){
+  clearInterval(trackTimer);
+  drawTracking(orderId);
+  openModal('trackOverlay');
+  trackTimer = setInterval(() => {
+    if(!$('trackOverlay').classList.contains('open')){ clearInterval(trackTimer); return; }
+    drawTracking(orderId);
+  }, 1000);
+}
+
+/* ================= ACTIVE ORDER BAR (Wolt-style) ================= */
+function updateActiveBar(){
+  const bar = $('activeBar');
+  const o = loadBookings().find(x => x.status === 'active');
+  if(!o){ bar.style.display = 'none'; return; }
+  const p = PROVIDERS.find(x => x.id === o.providerId) || PROVIDERS[0];
+  const ph = orderPhase(o);
+  const overall = Math.min(1, orderElapsed(o) / DEMO_TOTAL_SEC) * 100;
+  bar.style.display = 'flex';
+  bar.onclick = () => openTracking(o.id);
+  bar.innerHTML = `
+    <div class="avatar" style="background:${p.grad}">${p.initial}</div>
+    <div style="flex:1;min-width:0">
+      <b>${esc(o.providerName)} · ${ph === 'prep' ? 'מתארגנת' : ph === 'drive' ? 'בדרך אלייך' : 'הגיעה! לחצי לדירוג'}</b>
+      <span>${etaLabel(o)}</span>
+    </div>
+    <span class="chev">‹</span>
+    <div class="bar-track"></div><div class="bar-fill" style="width:${overall.toFixed(0)}%"></div>`;
 }
 
 /* ================= MY BOOKINGS ================= */
@@ -1169,7 +1338,7 @@ function openBookings(){
     : all.map(o => {
         const p = PROVIDERS.find(x => x.id === o.providerId) || PROVIDERS[0];
         return `
-        <div class="bk-item" onclick='${o.status === "active" ? `closeModal("bookingsOverlay");openTracking(${JSON.stringify(o)})` : ""}'>
+        <div class="bk-item" onclick="closeModal('bookingsOverlay');openTracking('${o.id}')">
           <div class="avatar" style="background:${p.grad}">${p.initial}</div>
           <div class="bi">
             <b>${esc(o.providerName)}</b>
@@ -1185,6 +1354,8 @@ function openBookings(){
 $('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
 render();
 updateBadge();
+updateActiveBar();
+setInterval(updateActiveBar, 1000);
 </script>
 </body>
 </html>
