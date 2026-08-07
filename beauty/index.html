@@ -527,7 +527,13 @@
   .track-provider span{font-size:.8rem;color:var(--ink-2)}
   .track-provider .call{
     margin-right:auto;width:42px;height:42px;border-radius:99px;background:var(--green-soft);color:var(--green);
-    display:grid;place-items:center;font-size:1.1rem;
+    display:grid;place-items:center;font-size:1.1rem;position:relative;
+  }
+  .chat-badge{
+    position:absolute;top:-4px;left:-4px;background:#e5484d;color:#fff;
+    font-size:.66rem;font-weight:800;min-width:17px;height:17px;border-radius:99px;
+    display:grid;place-items:center;padding:0 4px;box-shadow:0 1px 4px rgba(0,0,0,.3);
+    animation:pop .3s cubic-bezier(.2,1.4,.4,1);
   }
 
   /* ---------- My bookings ---------- */
@@ -2243,7 +2249,7 @@ function drawTracking(orderId){
     <div class="track-provider">
       ${avatarHTML(p)}
       <div><b>${esc(p.name)}</b><span>${esc(o.services.join(' + '))}</span></div>
-      <button class="call" style="margin-right:auto" onclick="openChat('${o.id}')" aria-label="צ'אט">💬</button>
+      <button class="call" style="margin-right:auto" onclick="openChat('${o.id}')" aria-label="צ'אט">💬${chatUnread(o.id) ? `<span class="chat-badge">${chatUnread(o.id)}</span>` : ''}</button>
       <button class="call" style="margin-right:0" onclick="toast('בדמו אין שיחות — אבל אפשר לדבר איתה בצ\\'אט 💬')" aria-label="התקשרות">📞</button>
     </div>
     <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="openReceipt('${o.id}')">🧾 צפייה בקבלה</button>
@@ -2447,6 +2453,22 @@ const CHAT_REPLIES = [
 let chatOrderId = null;
 function getChat(orderId){ return lsGet(CHAT_KEY, {})[orderId] || null; }
 function saveChat(orderId, msgs){ const all = lsGet(CHAT_KEY, {}); all[orderId] = msgs; lsSet(CHAT_KEY, all); }
+
+/* הודעות שלא נקראו — לבאדג' האדום על כפתור הצ'אט */
+const CHAT_READ_KEY = 'byoutoyou_chat_read';
+function chatUnread(orderId){
+  const msgs = getChat(orderId);
+  /* לפני הפתיחה הראשונה מחכה ברכת שלום מהמטפלת */
+  const themCount = msgs ? msgs.filter(m => m.who === 'them').length : 1;
+  const read = lsGet(CHAT_READ_KEY, {})[orderId] || 0;
+  return Math.max(0, themCount - read);
+}
+function markChatRead(orderId){
+  const msgs = getChat(orderId);
+  const all = lsGet(CHAT_READ_KEY, {});
+  all[orderId] = msgs ? msgs.filter(m => m.who === 'them').length : 0;
+  lsSet(CHAT_READ_KEY, all);
+}
 const chatTime = t => new Date(t).toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'});
 
 function openChat(orderId){
@@ -2460,6 +2482,8 @@ function openChat(orderId){
   }
   $('chatTitle').textContent = 'צ\'אט עם ' + p.name;
   renderChat();
+  markChatRead(orderId);
+  if($('trackOverlay').classList.contains('open')) drawTracking(orderId);
   openModal('chatOverlay');
   setTimeout(() => $('chatText').focus(), 200);
 }
@@ -2487,7 +2511,8 @@ function sendChat(){
     const m2 = getChat(chatOrderId) || [];
     m2.push({who:'them', text:CHAT_REPLIES[replyIdx % CHAT_REPLIES.length], t:Date.now()});
     saveChat(chatOrderId, m2);
-    if($('chatOverlay').classList.contains('open')) renderChat();
+    if($('chatOverlay').classList.contains('open')){ renderChat(); markChatRead(chatOrderId); }
+    else if($('trackOverlay').classList.contains('open')) drawTracking(chatOrderId);
   }, 1500);
 }
 
@@ -2666,8 +2691,8 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape' && tourIdx >= 
   await refreshBookings();
   updateActiveBar();
   setInterval(updateActiveBar, 1000);
-  /* ביקור ראשון? מציעים את הסיור המודרך */
-  if(!lsGet(TOUR_KEY, 0)) setTimeout(startTour, 1200);
+  /* ביקור ראשון? מציעים את הסיור המודרך (בדיקת הדגל ברגע הירי — לא בתזמון) */
+  setTimeout(() => { if(!lsGet(TOUR_KEY, 0) && !document.querySelector('.overlay.open')) startTour(); }, 1200);
 })();
 </script>
 </body>
