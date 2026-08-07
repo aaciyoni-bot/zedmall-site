@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1c1420">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#faf7f5;
@@ -50,14 +50,11 @@
     border-bottom:1px solid var(--line);
   }
   .header-in{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.35rem;letter-spacing:-.5px}
-  .logo .mark{
-    width:36px;height:36px;border-radius:12px;
-    background:linear-gradient(135deg,#c94f7c,#8e4fc9);
-    display:grid;place-items:center;color:#fff;font-size:1.05rem;
-    box-shadow:0 4px 12px rgba(201,79,124,.35);
-  }
-  .logo small{font-weight:500;color:var(--ink-2);font-size:.72rem;display:block;line-height:1;margin-top:2px}
+  .logo{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+  .logo .wordmark{font-family:'Comfortaa',system-ui,sans-serif;font-weight:700;font-size:1.85rem;letter-spacing:-1.2px;color:var(--ink);direction:ltr;unicode-bidi:isolate}
+  .logo .wordmark b{font-weight:700;background:linear-gradient(90deg,#c94f7c,#8e4fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .wordmark i{font-style:normal;color:var(--brand)}
+  .logo small{font-weight:600;color:var(--ink-2);font-size:.68rem;margin-top:3px;letter-spacing:.3px}
   .header-actions{display:flex;align-items:center;gap:8px}
   .btn-ghost{
     padding:8px 16px;border-radius:99px;font-weight:600;font-size:.92rem;
@@ -595,8 +592,8 @@
 <header>
   <div class="container header-in">
     <a class="logo" href="#" onclick="return false" aria-label="byoutoyou">
-      <span class="mark">💅</span>
-      <span>byoutoyou<small>ביוטי עד הבית</small></span>
+      <span class="wordmark">byou<b>toyou</b><i>.</i></span>
+      <small>היופי מגיע אלייך</small>
     </a>
     <div class="header-actions">
       <button class="btn-ghost" onclick="startTour()">🎓 סיור</button>
@@ -628,7 +625,7 @@
       </div>
       <div class="hero-stats">
         <div class="stat"><b>4.9★</b><span>דירוג ממוצע</span></div>
-        <div class="stat"><b>25</b><span>מטפלות מוסמכות</span></div>
+        <div class="stat"><b id="provCount">–</b><span>מטפלות מוסמכות</span></div>
         <div class="stat"><b>+2,400</b><span>טיפולים החודש</span></div>
         <div class="stat"><b>~35 דק'</b><span>זמן הגעה ממוצע</span></div>
       </div>
@@ -729,7 +726,7 @@
           <span class="em" style="right:10%;top:4px">👰‍♀️</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">💐</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>חבילת כלה</h3>
           <div class="role">איפור + שיער + ציפורניים ביום הגדול, כולל ניסיון מראש וליווי צמוד</div>
         </div></div>
@@ -740,7 +737,7 @@
           <span class="em" style="right:10%;top:4px">🎊</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">✨</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>בת/בר מצווה</h3>
           <div class="role">תסרוקת ואיפור עדין לכוכבת הערב + פינוק לאמא ולאחיות</div>
         </div></div>
@@ -751,7 +748,7 @@
           <span class="em" style="right:10%;top:4px">👨‍👩‍👧‍👧</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">💄</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>כל המשפחה לאירוע</h3>
           <div class="role">צוות מטפלות מגיע הביתה — איפור, שיער וציפורניים לכולן בערב אחד</div>
         </div></div>
@@ -762,7 +759,7 @@
           <span class="em" style="right:10%;top:4px">🥂</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🧖‍♀️</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>ערב פינוק קבוצתי</h3>
           <div class="role">מסיבת רווקות, ערב כלה או סתם פינוק לחברות — ספא ביתי לקבוצה</div>
         </div></div>
@@ -778,17 +775,18 @@
     <div class="hosp-banner">
       <div>
         <h2>יופי שמגיע עד מיטת בית החולים 🏥💜</h2>
-        <p class="lead">ילדת הרגע את הדבר הכי יפה בעולם — ומגיע לך להרגיש יפה גם את, בתמונות הראשונות עם הבייבי. ובאשפוז ארוך? כמה ימים בלי פן, בלי מניקור, בלי להרגיש עצמך. <b>byoutoyou care</b> מביאה את הטיפוח עד המיטה — בעדינות, בסטריליות ובאהבה.</p>
+        <p class="lead">אשפוז — קצר או ארוך — גורם לכל אישה להרגיש שהיא כבר לא היא: בלי פן, בלי טיפוח, בחלוק של בית חולים. זה נכון למי שמחלימה מניתוח ורוצה רגע אחד להרגיש שוב אישה, וזה נכון גם ליולדת בתמונות הראשונות עם הבייבי. <b>byoutoyou care</b> מביאה את הטיפוח עד המיטה — בעדינות, בסטריליות ובאהבה.</p>
         <ul class="hosp-list">
           <li>פן וסידור שיער ליד המיטה — בלי לקום</li>
-          <li>מניקור עדין וניקוי ידיים מפנק</li>
-          <li>איפור עדין לצילומים הראשונים עם התינוק 📸</li>
+          <li>מניקור עדין וטיפוח ידיים מפנק</li>
+          <li>טיפוח פנים מרענן — להרגיש שוב את עצמך</li>
+          <li>איפור עדין — למראה, לביקורים או לצילומים עם הבייבי 📸</li>
           <li>ציוד סטרילי חד־פעמי ותיאום מראש עם הצוות הסיעודי</li>
-          <li>מתאים ליולדות, מאושפזות ומחלקות שיקום</li>
+          <li>למחלימות מניתוח, יולדות, אשפוז ממושך ושיקום</li>
         </ul>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn-primary" onclick="openHospital(false)">הזמיני ביקור טיפוח 🏥</button>
-          <button class="btn-secondary" onclick="openHospital(true)">שלחי כמתנה ליולדת 🎁</button>
+          <button class="btn-secondary" onclick="openHospital(true)">שלחי כמתנה למאושפזת 🎁</button>
         </div>
         <div class="hosp-chips">
           <span class="tag">איכילוב</span><span class="tag">שיבא תל השומר</span><span class="tag">בילינסון</span>
@@ -819,7 +817,7 @@
           <span class="em" style="right:10%;top:4px">🤱</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🍼</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>מתנת לידה</h3>
           <div class="role">פינוק ליולדת — בבית החולים או בבית. המתנה שהיא באמת צריכה עכשיו</div>
         </div></div>
@@ -830,7 +828,7 @@
           <span class="em" style="right:10%;top:4px">🎂</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🎈</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>יום הולדת</h3>
           <div class="role">שובר בסכום לבחירתך + הקדשה אישית — והיא בוחרת בדיוק את הפינוק שבא לה</div>
         </div></div>
@@ -841,7 +839,7 @@
           <span class="em" style="right:10%;top:4px">💆‍♀️</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🕯️</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>חבילת פינוק</h3>
           <div class="role">מניקור + פן + טיפול פנים עד הבית — יום ספא שלם בלי לצאת מהדלת</div>
         </div></div>
@@ -852,7 +850,7 @@
           <span class="em" style="right:10%;top:4px">🏢</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">💝</span>
           <div class="veil"></div>
         </div>
-        <div class="card-top"><div class="info" style="padding-top:14px">
+        <div class="card-top" style="margin-top:0"><div class="info" style="padding-top:14px">
           <h3>ועדי עובדים וארגונים</h3>
           <div class="role">שוברים לעובדות בכמויות — ימי הולדת, לידות וחגים. מחירים מיוחדים לארגונים</div>
         </div></div>
@@ -978,7 +976,7 @@
       <label class="svc-check"><input type="checkbox" class="hosp-svc" value="איפור עדין לצילומים"> 📸 איפור עדין לצילומים עם הבייבי</label>
       <label class="svc-check"><input type="checkbox" class="hosp-svc" value="טיפוח פנים מרגיע"> 🧖‍♀️ טיפוח פנים מרגיע</label>
       <label class="svc-check" style="margin-top:6px"><input type="checkbox" id="hospGift" onchange="toggleHospGift()"> 🎁 זו מתנה למישהי אחרת</label>
-      <div class="field" id="hospGiftNameWrap" style="display:none"><label>למי המתנה? (שם היולדת / המאושפזת)</label><input id="hospGiftName" type="text" placeholder="שם המקבלת"></div>
+      <div class="field" id="hospGiftNameWrap" style="display:none"><label>למי המתנה? (שם המאושפזת / היולדת)</label><input id="hospGiftName" type="text" placeholder="שם המקבלת"></div>
       <div class="field"><label>מתי נוח? (לא חובה)</label><input id="hospWhen" type="text" placeholder="למשל: מחר בבוקר, אחרי ביקור הרופאים"></div>
       <button class="btn-primary" style="width:100%" onclick="submitHospital()">שלחי בקשה 💜</button>
     </div>
@@ -1468,6 +1466,93 @@ const PROVIDERS = [
     ]
   },
 ];
+
+/* ================= הרחבת דמו: 25 מטפלות בכל קטגוריה =================
+   מחולל דטרמיניסטי (אותו seed גם ב-data.js של הדשבורדים) — משלים כל
+   קטגוריה ל-25 מטפלות על בסיס תבניות השירותים של המטפלות הקיימות. */
+function expandProviders(list){
+  const FIRST = ['אביגיל','אגם','אודיה','אורטל','אילנית','אלה','אליה','אמילי','אנאל','אסתר','אפרת','גאיה','דורין','דנית','הדס','זוהר','חן','טוהר','יובל','יוליה','ירדן','לי','ליבי','לינור','מאיה','מיקה','מירב','נגה','נופר','נטע','סיון','ספיר','עופרי','עלמה','ענבר','פנינה','צליל','קארין','קורל','רומי','שיראל','שקד','תהילה','אוריאן','בתאל','גילי','דקלה','הילי','ויקי','זיו'];
+  const LAST = ['אברהם','אדרי','אוחנה','אזולאי','אלבז','אמסלם','ביטון','בן דוד','גבאי','גולן','דדון','דהן','חדד','טולדנו','יוסף','כהן','לוי','מלכה','ממן','מזרחי','נחום','סבן','עמר','פרץ','קדוש','רביבו','שטרית','שלום','שמעוני','תורג\'מן'];
+  const GRADS = ['linear-gradient(135deg,#e66aa0,#b34fc9)','linear-gradient(135deg,#4fc9a8,#3b82f6)','linear-gradient(135deg,#e8a33d,#e66a6a)','linear-gradient(135deg,#8e4fc9,#c94f7c)','linear-gradient(135deg,#3b82f6,#4fc9a8)','linear-gradient(135deg,#1fa97a,#e8a33d)','linear-gradient(135deg,#c94f7c,#8e4fc9)','linear-gradient(135deg,#e66a6a,#3b82f6)'];
+  const ROLES = {
+    nails:['מניקוריסטית מוסמכת','טכנאית ציפורניים','מומחית לק ג\'ל','מניקור ופדיקור עד הבית'],
+    hair:['מעצבת שיער','ספרית מוסמכת','מומחית פן ועיצוב','מעצבת שיער לאירועים'],
+    makeup:['מאפרת מקצועית','מאפרת ערב ואירועים','מאפרת מוסמכת','איפור כלות וערב'],
+    brows:['מעצבת גבות','מומחית ריסים','גבות וריסים','למינציה והרמת ריסים'],
+    face:['קוסמטיקאית מוסמכת','טיפולי פנים עד הבית','קוסמטיקאית פרא-רפואית','מומחית טיפוח עור'],
+  };
+  let seed = 20262026;
+  const rnd = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  const used = new Set(list.map(p => p.name));
+  const byCat = {}, donors = {};
+  list.forEach(p => { byCat[p.cat] = (byCat[p.cat] || 0) + 1; (donors[p.cat] = donors[p.cat] || []).push(p); });
+  ['nails','hair','makeup','brows','face'].forEach(cat => {
+    let n = 0;
+    while((byCat[cat] || 0) < 25){
+      let name;
+      do { name = FIRST[Math.floor(rnd()*FIRST.length)] + ' ' + LAST[Math.floor(rnd()*LAST.length)]; } while(used.has(name));
+      used.add(name);
+      const donor = donors[cat][Math.floor(rnd()*donors[cat].length)];
+      const services = donor.services.map(s => ({...s, price: Math.max(40, Math.round(s.price*(0.85+rnd()*0.3)/5)*5)}));
+      const rating = Math.round((4.5 + rnd()*0.5)*10)/10;
+      const reviews = 25 + Math.floor(rnd()*290);
+      const etaMin = 20 + 5*Math.floor(rnd()*9);
+      const availableNow = rnd() < 0.55;
+      const slotH = 15 + Math.floor(rnd()*7);
+      const verified = rnd() < 0.7;
+      const grad = GRADS[Math.floor(rnd()*GRADS.length)];
+      const photo = 'https://randomuser.me/api/portraits/women/' + Math.floor(rnd()*99) + '.jpg';
+      const role = ROLES[cat][Math.floor(rnd()*ROLES[cat].length)];
+      list.push({
+        id: cat + '-g' + (++n), cat, name, initial: name[0], grad, photo, role,
+        rating, reviews, etaMin, availableNow,
+        ...(availableNow ? {} : {nextSlot: (slotH > 20 ? 'מחר, 10:00' : 'היום, ' + slotH + ':00')}),
+        verified,
+        tags: (donor.tags || []).slice(0,3),
+        services,
+      });
+      byCat[cat]++;
+    }
+  });
+  return list;
+}
+expandProviders(PROVIDERS);
+
+/* העשרה לתצוגה בלבד (פרופיל): תיק עבודות, ביו וביקורות למטפלות שנוצרו */
+(function enrichGenerated(){
+  const PORT = {
+    nails:['💅','✨','🌸','💎','🩷','🌷'], hair:['💇‍♀️','✂️','🌊','💫','🪞','💜'],
+    makeup:['💄','✨','🌙','💃','🥀','📸'], brows:['👁️','✨','🦋','🌙','🖤','🧵'],
+    face:['🧖‍♀️','🌿','💆‍♀️','✨','🕯️','🤍'],
+  };
+  const BIOS = {
+    nails:['מגיעה עם עמדת עבודה ניידת, מנורת UV וערכת חיטוי אישית לכל לקוחה. דיוק, ניקיון ותוצאה שמחזיקה.','לק שמחזיק שבועות ותוצאה של סלון — בסלון שלך. עובדת עם המותגים המובילים בלבד.'],
+    hair:['מגיעה עם כל הציוד המקצועי — פן, מספריים וחומרים מהשורה הראשונה. יוצאת מסודרת בלי לצאת מהבית.','תספורות, פן ועיצוב ברמה של מספרה — בלי לחכות בתור ובלי לחפש חניה.'],
+    makeup:['איפור מותאם אישית לסגנון שלך ולאירוע — עם מזוודת איפור מקצועית מלאה.','איפור עמיד שנראה מושלם גם במצלמה — מגיעה אלייך עד הבית.'],
+    brows:['מדייקת את הגבות והריסים למבנה הפנים שלך — בעדינות ובכלים סטריליים.','גבות וריסים מושלמים בלי לצאת מהבית — תוצאה טבעית שמחזיקה שבועות.'],
+    face:['טיפולי פנים מקצועיים עם מיטת טיפולים ניידת ומוצרים מהשורה הראשונה — ספא אמיתי בבית.','עור זוהר בלי לצאת מהבית — טיפול מותאם אישית לסוג העור שלך.'],
+  };
+  const REVS = [
+    {name:'שירה', stars:5, text:'מקצועית, נעימה ומדויקת. אזמין שוב בלי לחשוב פעמיים.'},
+    {name:'דנה', stars:5, text:'הגיעה בזמן עם כל הציוד — תוצאה מושלמת.'},
+    {name:'מיכל', stars:4, text:'שירות אדיב ותוצאה יפה מאוד. ממליצה.'},
+    {name:'רוני', stars:5, text:'איזה כיף שלא צריך לצאת מהבית. ממליצה בחום!'},
+  ];
+  PROVIDERS.forEach(p => {
+    if(!/-g\d+$/.test(p.id)) return;
+    let s = [...p.id + p.name].reduce((a,c) => a + c.charCodeAt(0), 3);
+    const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648;
+    const pool = PORT[p.cat], start = Math.floor(r()*pool.length);
+    p.portfolio = [0,1,2,3].map(i => pool[(start+i) % pool.length]);
+    p.pics = pick(p.cat, start, start+1, start+2, start+3);
+    p.bio = BIOS[p.cat][Math.floor(r()*BIOS[p.cat].length)];
+    const r1 = Math.floor(r()*REVS.length);
+    p.reviewsList = [
+      {...REVS[r1], date:'לפני ' + (2 + Math.floor(r()*10)) + ' ימים'},
+      {...REVS[(r1+2) % REVS.length], date:'לפני ' + (2 + Math.floor(r()*4)) + ' שבועות'},
+    ];
+  });
+})();
 
 const SERVICE_FEE = 10;                    // דמי שירות קבועים לפלטפורמה
 const LS_KEY = 'byoutoyou_bookings_v1';
@@ -2492,11 +2577,11 @@ const TOUR_KEY = 'byoutoyou_tour_done';
 const TOUR_STEPS = [
   {el:null, title:'ברוכה הבאה ל-byoutoyou! 💜', text:'רוצה סיור קצר בכל מה שהפלטפורמה יודעת לעשות? כמו הדרכה במשחק — צעד אחרי צעד, פחות מ-2 דקות.', cta:'התחילי סיור 🎓'},
   {el:'.search-card', title:'מתחילים בכתובת 📍', text:'מקלידים לאן להגיע — ורואים מיד את כל המטפלות הזמינות באזור, עם זמן הגעה משוער לכל אחת.'},
-  {el:'#cats', title:'5 עולמות של יופי במקום אחד', text:'מניקור, שיער, איפור, גבות וריסים וטיפולי פנים — 25 מטפלות מוסמכות ומאומתות, הכול עד הבית.'},
+  {el:'#cats', title:'5 עולמות של יופי במקום אחד', text:'מניקור, שיער, איפור, גבות וריסים וטיפולי פנים — 25 מטפלות מוסמכות בכל קטגוריה, הכול עד הבית.'},
   {el:'#grid .card', title:'כרטיס מטפלת חכם 🏆', text:'דירוג אמיתי, תג "מאומתת", זמינות חיה ותגיות חכמות כמו "המובילה באזור". לחיצה על הלב ❤️ שומרת במועדפות.'},
   {el:'.filters', title:'מסננים בקליק', text:'זמינות עכשיו, דירוג 4.8+, מאומתות או תקציב — ומיון לפי מחיר, דירוג או זמן הגעה. מוצאים בדיוק את המתאימה.'},
   {el:'#events .grid', title:'אירועים וחבילות 🎉', text:'חבילת כלה, בת מצווה, איפור כל המשפחה וערב פינוק קבוצתי — משאירים פרטים ומנהלת אירועים חוזרת עם הצעה תוך שעתיים.'},
-  {el:'#hospital .hosp-banner', title:'byoutoyou care 🏥💜', text:'הפיצ\'ר שאנחנו הכי גאות בו: פינוק ליולדות ולמאושפזות עד מיטת בית החולים — כי לכל אישה מגיע להרגיש יפה, בכל מצב.'},
+  {el:'#hospital .hosp-banner', title:'byoutoyou care 🏥💜', text:'הפיצ\'ר שאנחנו הכי גאות בו: טיפוח עד מיטת בית החולים — אחרי ניתוח, באשפוז ממושך או אחרי לידה. כי לכל אישה מגיע להרגיש אישה, בכל מצב.'},
   {el:'#gifts .grid', title:'שוברי מתנה 🎁', text:'שולחים שובר עם הקדשה אישית בדקה — ללידה, ליום הולדת או לכל העובדות בארגון. השובר נפדה בקופה כמו קופון, כולל יתרה.'},
   {el:'#bookingsBtn', title:'הכול נשמר אצלך 🗓️', text:'אחרי הזמנה: מעקב חי על המפה כמו ב-Wolt, צ\'אט עם המטפלת, קבלה דיגיטלית ונקודות 💎 — 5% חזרה על כל טיפול.'},
   {el:null, title:'ויש עוד! 🚀', text:'דשבורד אישי למטפלות (קוד דמו 1234), דשבורד ניהול (קוד 2026) והמצגת המלאה — הכול בקישורים למטה בעמוד. עכשיו תורך: הזמיני טיפול ותראי את הקסם ✨', cta:'סיימי סיור'},
@@ -2574,6 +2659,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape' && tourIdx >= 
 /* ================= INIT ================= */
 (async () => {
   $('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
+  $('provCount').textContent = PROVIDERS.length;
   $('ptsCount').textContent = getPoints();
   renderCats();
   render();

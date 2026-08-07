@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#f6f4f7;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#9a8fa0;
@@ -21,8 +21,10 @@
   .container{max-width:1180px;margin:0 auto;padding:0 20px}
   header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .header-in{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:1180px;margin:0 auto;padding:0 20px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.15rem}
-  .logo .mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;font-size:.9rem}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .wordmark{font-family:'Comfortaa',system-ui,sans-serif;font-weight:700;font-size:1.45rem;letter-spacing:-1px;color:var(--ink);direction:ltr;unicode-bidi:isolate}
+  .logo .wordmark b{font-weight:700;background:linear-gradient(90deg,#c94f7c,#8e4fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .wordmark i{font-style:normal;color:var(--brand)}
   .logo .admin-tag{background:var(--ink);color:#fff;font-size:.68rem;font-weight:700;border-radius:99px;padding:3px 10px;margin-right:6px}
   .btn-ghost{padding:7px 14px;border-radius:99px;font-weight:600;font-size:.88rem;color:var(--ink-2)}
   .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
@@ -86,7 +88,7 @@
 
 <header>
   <div class="header-in">
-    <a class="logo" href="index.html"><span class="mark">💅</span> byoutoyou <span class="admin-tag">ADMIN</span></a>
+    <a class="logo" href="index.html"><span class="wordmark">byou<b>toyou</b><i>.</i></span><span class="admin-tag">ADMIN</span></a>
     <div>
       <a class="btn-ghost" href="pro.html">אזור המטפלת</a>
       <a class="btn-ghost" href="index.html">→ חזרה לאתר</a>
@@ -135,7 +137,7 @@
     <h2 class="sec">שוברי מתנה 🎁</h2>
     <div class="panel" id="giftsPanel"></div>
 
-    <h2 class="sec">מטפלות פעילות (25)</h2>
+    <h2 class="sec">מטפלות פעילות <span class="chip live" id="provTotal"></span></h2>
     <div class="panel"><table id="provTable"></table></div>
   </div>
 </main>
@@ -301,9 +303,10 @@ function draw(){
   /* מטפלות */
   const provRevenue = {};
   orders.forEach(o => provRevenue[o.providerId] = (provRevenue[o.providerId] || 0) + o.total);
+  $('provTotal').textContent = window.BYT_PROVIDERS.length + ' מטפלות · מציג את 40 המובילות במחזור';
   $('provTable').innerHTML = `
     <tr><th>מטפלת</th><th>תחום</th><th>דירוג</th><th>ביקורות</th><th>זמן הגעה</th><th>מחזור 30 יום</th><th>עמלה</th><th>זמינות</th><th>מאומתת</th></tr>` +
-    [...window.BYT_PROVIDERS].sort((a,b) => (provRevenue[b.id]||0) - (provRevenue[a.id]||0)).map(p => `
+    [...window.BYT_PROVIDERS].sort((a,b) => (provRevenue[b.id]||0) - (provRevenue[a.id]||0)).slice(0, 40).map(p => `
     <tr>
       <td><span class="mini-avatar" style="background:${p.grad}">${p.initial}</span><b>${esc(p.name)}</b></td>
       <td>${CATS[p.cat]}</td>

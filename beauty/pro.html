@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#f6f4f7;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#9a8fa0;
@@ -22,8 +22,10 @@
   .container{max-width:980px;margin:0 auto;padding:0 20px}
   header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .header-in{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:980px;margin:0 auto;padding:0 20px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.15rem}
-  .logo .mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;font-size:.9rem}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .wordmark{font-family:'Comfortaa',system-ui,sans-serif;font-weight:700;font-size:1.45rem;letter-spacing:-1px;color:var(--ink);direction:ltr;unicode-bidi:isolate}
+  .logo .wordmark b{font-weight:700;background:linear-gradient(90deg,#c94f7c,#8e4fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .wordmark i{font-style:normal;color:var(--brand)}
   .logo .pro-tag{background:linear-gradient(135deg,#c94f7c,#8e4fc9);color:#fff;font-size:.68rem;font-weight:700;border-radius:99px;padding:3px 10px;margin-right:6px}
   .btn-ghost{padding:7px 14px;border-radius:99px;font-weight:600;font-size:.88rem;color:var(--ink-2)}
   .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
@@ -101,7 +103,7 @@
 
 <header>
   <div class="header-in">
-    <a class="logo" href="index.html"><span class="mark">💅</span> byoutoyou <span class="pro-tag">PRO</span></a>
+    <a class="logo" href="index.html"><span class="wordmark">byou<b>toyou</b><i>.</i></span><span class="pro-tag">PRO</span></a>
     <div>
       <button class="btn-ghost" id="logoutBtn" style="display:none" onclick="logout()">התנתקות</button>
       <a class="btn-ghost" href="index.html">→ חזרה לאתר</a>

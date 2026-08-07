@@ -6,7 +6,7 @@
 <title>תקנון ומידע משפטי — byoutoyou</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#faf7f5;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#9a8fa0;
@@ -20,9 +20,11 @@
   .container{max-width:820px;margin:0 auto;padding:0 20px}
   header{position:sticky;top:0;z-index:50;background:rgba(250,247,245,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
   .header-in{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1080px;margin:0 auto;padding:0 20px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.35rem}
-  .logo .mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(201,79,124,.35)}
-  .logo small{font-weight:500;color:var(--ink-2);font-size:.72rem;display:block;line-height:1;margin-top:2px}
+  .logo{display:flex;flex-direction:column;align-items:flex-start;line-height:1}
+  .logo .wordmark{font-family:'Comfortaa',system-ui,sans-serif;font-weight:700;font-size:1.85rem;letter-spacing:-1.2px;color:var(--ink);direction:ltr;unicode-bidi:isolate}
+  .logo .wordmark b{font-weight:700;background:linear-gradient(90deg,#c94f7c,#8e4fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .wordmark i{font-style:normal;color:var(--brand)}
+  .logo small{font-weight:600;color:var(--ink-2);font-size:.68rem;margin-top:3px;letter-spacing:.3px}
   .btn-ghost{padding:8px 16px;border-radius:99px;font-weight:600;font-size:.92rem;color:var(--ink-2)}
   .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
   h1{font-size:1.7rem;font-weight:900;padding:36px 0 6px;letter-spacing:-.5px}
@@ -45,7 +47,7 @@
 
 <header>
   <div class="header-in">
-    <a class="logo" href="index.html"><span class="mark">💅</span><span>byoutoyou<small>ביוטי עד הבית</small></span></a>
+    <a class="logo" href="index.html"><span class="wordmark">byou<b>toyou</b><i>.</i></span><small>היופי מגיע אלייך</small></a>
     <a class="btn-ghost" href="index.html">→ חזרה לאתר</a>
   </div>
 </header>
