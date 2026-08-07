@@ -669,7 +669,7 @@
     <div class="toolbar">
       <div class="search-mini">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-        <input id="qInput" type="search" placeholder="חיפוש: שם, טיפול, התמחות…" oninput="render()">
+        <input id="qInput" type="search" placeholder="חיפוש: שם, טיפול, התמחות…" oninput="resetAndRender()">
       </div>
       <div class="filters">
         <button class="pill" data-filter="fav" onclick="toggleFilter(this)">❤️ מועדפות</button>
@@ -681,7 +681,7 @@
       <div class="sort-wrap">
         <span class="results-count" id="resultsCount"></span>
         <label for="sortSel">מיון:</label>
-        <select id="sortSel" onchange="render()">
+        <select id="sortSel" onchange="resetAndRender()">
           <option value="reco">מומלצות</option>
           <option value="rating">דירוג גבוה</option>
           <option value="price">מחיר: מהזול ליקר</option>
@@ -691,6 +691,9 @@
     </div>
 
     <div class="grid" id="grid"></div>
+    <div id="showMoreWrap" style="text-align:center;margin-top:24px;display:none">
+      <button class="btn-secondary" id="showMoreBtn" style="padding:13px 34px;border-radius:99px;font-size:.95rem" onclick="showMore()"></button>
+    </div>
     <div class="empty-state" id="emptyState" style="display:none">
       <div class="big">🔍</div>
       <b>לא נמצאו תוצאות לסינון הזה</b>
@@ -1703,7 +1706,7 @@ $('addrInput').addEventListener('keydown', e => { if(e.key === 'Enter') startSea
 
 /* ================= CATEGORIES ================= */
 let activeCat = 'all';
-function setCat(c){ activeCat = c; renderCats(); render(); }
+function setCat(c){ activeCat = c; renderCats(); resetAndRender(); }
 function renderCats(){
   $('cats').innerHTML = CATEGORIES.map(c => {
     const n = c.id === 'all' ? PROVIDERS.length : PROVIDERS.filter(p => p.cat === c.id).length;
@@ -1717,7 +1720,7 @@ function toggleFilter(btn){
   const f = btn.dataset.filter;
   if(activeFilters.has(f)){ activeFilters.delete(f); btn.classList.remove('active'); }
   else { activeFilters.add(f); btn.classList.add('active'); }
-  render();
+  resetAndRender();
 }
 
 function filteredProviders(){
@@ -1739,10 +1742,20 @@ function filteredProviders(){
   return list;
 }
 
+/* עימוד: מציגים 12 בכל פעם — קריטי בסלולר, שלא נגלול 125 כרטיסים */
+const PAGE_SIZE = 12;
+let visibleCount = PAGE_SIZE;
+function resetAndRender(){ visibleCount = PAGE_SIZE; render(); }
+function showMore(){ visibleCount += PAGE_SIZE; render(); }
+
 function render(){
-  const list = filteredProviders();
-  $('resultsCount').textContent = list.length + ' תוצאות';
-  $('emptyState').style.display = list.length ? 'none' : 'block';
+  const fullList = filteredProviders();
+  const list = fullList.slice(0, visibleCount);
+  const hidden = fullList.length - list.length;
+  $('resultsCount').textContent = fullList.length + ' תוצאות';
+  $('emptyState').style.display = fullList.length ? 'none' : 'block';
+  $('showMoreWrap').style.display = hidden > 0 ? 'block' : 'none';
+  if(hidden > 0) $('showMoreBtn').textContent = 'הצגת עוד מטפלות (' + hidden + ' נוספות) ↓';
 
   /* תגיות חכמות — מחושבות על התוצאות המוצגות */
   const nowList = list.filter(p => p.availableNow);
