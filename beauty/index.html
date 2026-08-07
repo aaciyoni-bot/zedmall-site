@@ -605,14 +605,18 @@
     #grid .card .card-top{padding:0 10px;margin-top:-18px;gap:8px}
     #grid .avatar{width:42px;height:42px;font-size:1rem;border-radius:13px;border-width:2px}
     #grid .card .card-top .info{padding-top:22px}
-    #grid .card-top h3{font-size:.85rem;gap:4px}
+    #grid .card-top h3{font-size:.85rem;gap:4px;white-space:nowrap;overflow:hidden}
     #grid .verified{width:12px;height:12px}
     #grid .card-top .role{font-size:.68rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    #grid .rating{font-size:.76rem}
-    #grid .rating .rev{font-size:.66rem}
-    #grid .badge-now,#grid .badge-later{font-size:.6rem;padding:2px 7px}
-    #grid .card-tags{padding:8px 10px 0;gap:4px}
-    #grid .card-tags .tag{font-size:.62rem;padding:2px 6px}
+    /* שורת דירוג+זמינות בשורה אחת קבועה — כרטיסים סימטריים */
+    #grid .card-top .info > div{flex-wrap:nowrap !important;overflow:hidden;white-space:nowrap}
+    #grid .rating{font-size:.72rem;flex:none;gap:2px}
+    #grid .rating .rev{display:none}
+    #grid .card-top .info > div{gap:5px !important}
+    #grid .badge-now,#grid .badge-later{font-size:.54rem;padding:2px 5px;gap:3px;overflow:hidden;flex-shrink:1;min-width:0}
+    #grid .badge-now .dot{width:4px;height:4px}
+    #grid .card-tags{padding:8px 10px 0;gap:4px;height:26px;overflow:hidden;flex-wrap:nowrap}
+    #grid .card-tags .tag{font-size:.62rem;padding:2px 6px;white-space:nowrap}
     #grid .card-tags .tag:nth-child(n+3){display:none}
     #grid .card-bottom{padding:9px 10px 11px;margin-top:9px;flex-wrap:wrap;gap:6px}
     #grid .price b{font-size:.92rem}
