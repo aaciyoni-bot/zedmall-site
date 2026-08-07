@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תקנון ומידע משפטי — byoutoyou</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f5;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#9a8fa0;
+    --brand:#c94f7c;--brand-dark:#a83a64;--brand-soft:#fbeef3;
+    --line:#efe7ea;--shadow:0 2px 12px rgba(60,30,50,.07);--shadow-lg:0 12px 40px rgba(60,30,50,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .container{max-width:820px;margin:0 auto;padding:0 20px}
+  header{position:sticky;top:0;z-index:50;background:rgba(250,247,245,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1080px;margin:0 auto;padding:0 20px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.35rem}
+  .logo .mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(201,79,124,.35)}
+  .logo small{font-weight:500;color:var(--ink-2);font-size:.72rem;display:block;line-height:1;margin-top:2px}
+  .btn-ghost{padding:8px 16px;border-radius:99px;font-weight:600;font-size:.92rem;color:var(--ink-2)}
+  .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
+  h1{font-size:1.7rem;font-weight:900;padding:36px 0 6px;letter-spacing:-.5px}
+  .sub{color:var(--ink-2);font-size:.92rem;margin-bottom:20px}
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;margin-bottom:18px}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:none;background:var(--surface);border:1.5px solid var(--line);border-radius:99px;padding:9px 18px;font-weight:600;font-size:.9rem;color:var(--ink-2);transition:.2s;white-space:nowrap}
+  .tab.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .doc{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:28px;margin-bottom:50px;display:none}
+  .doc.open{display:block}
+  .doc h2{font-size:1.25rem;font-weight:800;margin-bottom:4px}
+  .doc .updated{font-size:.78rem;color:var(--ink-3);margin-bottom:18px}
+  .doc h3{font-size:1rem;font-weight:800;margin:20px 0 6px}
+  .doc p, .doc li{font-size:.92rem;color:var(--ink-2)}
+  .doc ol, .doc ul{padding-right:20px;display:flex;flex-direction:column;gap:6px}
+  .doc .demo-note{background:var(--brand-soft);border-radius:12px;padding:12px 16px;font-size:.82rem;color:var(--brand-dark);font-weight:600;margin-top:22px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="logo" href="index.html"><span class="mark">💅</span><span>byoutoyou<small>ביוטי עד הבית</small></span></a>
+    <a class="btn-ghost" href="index.html">→ חזרה לאתר</a>
+  </div>
+</header>
+
+<div class="container">
+  <h1>מידע משפטי 📋</h1>
+  <p class="sub">שקיפות מלאה — התנאים שלנו כתובים בגובה העיניים</p>
+
+  <div class="tabs">
+    <button class="tab active" data-doc="terms" onclick="openTab(this)">תקנון שימוש</button>
+    <button class="tab" data-doc="privacy" onclick="openTab(this)">מדיניות פרטיות</button>
+    <button class="tab" data-doc="cancel" onclick="openTab(this)">מדיניות ביטולים</button>
+    <button class="tab" data-doc="pros" onclick="openTab(this)">הסכם מטפלות</button>
+    <button class="tab" data-doc="a11y" onclick="openTab(this)">הצהרת נגישות</button>
+  </div>
+
+  <!-- תקנון -->
+  <div class="doc open" id="doc-terms">
+    <h2>תקנון שימוש</h2>
+    <div class="updated">עדכון אחרון: אוגוסט 2026</div>
+    <h3>1. כללי</h3>
+    <p>ברוכות הבאות ל-byoutoyou ("הפלטפורמה"). הפלטפורמה מתווכת בין לקוחות לבין מטפלות ביוטי עצמאיות המספקות שירותים בבית הלקוחה. השימוש באתר מהווה הסכמה לתנאים אלה.</p>
+    <h3>2. השירות</h3>
+    <ol>
+      <li>הפלטפורמה מציגה מטפלות, מחירים, זמינות ודירוגים — ומאפשרת הזמנה ותשלום מקוונים.</li>
+      <li>השירות עצמו ניתן על-ידי המטפלת, שהיא בעלת עסק עצמאית. הפלטפורמה אחראית לתהליך ההזמנה, התשלום ושירות הלקוחות.</li>
+      <li>כל המטפלות עוברות תהליך אימות: בדיקת תעודות הסמכה, תעודת זהות וראיון אישי. מטפלות מסומנות ✔️ השלימו אימות מלא.</li>
+    </ol>
+    <h3>3. הזמנה ותשלום</h3>
+    <ol>
+      <li>המחיר המוצג בעת ההזמנה הוא סופי וכולל הכול, למעט דמי שירות המוצגים בנפרד לפני התשלום.</li>
+      <li>התשלום נגבה בעת ההזמנה ומשוחרר למטפלת רק לאחר השלמת הטיפול.</li>
+      <li>טיפ שנוסף בהזמנה מועבר למטפלת במלואו (100%).</li>
+    </ol>
+    <h3>4. אחריות ובטיחות</h3>
+    <ol>
+      <li>המטפלות מחויבות לעבוד עם ציוד מחוטא וערכה סטרילית בהתאם להנחיות משרד הבריאות.</li>
+      <li>בכל מקרה של אי-שביעות רצון מהותית, ניתן לפנות לשירות הלקוחות תוך 48 שעות — ואנו מתחייבים לפתרון: תיקון, זיכוי או החזר.</li>
+      <li>ביטוח אחריות מקצועית: כל מטפלת מאומתת מחזיקה בפוליסת ביטוח בתוקף.</li>
+    </ol>
+    <h3>5. דירוגים וביקורות</h3>
+    <p>ביקורות נכתבות רק על-ידי לקוחות שהשלימו טיפול בפועל. חל איסור על פרסום תוכן פוגעני; הפלטפורמה רשאית להסיר ביקורות המפרות כלל זה.</p>
+    <h3>6. מועדון הנקודות</h3>
+    <p>על כל טיפול נצברות נקודות בשווי 5% מסכום העסקה (1 נקודה = 1 ₪). ניתן לממש עד 50% מערך הזמנה. נקודות תקפות ל-12 חודשים.</p>
+    <div class="demo-note">⚠️ גרסת דמו — נוסח משפטי מחייב ייקבע בליווי עורך דין לפני השקה מסחרית.</div>
+  </div>
+
+  <!-- פרטיות -->
+  <div class="doc" id="doc-privacy">
+    <h2>מדיניות פרטיות</h2>
+    <div class="updated">עדכון אחרון: אוגוסט 2026 · בהתאם לחוק הגנת הפרטיות, התשמ"א-1981 ותיקון 13</div>
+    <h3>1. איזה מידע נאסף</h3>
+    <ul>
+      <li><b>מידע שאת מוסרת:</b> שם, טלפון, כתובת, פרטי הזמנה והעדפות.</li>
+      <li><b>פרטי תשלום:</b> מטופלים על-ידי ספק סליקה מורשה PCI-DSS. מספר הכרטיס המלא לעולם אינו נשמר אצלנו.</li>
+      <li><b>מידע טכני:</b> נתוני שימוש באתר לצורך שיפור השירות.</li>
+    </ul>
+    <h3>2. למה משמש המידע</h3>
+    <ul>
+      <li>ביצוע הזמנות ומתן השירות (כולל העברת כתובת וטלפון למטפלת שהוזמנה בלבד).</li>
+      <li>שירות לקוחות, מניעת הונאות ושיפור המוצר.</li>
+      <li>דיוור שיווקי — רק בהסכמה מפורשת, עם אפשרות הסרה בכל עת.</li>
+    </ul>
+    <h3>3. שיתוף מידע</h3>
+    <p>המידע אינו נמכר לצדדים שלישיים. הוא משותף רק עם: המטפלת המבצעת (פרטי ההזמנה בלבד), ספק הסליקה, וספקי תשתית ענן מחויבי סודיות.</p>
+    <h3>4. זכויותייך</h3>
+    <p>זכות עיון, תיקון ומחיקה של המידע האישי — בפנייה ל-privacy@byoutoyou.com. מענה תוך 30 יום כנדרש בחוק.</p>
+    <h3>5. אבטחה</h3>
+    <p>המידע מוצפן בתעבורה (TLS) ובאחסון. הגישה מוגבלת לעובדים מורשים בלבד ומתועדת.</p>
+    <div class="demo-note">⚠️ גרסת דמו — בדמו הנתונים נשמרים מקומית בדפדפן שלך בלבד ולא נשלחים לשום שרת.</div>
+  </div>
+
+  <!-- ביטולים -->
+  <div class="doc" id="doc-cancel">
+    <h2>מדיניות ביטולים והחזרים</h2>
+    <div class="updated">עדכון אחרון: אוגוסט 2026 · בהתאם לחוק הגנת הצרכן, התשמ"א-1981</div>
+    <h3>ביטול על-ידי הלקוחה</h3>
+    <ul>
+      <li><b>עד 3 שעות לפני המועד:</b> ביטול חינם והחזר מלא.</li>
+      <li><b>פחות מ-3 שעות לפני המועד:</b> דמי ביטול של 15% או 50 ₪ — הנמוך מביניהם.</li>
+      <li><b>לאחר שהמטפלת יצאה לדרך:</b> דמי ביטול של 50 ₪ לכיסוי זמן הנסיעה.</li>
+      <li><b>הזמנת "עכשיו":</b> ניתנת לביטול חינם תוך 5 דקות מהאישור.</li>
+    </ul>
+    <h3>ביטול על-ידי המטפלת</h3>
+    <ul>
+      <li>הלקוחה מקבלת החזר מלא מיידי + שובר של 30 ₪ להזמנה הבאה.</li>
+      <li>הפלטפורמה מציעה אוטומטית מטפלת חלופית זמינה באותו מחיר או טוב ממנו.</li>
+    </ul>
+    <h3>החזרים</h3>
+    <p>החזרים מבוצעים לאמצעי התשלום המקורי תוך 3-5 ימי עסקים. נקודות שמומשו מוחזרות ליתרה מיידית.</p>
+    <h3>אי-שביעות רצון</h3>
+    <p>פנייה תוך 48 שעות מהטיפול → בירור מול שני הצדדים → תיקון חינם, זיכוי חלקי או החזר מלא, לפי העניין. אנחנו בצד שלך.</p>
+    <div class="demo-note">⚠️ גרסת דמו — בדמו לא מתבצעים חיובים אמיתיים ולכן גם לא החזרים.</div>
+  </div>
+
+  <!-- הסכם מטפלות -->
+  <div class="doc" id="doc-pros">
+    <h2>הסכם התקשרות מטפלת עצמאית</h2>
+    <div class="updated">עדכון אחרון: אוגוסט 2026 · ההסכם המלא נחתם דיגיטלית בתהליך ההצטרפות</div>
+    <h3>1. מהות ההתקשרות</h3>
+    <p>המטפלת פועלת כעצמאית (עוסקת מורשית/פטורה) ואינה עובדת של הפלטפורמה. אין בהסכם כדי ליצור יחסי עובד-מעביד, שותפות או שליחות.</p>
+    <h3>2. תנאים כלכליים</h3>
+    <ul>
+      <li>עמלת פלטפורמה: 20% + מע"מ מכל עסקה. אין דמי מנוי ואין דמי הצטרפות.</li>
+      <li>טיפים עוברים למטפלת במלואם — ללא עמלה.</li>
+      <li>תשלומים מועברים לחשבון הבנק תוך 3 ימי עסקים מהשלמת הטיפול.</li>
+      <li>המטפלת קובעת את מחיריה באופן עצמאי ויכולה לעדכנם בכל עת.</li>
+    </ul>
+    <h3>3. התחייבויות המטפלת</h3>
+    <ol>
+      <li>תעודות הסמכה בתוקף וביטוח אחריות מקצועית.</li>
+      <li>עמידה בזמנים; איחור מעל 20 דקות ללא עדכון מזכה את הלקוחה בפיצוי.</li>
+      <li>ציוד מחוטא וערכה סטרילית בכל טיפול.</li>
+      <li>שמירת פרטיות הלקוחות ואיסור שימוש בפרטיהן מחוץ לפלטפורמה.</li>
+      <li>איסור עקיפת מערכת התשלומים.</li>
+    </ol>
+    <h3>4. איכות ובקרה</h3>
+    <p>דירוג ממוצע מתחת ל-4.2 לאורך 30 יום או הפרות חוזרות — עלולים להוביל להשעיה או הסרה, לאחר שימוע הוגן.</p>
+    <h3>5. סיום התקשרות</h3>
+    <p>כל צד רשאי לסיים בהודעה של 14 יום. יתרות כספיות נפרעות במלואן במועד הסיום.</p>
+    <div class="demo-note">⚠️ גרסת דמו — הנוסח המחייב ייחתם דיגיטלית בתהליך ההצטרפות לאחר אישור עורך דין.</div>
+  </div>
+
+  <!-- נגישות -->
+  <div class="doc" id="doc-a11y">
+    <h2>הצהרת נגישות</h2>
+    <div class="updated">עדכון אחרון: אוגוסט 2026 · בהתאם לתקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג-2013</div>
+    <h3>מחויבות</h3>
+    <p>byoutoyou רואה חשיבות עליונה בהנגשת השירות לכלל האוכלוסייה, לרבות אנשים עם מוגבלות, ופועלת להתאמת האתר לתקן הישראלי (ת"י 5568) ברמה AA ולהנחיות WCAG 2.1.</p>
+    <h3>התאמות שבוצעו באתר</h3>
+    <ul>
+      <li>ניווט מלא במקלדת (Tab/Enter/Escape) בכל המסכים, כולל חלונות קופצים.</li>
+      <li>תיוג ARIA לרכיבים אינטראקטיביים וטקסט חלופי לתמונות.</li>
+      <li>ניגודיות צבעים העומדת בדרישות AA וטיפוגרפיה קריאה.</li>
+      <li>תמיכה מלאה בכיווניות RTL ובהגדלת תצוגה עד 200%.</li>
+      <li>מבנה כותרות היררכי ותגיות סמנטיות לקוראי מסך.</li>
+    </ul>
+    <h3>שירות נגיש</h3>
+    <p>ניתן לציין בהערות ההזמנה כל צורך בהתאמה (למשל: תקשורת בכתב בלבד) — והמטפלת תקבל את המידע מראש.</p>
+    <h3>נתקלת בבעיה?</h3>
+    <p>רכזת הנגישות שלנו זמינה ב-accessibility@byoutoyou.com או בטלפון 03-0000000. נטפל בכל פנייה תוך 48 שעות.</p>
+    <div class="demo-note">⚠️ גרסת דמו — פרטי הקשר יעודכנו בהשקה.</div>
+  </div>
+</div>
+
+<script>
+'use strict';
+function openTab(btn){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === btn));
+  document.querySelectorAll('.doc').forEach(d => d.classList.toggle('open', d.id === 'doc-' + btn.dataset.doc));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+/* פתיחת טאב לפי hash, למשל legal.html#pros */
+const h = location.hash.slice(1);
+if(h){ const btn = document.querySelector(`.tab[data-doc="${h}"]`); if(btn) openTab(btn); }
+</script>
+</body>
+</html>

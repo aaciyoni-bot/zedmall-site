@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>אזור המטפלת — byoutoyou</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f6f4f7;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#9a8fa0;
+    --brand:#c94f7c;--brand-dark:#a83a64;--brand-soft:#fbeef3;--green:#1fa97a;--green-soft:#e6f7f0;
+    --gold:#e8a33d;--line:#eae4ec;--shadow:0 2px 12px rgba(60,30,50,.07);--shadow-lg:0 12px 40px rgba(60,30,50,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  input,select{font-family:inherit;font-size:1rem}
+  .container{max-width:980px;margin:0 auto;padding:0 20px}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:980px;margin:0 auto;padding:0 20px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.15rem}
+  .logo .mark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;font-size:.9rem}
+  .logo .pro-tag{background:linear-gradient(135deg,#c94f7c,#8e4fc9);color:#fff;font-size:.68rem;font-weight:700;border-radius:99px;padding:3px 10px;margin-right:6px}
+  .btn-ghost{padding:7px 14px;border-radius:99px;font-weight:600;font-size:.88rem;color:var(--ink-2)}
+  .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
+
+  /* ---- login ---- */
+  .gate{max-width:410px;margin:60px auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-lg);padding:30px;text-align:center}
+  .gate .mark{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;font-size:1.5rem;margin:0 auto 14px}
+  .gate h1{font-size:1.3rem;font-weight:900}
+  .gate p{color:var(--ink-2);font-size:.88rem;margin:6px 0 18px}
+  .gate select,.gate input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);outline:none;font-weight:600;margin-bottom:10px}
+  .gate input{text-align:center;letter-spacing:6px;font-size:1.2rem}
+  .gate select:focus,.gate input:focus{border-color:var(--brand)}
+  .btn-primary{background:linear-gradient(135deg,#c94f7c,#a83a64);color:#fff;font-weight:700;padding:13px 24px;border-radius:12px;width:100%;font-size:1rem;transition:.2s}
+  .btn-primary:hover{transform:translateY(-1px)}
+  .g-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px;font-weight:700;font-size:.92rem;margin-top:10px;background:#fff;transition:.2s}
+  .g-btn:hover{border-color:var(--ink-3)}
+  .hint{font-size:.76rem;color:var(--ink-3);margin-top:10px}
+  .divider{display:flex;align-items:center;gap:10px;color:var(--ink-3);font-size:.76rem;margin:14px 0 4px}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--line)}
+
+  /* ---- dashboard ---- */
+  main{padding:26px 0 60px;display:none}
+  .prof-head{display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+  .avatar{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:1.6rem;color:#fff;font-weight:800;position:relative;overflow:hidden;flex:none}
+  .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .prof-head h1{font-size:1.4rem;font-weight:900}
+  .prof-head .sub{color:var(--ink-2);font-size:.88rem}
+  .avail-toggle{margin-right:auto;display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-weight:700;font-size:.9rem;cursor:pointer;box-shadow:var(--shadow)}
+  .avail-toggle .dot{width:10px;height:10px;border-radius:99px;background:var(--ink-3)}
+  .avail-toggle.on .dot{background:var(--green);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+  .kpi .v{font-size:1.45rem;font-weight:900;letter-spacing:-.5px}
+  .kpi .v small{font-size:.8rem;color:var(--ink-3);font-weight:600}
+  .kpi .l{font-size:.8rem;color:var(--ink-2);margin-top:2px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px 20px;overflow-x:auto}
+  h2.sec{font-size:1.1rem;font-weight:800;margin:24px 0 12px}
+  .chart{display:flex;align-items:flex-end;gap:8px;height:130px;padding-top:14px}
+  .chart .bar{flex:1;background:linear-gradient(180deg,#4fc9a8,#1fa97a);border-radius:6px 6px 0 0;min-height:4px;position:relative}
+  .chart .bar .tip{position:absolute;top:-20px;right:50%;transform:translateX(50%);font-size:.62rem;font-weight:700;color:var(--ink-2);white-space:nowrap}
+  .chart-labels{display:flex;gap:8px;margin-top:6px}
+  .chart-labels span{flex:1;text-align:center;font-size:.62rem;color:var(--ink-3)}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:520px}
+  th{text-align:right;color:var(--ink-3);font-weight:700;font-size:.74rem;padding:8px 10px;border-bottom:1.5px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid var(--line)}
+  tr:last-child td{border-bottom:none}
+  .chip{font-size:.7rem;font-weight:700;border-radius:99px;padding:3px 10px}
+  .chip.active{background:var(--green-soft);color:var(--green)}
+  .chip.done{background:#f0eef4;color:var(--ink-2)}
+  .svc-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:8px;align-items:center}
+  .svc-row input{border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--bg);outline:none;width:100%;font-weight:600}
+  .svc-row input:focus{border-color:var(--brand);background:#fff}
+  .save-note{font-size:.78rem;color:var(--green);font-weight:700;display:none;margin-top:6px}
+  .payout{background:linear-gradient(135deg,#2a1e30,#4a2440);border-radius:18px;color:#fff;padding:22px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:16px}
+  .payout b{font-size:1.3rem}
+  .payout span{opacity:.75;font-size:.85rem;display:block}
+  .payout button{background:#fff;color:var(--ink);font-weight:800;border-radius:12px;padding:11px 22px}
+  .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:99px;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:.3s;z-index:200;white-space:nowrap}
+  .toast.show{opacity:1;transform:translateX(50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="logo" href="index.html"><span class="mark">💅</span> byoutoyou <span class="pro-tag">PRO</span></a>
+    <div>
+      <button class="btn-ghost" id="logoutBtn" style="display:none" onclick="logout()">התנתקות</button>
+      <a class="btn-ghost" href="index.html">→ חזרה לאתר</a>
+    </div>
+  </div>
+</header>
+
+<!-- ---- LOGIN ---- -->
+<div class="gate" id="gate">
+  <div class="mark">💼</div>
+  <h1>אזור המטפלת</h1>
+  <p>ההזמנות, הרווחים והיומן שלך — במקום אחד</p>
+  <div id="loginStep1">
+    <select id="whoSel"></select>
+    <button class="btn-primary" onclick="sendOtp()">שלחי לי קוד ב-SMS 📲</button>
+    <div class="divider">או</div>
+    <button class="g-btn" onclick="toast('בפרודקשן: כניסה עם Google דרך Firebase Auth')">
+      <svg width="17" height="17" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.2 6.1 29.3 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.2 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.7l6.2 5.2C36.9 40.4 44 35 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+      כניסה עם Google
+    </button>
+    <div class="hint">בפרודקשן: אימות SMS אמיתי (Firebase Auth) — בלי סיסמאות לזכור</div>
+  </div>
+  <div id="loginStep2" style="display:none">
+    <p style="margin-bottom:10px">שלחנו קוד בן 4 ספרות למספר <b id="otpPhone" dir="ltr"></b></p>
+    <input id="otp" inputmode="numeric" maxlength="4" placeholder="• • • •" onkeydown="if(event.key==='Enter')verifyOtp()">
+    <button class="btn-primary" onclick="verifyOtp()">כניסה</button>
+    <div class="hint">דמו: הקוד הוא 1234</div>
+  </div>
+</div>
+
+<!-- ---- DASHBOARD ---- -->
+<main id="main">
+  <div class="container">
+    <div class="prof-head" id="profHead"></div>
+    <div class="kpis" id="kpis"></div>
+
+    <h2 class="sec">הרווחים שלך — 14 ימים אחרונים (נטו, אחרי עמלה)</h2>
+    <div class="panel">
+      <div class="chart" id="chart"></div>
+      <div class="chart-labels" id="chartLabels"></div>
+    </div>
+
+    <div class="payout">
+      <div><span>זמין למשיכה לחשבון הבנק</span><b id="payoutSum">0 ₪</b></div>
+      <button onclick="toast('בדמו אין העברות — בפרודקשן: העברה תוך 3 ימי עסקים 🏦')">משכי עכשיו 🏦</button>
+    </div>
+
+    <h2 class="sec">ההזמנות שלך</h2>
+    <div class="panel"><table id="myOrders"></table></div>
+
+    <h2 class="sec">השירותים והמחירים שלך (לחצי לעריכה)</h2>
+    <div class="panel">
+      <div id="svcEdit"></div>
+      <button class="btn-primary" style="width:auto;padding:11px 26px" onclick="saveSvcs()">שמרי שינויים</button>
+      <span class="save-note" id="saveNote">✓ נשמר! המחירים החדשים כבר באוויר</span>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = window.BYT_FMT;
+const lsGet=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const lsSet=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2600); }
+
+const NET = 1 - window.BYT_COMMISSION;
+let me = null;
+
+/* ---- login (דמו: בפרודקשן Firebase Auth phone/Google) ---- */
+$('whoSel').innerHTML = '<option value="">מי את? בחרי את הפרופיל שלך…</option>' +
+  window.BYT_PROVIDERS.map(p => `<option value="${p.id}">${esc(p.name)} — ${esc(p.role)}</option>`).join('');
+
+function sendOtp(){
+  const id = $('whoSel').value;
+  if(!id){ toast('בחרי את הפרופיל שלך מהרשימה'); return; }
+  sessionStorage.setItem('byt_pro_pending', id);
+  $('otpPhone').textContent = '05*-***' + String(1000 + Math.abs(id.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % 9000);
+  $('loginStep1').style.display = 'none';
+  $('loginStep2').style.display = 'block';
+  $('otp').focus();
+}
+function verifyOtp(){
+  if($('otp').value === '1234'){
+    sessionStorage.setItem('byt_pro', sessionStorage.getItem('byt_pro_pending'));
+    show();
+  } else { $('otp').value = ''; $('otp').placeholder = 'קוד שגוי'; }
+}
+function logout(){ sessionStorage.removeItem('byt_pro'); location.reload(); }
+
+/* ---- dashboard ---- */
+function myOrders(){
+  const all = [...lsGet('byoutoyou_bookings_v1', []), ...window.BYT_GEN_ORDERS()];
+  return all.filter(o => o.providerId === me.id);
+}
+
+function show(){
+  me = window.BYT_PROVIDERS.find(p => p.id === sessionStorage.getItem('byt_pro'));
+  if(!me) return;
+  $('gate').style.display = 'none';
+  $('main').style.display = 'block';
+  $('logoutBtn').style.display = 'inline-block';
+
+  const avail = lsGet('byt_avail_' + me.id, me.availableNow);
+  $('profHead').innerHTML = `
+    <div class="avatar" style="background:${me.grad}">${me.initial}${me.photo ? `<img src="${me.photo}" alt="" onerror="this.remove()">` : ''}</div>
+    <div><h1>היי, ${esc(me.name.split(' ')[0])} 👋</h1><div class="sub">${esc(me.role)} · ★ ${me.rating.toFixed(1)} (${me.reviews} ביקורות)</div></div>
+    <button class="avail-toggle ${avail ? 'on' : ''}" id="availBtn" onclick="toggleAvail()">
+      <span class="dot"></span><span id="availLabel">${avail ? 'זמינה עכשיו' : 'לא זמינה'}</span>
+    </button>`;
+
+  const orders = myOrders();
+  const gross = orders.reduce((a,o) => a + o.total, 0);
+  const tips = orders.reduce((a,o) => a + (o.tip || 0), 0);
+  /* טיפים עוברים במלואם — עמלה רק על השירותים */
+  const net = Math.round((gross - tips) * NET) + tips;
+  const rated = orders.filter(o => o.rating);
+  const avg = rated.length ? (rated.reduce((a,o) => a + o.rating, 0) / rated.length).toFixed(2) : '—';
+
+  $('kpis').innerHTML = [
+    {v: fmt(net), l: 'נטו 30 יום (אחרי עמלה)'},
+    {v: fmt(gross), l: 'מחזור ברוטו'},
+    {v: fmt(tips) , l: 'טיפים 💜 (100% שלך)'},
+    {v: orders.length, l: 'טיפולים'},
+    {v: avg + ' ★', l: 'הדירוג שלך'},
+  ].map(k => `<div class="kpi"><div class="v">${k.v}</div><div class="l">${k.l}</div></div>`).join('');
+
+  /* גרף נטו יומי */
+  const DAY = 86400000, today = new Date(); today.setHours(0,0,0,0);
+  const days = [];
+  for(let i = 13; i >= 0; i--){
+    const t0 = today.getTime() - i * DAY;
+    const dayOrders = orders.filter(o => o.createdAt >= t0 && o.createdAt < t0 + DAY);
+    const dGross = dayOrders.reduce((a,o) => a + o.total, 0);
+    const dTips = dayOrders.reduce((a,o) => a + (o.tip || 0), 0);
+    days.push({t0, sum: Math.round((dGross - dTips) * NET) + dTips});
+  }
+  const max = Math.max(...days.map(d => d.sum), 1);
+  $('chart').innerHTML = days.map(d =>
+    `<div class="bar" style="height:${Math.max(3, Math.round(d.sum / max * 100))}%"><span class="tip">${d.sum ? fmt(d.sum) : ''}</span></div>`).join('');
+  $('chartLabels').innerHTML = days.map(d =>
+    `<span>${new Date(d.t0).toLocaleDateString('he-IL', {day:'numeric', month:'numeric'})}</span>`).join('');
+
+  $('payoutSum').textContent = fmt(Math.round(net * 0.35));
+
+  $('myOrders').innerHTML = `
+    <tr><th>מס'</th><th>לקוחה</th><th>שירותים</th><th>כתובת</th><th>ברוטו</th><th>נטו שלך</th><th>טיפ</th><th>דירוג</th><th>סטטוס</th></tr>` +
+    orders.slice(0, 12).map(o => {
+      const oTip = o.tip || 0;
+      const oNet = Math.round((o.total - oTip) * NET) + oTip;
+      return `
+      <tr>
+        <td dir="ltr">${esc(o.id)}</td>
+        <td>${esc(o.customerName)}</td>
+        <td>${esc((o.services || []).join(' + '))}</td>
+        <td>${esc(o.address || '')}</td>
+        <td>${fmt(o.total)}</td>
+        <td><b style="color:var(--green)">${fmt(oNet)}</b></td>
+        <td>${oTip ? fmt(oTip) + ' 💜' : '—'}</td>
+        <td>${o.rating ? '★'.repeat(o.rating) : '—'}</td>
+        <td><span class="chip ${o.status}">${o.status === 'active' ? 'פעילה' : 'הושלמה'}</span></td>
+      </tr>`;
+    }).join('');
+
+  /* עריכת שירותים */
+  const myPrices = lsGet('byt_prices_' + me.id, me.services);
+  $('svcEdit').innerHTML = myPrices.map((s, i) => `
+    <div class="svc-row">
+      <input value="${esc(s.name)}" data-i="${i}" data-k="name">
+      <input value="${s.price}" type="number" min="0" data-i="${i}" data-k="price">
+      <input value="${s.dur || ''}" type="number" min="5" placeholder="דקות" data-i="${i}" data-k="dur">
+    </div>`).join('');
+}
+
+function toggleAvail(){
+  const cur = lsGet('byt_avail_' + me.id, me.availableNow);
+  lsSet('byt_avail_' + me.id, !cur);
+  $('availBtn').classList.toggle('on', !cur);
+  $('availLabel').textContent = !cur ? 'זמינה עכשיו' : 'לא זמינה';
+  toast(!cur ? 'את זמינה עכשיו — לקוחות רואות אותך 🟢' : 'סומנת כלא זמינה');
+}
+
+function saveSvcs(){
+  const rows = [...document.querySelectorAll('#svcEdit input')];
+  const out = lsGet('byt_prices_' + me.id, me.services).map(s => ({...s}));
+  rows.forEach(inp => {
+    const i = +inp.dataset.i, k = inp.dataset.k;
+    out[i][k] = k === 'name' ? inp.value : +inp.value;
+  });
+  lsSet('byt_prices_' + me.id, out);
+  $('saveNote').style.display = 'inline';
+  setTimeout(() => $('saveNote').style.display = 'none', 3000);
+}
+
+if(sessionStorage.getItem('byt_pro')) show();
+</script>
+</body>
+</html>

@@ -223,6 +223,58 @@
   .empty-state{text-align:center;padding:60px 20px;color:var(--ink-3)}
   .empty-state .big{font-size:2.6rem;margin-bottom:8px}
 
+  /* ---------- Favorites & smart badges ---------- */
+  .fav-btn{
+    position:absolute;top:10px;left:10px;width:34px;height:34px;border-radius:99px;
+    background:rgba(255,255,255,.92);display:grid;place-items:center;font-size:1rem;z-index:2;
+    color:#c9b6c0;transition:.2s;box-shadow:var(--shadow);
+  }
+  .fav-btn:hover{transform:scale(1.12)}
+  .fav-btn.on{color:#e5486c}
+  .smart-badge{
+    position:absolute;bottom:8px;left:10px;background:rgba(255,255,255,.95);color:var(--ink);
+    font-size:.7rem;font-weight:800;border-radius:99px;padding:3px 10px;z-index:2;box-shadow:var(--shadow);
+  }
+
+  /* ---------- Chat ---------- */
+  .chat-msgs{display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:320px;overflow-y:auto;padding:4px 2px;margin-bottom:12px}
+  .msg{max-width:78%;padding:9px 14px;border-radius:16px;font-size:.92rem;line-height:1.4}
+  .msg.me{align-self:flex-start;background:var(--brand);color:#fff;border-radius:16px 16px 16px 4px}
+  .msg.them{align-self:flex-end;background:var(--bg);border:1px solid var(--line);border-radius:16px 16px 4px 16px}
+  .msg .m-time{display:block;font-size:.66rem;opacity:.6;margin-top:2px}
+  .chat-input{display:flex;gap:8px}
+  .chat-input input{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:11px 14px;background:var(--bg);outline:none}
+  .chat-input input:focus{border-color:var(--brand);background:#fff}
+  .typing{align-self:flex-end;font-size:.78rem;color:var(--ink-3);padding:0 6px}
+
+  /* ---------- Checkout extras ---------- */
+  .tip-row{display:flex;gap:8px;margin-bottom:14px}
+  .tip-opt{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:10px 0;text-align:center;font-weight:700;font-size:.9rem;transition:.2s}
+  .tip-opt.selected{border-color:var(--brand);background:var(--brand-soft);color:var(--brand-dark)}
+  .coupon-row{display:flex;gap:8px;margin-bottom:6px}
+  .coupon-row input{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;background:var(--bg);outline:none;font-weight:600}
+  .coupon-row button{background:var(--ink);color:#fff;font-weight:700;border-radius:12px;padding:0 18px;font-size:.88rem}
+  .points-toggle{
+    display:flex;align-items:center;gap:10px;background:#f6f0fb;border:1.5px solid #e4d5f2;
+    border-radius:12px;padding:11px 14px;margin:10px 0 14px;cursor:pointer;font-size:.9rem;font-weight:600;
+  }
+  .points-toggle input{width:18px;height:18px;accent-color:var(--brand)}
+  .s-row.good b{color:var(--green) !important}
+
+  /* ---------- Receipt ---------- */
+  .receipt{background:var(--bg);border:1px dashed var(--ink-3);border-radius:16px;padding:20px}
+  .receipt .r-logo{text-align:center;font-weight:900;font-size:1.2rem;margin-bottom:2px}
+  .receipt .r-sub{text-align:center;font-size:.78rem;color:var(--ink-3);margin-bottom:14px}
+  .receipt .s-row{font-size:.9rem}
+
+  /* ---------- Review form ---------- */
+  .rate-box textarea{
+    width:100%;border:1.5px solid #eed7e1;border-radius:12px;padding:11px 14px;margin-top:12px;
+    background:#fff;outline:none;resize:vertical;min-height:70px;font-size:.92rem;
+  }
+  .rate-box .btn-primary{margin-top:10px;width:100%}
+  .rate-box .skip{display:block;margin:8px auto 0;font-size:.8rem;color:var(--ink-3);text-decoration:underline}
+
   /* ---------- Card cover (Wolt-style) ---------- */
   .card-cover{height:86px;position:relative;overflow:hidden;flex:none}
   .card-cover .em{position:absolute;font-size:3rem;opacity:.4;transform:rotate(-10deg);user-select:none}
@@ -495,7 +547,8 @@
     </a>
     <div class="header-actions">
       <button class="btn-ghost hide-m" onclick="scrollToId('how')">איך זה עובד</button>
-      <button class="btn-ghost hide-m" onclick="scrollToId('pros')">לנותנות שירות</button>
+      <a class="btn-ghost hide-m" href="join.html">הצטרפי כמטפלת</a>
+      <button class="btn-ghost" id="pointsBtn" onclick="toast('צוברים 5% נקודות על כל טיפול — ומשלמים איתן בקופה 💎')">💎 <span id="ptsCount">0</span></button>
       <button class="btn-ghost bookings-badge" id="bookingsBtn" data-count="0" onclick="openBookings()">ההזמנות שלי</button>
     </div>
   </div>
@@ -561,6 +614,7 @@
         <input id="qInput" type="search" placeholder="חיפוש: שם, טיפול, התמחות…" oninput="render()">
       </div>
       <div class="filters">
+        <button class="pill" data-filter="fav" onclick="toggleFilter(this)">❤️ מועדפות</button>
         <button class="pill" data-filter="now" onclick="toggleFilter(this)">🟢 זמינות עכשיו</button>
         <button class="pill" data-filter="top" onclick="toggleFilter(this)">⭐ 4.8 ומעלה</button>
         <button class="pill" data-filter="verified" onclick="toggleFilter(this)">✔️ מאומתות</button>
@@ -605,6 +659,64 @@
   </div>
 </section>
 
+<!-- ============ EVENTS & PACKAGES ============ -->
+<section id="events">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <h2>אירועים וחבילות 🎉</h2>
+        <p>כלה, בת מצווה או כל המשפחה לפני אירוע — צוות מטפלות מגיע אליכם</p>
+      </div>
+    </div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">
+      <article class="card" onclick="openEventForm('חבילת כלה 👰‍♀️')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#e66aa0,#c94f7c)">
+          <span class="em" style="right:10%;top:4px">👰‍♀️</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">💐</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>חבילת כלה</h3>
+          <div class="role">איפור + שיער + ציפורניים ביום הגדול, כולל ניסיון מראש וליווי צמוד</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־1,400 ₪</b><span>לחבילה</span></div><button class="btn-book">בקשי הצעה</button></div>
+      </article>
+      <article class="card" onclick="openEventForm('בת/בר מצווה 🎊')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#8e4fc9,#3b82f6)">
+          <span class="em" style="right:10%;top:4px">🎊</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">✨</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>בת/בר מצווה</h3>
+          <div class="role">תסרוקת ואיפור עדין לכוכבת הערב + פינוק לאמא ולאחיות</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־600 ₪</b><span>לחבילה</span></div><button class="btn-book">בקשי הצעה</button></div>
+      </article>
+      <article class="card" onclick="openEventForm('איפור כל המשפחה 👨‍👩‍👧‍👧')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#e8a33d,#e66a6a)">
+          <span class="em" style="right:10%;top:4px">👨‍👩‍👧‍👧</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">💄</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>כל המשפחה לאירוע</h3>
+          <div class="role">צוות מטפלות מגיע הביתה — איפור, שיער וציפורניים לכולן בערב אחד</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־950 ₪</b><span>לחבילה</span></div><button class="btn-book">בקשי הצעה</button></div>
+      </article>
+      <article class="card" onclick="openEventForm('ערב פינוק קבוצתי 🥂')">
+        <div class="card-cover" style="background:linear-gradient(135deg,#1fa97a,#4fc9a8)">
+          <span class="em" style="right:10%;top:4px">🥂</span><span class="em" style="left:14%;bottom:-12px;font-size:2.2rem">🧖‍♀️</span>
+          <div class="veil"></div>
+        </div>
+        <div class="card-top"><div class="info" style="padding-top:14px">
+          <h3>ערב פינוק קבוצתי</h3>
+          <div class="role">מסיבת רווקות, ערב כלה או סתם פינוק לחברות — ספא ביתי לקבוצה</div>
+        </div></div>
+        <div class="card-bottom"><div class="price"><b>מ־800 ₪</b><span>לחבילה</span></div><button class="btn-book">בקשי הצעה</button></div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ============ PROS BANNER ============ -->
 <section id="pros">
   <div class="container">
@@ -613,7 +725,7 @@
         <h2>מטפלת ביוטי? בואי לעבוד איתנו 💼</h2>
         <p>ספרית, מאפרת, מניקוריסטית או קוסמטיקאית — כמו שנהגת Uber לא צריכה תחנת מוניות, את לא צריכה כיסא בסלון. אנחנו מביאים את הלקוחות, מנהלים את היומן והתשלומים, ואת קובעת מתי ואיפה לעבוד.</p>
       </div>
-      <button class="btn-light" onclick="toast('נרשמת לרשימת ההמתנה לנותנות שירות! נחזור אלייך 💜')">הצטרפי כנותנת שירות</button>
+      <a class="btn-light" href="join.html" style="display:inline-block;text-align:center">הצטרפי כמטפלת ←</a>
     </div>
   </div>
 </section>
@@ -621,6 +733,13 @@
 <footer>
   <div class="container footer-in">
     <span>byoutoyou © 2026 · ביוטי עד הבית</span>
+    <span>
+      <a href="pitch.html" style="text-decoration:underline">המצגת</a> ·
+      <a href="legal.html" style="text-decoration:underline">תקנון ופרטיות</a> ·
+      <a href="join.html" style="text-decoration:underline">הצטרפות כמטפלת</a> ·
+      <a href="pro.html" style="text-decoration:underline">אזור המטפלת</a> ·
+      <a href="admin.html" style="text-decoration:underline">ניהול</a>
+    </span>
     <span>נבנה באהבה 💜 · גרסת דמו — התשלום אינו אמיתי</span>
   </div>
 </footer>
@@ -659,6 +778,57 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-label="ההזמנות שלי">
     <div class="sheet-head"><b>ההזמנות שלי</b><button class="btn-close" onclick="closeModal('bookingsOverlay')" aria-label="סגירה">✕</button></div>
     <div class="sheet-body" id="bookingsBody"></div>
+  </div>
+</div>
+
+<!-- ============ EVENT LEAD MODAL ============ -->
+<div class="overlay" id="eventOverlay" onclick="closeOnBackdrop(event,'eventOverlay')">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="בקשת הצעת מחיר לאירוע">
+    <div class="sheet-head"><b id="eventTitle">בקשת הצעה</b><button class="btn-close" onclick="closeModal('eventOverlay')" aria-label="סגירה">✕</button></div>
+    <div class="sheet-body">
+      <p style="color:var(--ink-2);font-size:.92rem;margin-bottom:16px">השאירי פרטים ומנהלת אירועים תחזור אלייך עם הצעה מותאמת תוך שעתיים ⏱️</p>
+      <div class="field" id="fEvName"><label>שם מלא</label><input id="evName" type="text" placeholder="השם שלך"></div>
+      <div class="row-2">
+        <div class="field" id="fEvPhone"><label>טלפון</label><input id="evPhone" type="tel" placeholder="050-0000000" dir="rtl"></div>
+        <div class="field"><label>תאריך האירוע</label><input id="evDate" type="date"></div>
+      </div>
+      <div class="row-2">
+        <div class="field"><label>מספר משתתפות</label>
+          <select id="evCount"><option>1</option><option>2-3</option><option selected>4-6</option><option>7-10</option><option>10+</option></select>
+        </div>
+        <div class="field"><label>עיר</label><input id="evCity" type="text" placeholder="תל אביב"></div>
+      </div>
+      <div class="field"><label>פרטים נוספים (לא חובה)</label><textarea id="evNotes" rows="2" placeholder="למשל: חתונה ב-19:00, צריכות איפור + שיער ל-5 נשים"></textarea></div>
+      <button class="btn-primary" style="width:100%" onclick="submitEventLead()">שלחי בקשה 🎉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHAT MODAL ============ -->
+<div class="overlay" id="chatOverlay" onclick="closeOnBackdrop(event,'chatOverlay')">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="צ'אט עם המטפלת">
+    <div class="sheet-head"><b id="chatTitle">צ'אט</b><button class="btn-close" onclick="closeModal('chatOverlay')" aria-label="סגירה">✕</button></div>
+    <div class="sheet-body">
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-input">
+        <input id="chatText" type="text" placeholder="כתבי הודעה…" onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="btn-primary" style="padding:11px 20px" onclick="sendChat()">שלחי</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RECEIPT MODAL ============ -->
+<div class="overlay" id="receiptOverlay" onclick="closeOnBackdrop(event,'receiptOverlay')">
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="קבלה">
+    <div class="sheet-head"><b>קבלה</b><button class="btn-close" onclick="closeModal('receiptOverlay')" aria-label="סגירה">✕</button></div>
+    <div class="sheet-body">
+      <div class="receipt" id="receiptBody"></div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn-secondary" onclick="closeModal('receiptOverlay')">סגירה</button>
+        <button class="btn-primary" onclick="printReceipt()">🖨️ הדפסה / PDF</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1181,6 +1351,31 @@ const api = {
 let BOOKINGS = [];
 async function refreshBookings(){ BOOKINGS = await api.listBookings(); updateBadge(); }
 
+/* ================= מועדפות, נקודות, ביקורות, צ'אט ================= */
+const FAVS_KEY = 'byoutoyou_favs', PTS_KEY = 'byoutoyou_points',
+      UREV_KEY = 'byoutoyou_user_reviews', CHAT_KEY = 'byoutoyou_chats';
+const lsGet = (k, d) => { try{ return JSON.parse(localStorage.getItem(k)) ?? d; }catch{ return d; } };
+const lsSet = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+let FAVS = new Set(lsGet(FAVS_KEY, []));
+function toggleFav(pid){
+  FAVS.has(pid) ? FAVS.delete(pid) : FAVS.add(pid);
+  lsSet(FAVS_KEY, [...FAVS]);
+  toast(FAVS.has(pid) ? 'נוספה למועדפות ❤️' : 'הוסרה מהמועדפות');
+  render();
+}
+
+function getPoints(){ return lsGet(PTS_KEY, 0); }
+function setPoints(n){ lsSet(PTS_KEY, n); $('ptsCount').textContent = n; }
+function addPoints(n){ setPoints(getPoints() + n); }
+
+function userReviews(pid){ return lsGet(UREV_KEY, {})[pid] || []; }
+function addUserReview(pid, review){
+  const all = lsGet(UREV_KEY, {});
+  (all[pid] = all[pid] || []).unshift(review);
+  lsSet(UREV_KEY, all);
+}
+
 /* ================= STATE ================= */
 let activeFilters = new Set();
 let currentProvider = null;
@@ -1251,6 +1446,7 @@ function filteredProviders(){
   const q = $('qInput').value.trim();
   if(q) list = list.filter(p =>
     (p.name + ' ' + p.role + ' ' + p.tags.join(' ') + ' ' + p.services.map(s => s.name).join(' ')).includes(q));
+  if(activeFilters.has('fav'))      list = list.filter(p => FAVS.has(p.id));
   if(activeFilters.has('now'))      list = list.filter(p => p.availableNow);
   if(activeFilters.has('top'))      list = list.filter(p => p.rating >= 4.8);
   if(activeFilters.has('verified')) list = list.filter(p => p.verified);
@@ -1267,19 +1463,36 @@ function render(){
   const list = filteredProviders();
   $('resultsCount').textContent = list.length + ' תוצאות';
   $('emptyState').style.display = list.length ? 'none' : 'block';
+
+  /* תגיות חכמות — מחושבות על התוצאות המוצגות */
+  const nowList = list.filter(p => p.availableNow);
+  const fastestId = nowList.length ? nowList.reduce((a,b) => a.etaMin <= b.etaMin ? a : b).id : null;
+  const cheapestId = list.length ? list.reduce((a,b) =>
+    Math.min(...a.services.map(s=>s.price)) <= Math.min(...b.services.map(s=>s.price)) ? a : b).id : null;
+  const topId = list.length ? list.reduce((a,b) =>
+    a.rating * Math.log(a.reviews+1) >= b.rating * Math.log(b.reviews+1) ? a : b).id : null;
+  const smartBadge = p =>
+    p.id === topId ? '🏆 המובילה באזור' :
+    p.id === fastestId ? '⚡ הכי מהירה' :
+    p.id === cheapestId ? '💰 המחיר הטוב ביותר' : '';
+
   $('grid').innerHTML = list.map(p => {
     const minPrice = Math.min(...p.services.map(s => s.price));
     const avail = p.availableNow
       ? '<span class="badge-now"><span class="dot"></span>זמינה עכשיו</span>'
       : '<span class="badge-later">🕐 ' + esc(p.nextSlot) + '</span>';
+    const badge = smartBadge(p);
     return `
     <article class="card" onclick="openProfile('${p.id}')" role="button" tabindex="0" aria-label="פרופיל של ${esc(p.name)}"
              onkeydown="if(event.key==='Enter')openProfile('${p.id}')">
-      <div class="card-cover" style="background:${p.grad}" aria-hidden="true">
+      <div class="card-cover" style="background:${p.grad}">
         <span class="em" style="right:6%;top:2px">${p.portfolio[0]}</span>
         <span class="em" style="left:12%;bottom:-14px;font-size:2.3rem">${p.portfolio[1]}</span>
         <span class="em" style="left:44%;top:-10px;font-size:2rem">${p.portfolio[2]}</span>
         <div class="veil"></div>
+        <button class="fav-btn ${FAVS.has(p.id) ? 'on' : ''}" aria-label="הוספה למועדפות"
+                onclick="event.stopPropagation();toggleFav('${p.id}')">${FAVS.has(p.id) ? '❤️' : '🤍'}</button>
+        ${badge ? `<span class="smart-badge">${badge}</span>` : ''}
       </div>
       <div class="card-top">
         ${avatarHTML(p)}
@@ -1337,7 +1550,12 @@ function openProfile(pid){
           <div class="s-price">${fmt(s.price)}</div>
         </div>`).join('')}
     </div>
-    <h4 class="block-title">ביקורות (${p.reviews})</h4>
+    <h4 class="block-title">ביקורות (${p.reviews + userReviews(p.id).length})</h4>
+    ${userReviews(p.id).map(r => `
+      <div class="review" style="background:var(--brand-soft);border-radius:12px;padding:13px 14px;border-top:none;margin-bottom:6px">
+        <div class="r-head"><b>${esc(r.name)} · <span style="color:var(--gold)">${'★'.repeat(r.stars)}</span> <span style="color:var(--brand-dark);font-size:.72rem">· הביקורת שלך</span></b><span style="color:var(--ink-3)">${esc(r.date)}</span></div>
+        <p>${esc(r.text)}</p>
+      </div>`).join('')}
     ${p.reviewsList.map(r => `
       <div class="review">
         <div class="r-head"><b>${esc(r.name)} · <span style="color:var(--gold)">${'★'.repeat(r.stars)}</span></b><span style="color:var(--ink-3)">${esc(r.date)}</span></div>
@@ -1377,13 +1595,24 @@ function goToBooking(){
     provider: currentProvider,
     services: selectedList(),
     when: currentProvider.availableNow ? 'now' : 'later',
-    slot: null,
+    day: 'היום', slot: null,
     address: $('addrInput').value.trim(),
     name: '', phone: '', notes: '',
+    tip: 0, coupon: null, usePoints: false,
   };
   closeModal('profileOverlay');
   openModal('bookOverlay');
   renderBookStep(1);
+}
+
+/* חישוב סכומים אחיד לקופה, להזמנה ולקבלה */
+function bookingTotals(){
+  const subtotal = booking.services.reduce((a,s) => a + s.price, 0);
+  const discount = booking.coupon ? Math.round(subtotal * 0.10) : 0;
+  const maxPts = Math.min(getPoints(), Math.floor((subtotal - discount) * 0.5));
+  const pointsUsed = booking.usePoints ? maxPts : 0;
+  const total = subtotal - discount - pointsUsed + SERVICE_FEE + booking.tip;
+  return {subtotal, discount, pointsUsed, maxPts, total};
 }
 
 function setWizard(step){
@@ -1409,11 +1638,15 @@ function renderBookStep(step){
         </div>
       </div>
       <div id="slotsWrap" style="display:${booking.when==='later'?'block':'none'}">
-        <h4 class="block-title">שעות פנויות היום</h4>
+        <h4 class="block-title">באיזה יום?</h4>
+        <div class="slots" style="margin-bottom:12px">
+          ${['היום','מחר','מחרתיים'].map(d => `<button class="slot ${booking.day===d?'selected':''}" onclick="setDay('${d}')">${d}</button>`).join('')}
+        </div>
+        <h4 class="block-title">שעות פנויות</h4>
         <div class="slots">
           ${slots.map(s => `<button class="slot ${booking.slot===s?'selected':''}" onclick="setSlot('${s}')">${s}</button>`).join('')}
         </div>
-        <p class="hint" style="font-size:.78rem;color:var(--ink-3);margin-bottom:10px">אפשר גם לתאם ליום אחר בצ'אט אחרי ההזמנה</p>
+        <p class="hint" style="font-size:.78rem;color:var(--ink-3);margin-bottom:10px">צריך תאריך רחוק יותר? אפשר לתאם בצ'אט אחרי ההזמנה</p>
       </div>
       <div class="btn-row">
         <button class="btn-primary" onclick="validateStep1()">המשך</button>
@@ -1450,34 +1683,57 @@ function renderBookStep(step){
 
   if(step === 3){
     $('bookTitle').textContent = 'סיכום ותשלום';
-    const total = booking.services.reduce((a,s) => a + s.price, 0);
+    const t = bookingTotals();
+    const whenLabel = booking.when === 'now'
+      ? 'עכשיו · הגעה ~' + p.etaMin + ' דק\''
+      : booking.day + ' בשעה ' + booking.slot;
     $('bookBody').innerHTML = `
       <div class="summary-box">
         <div class="s-row"><span>נותנת שירות</span><b>${esc(p.name)}</b></div>
-        <div class="s-row"><span>מועד</span><b>${booking.when === 'now' ? 'עכשיו · הגעה ~' + p.etaMin + ' דק\'' : 'היום בשעה ' + booking.slot}</b></div>
+        <div class="s-row"><span>מועד</span><b>${whenLabel}</b></div>
         <div class="s-row"><span>כתובת</span><b>${esc(booking.address)}</b></div>
         ${booking.services.map(s => `<div class="s-row"><span>${esc(s.name)}</span><b>${fmt(s.price)}</b></div>`).join('')}
         <div class="s-row"><span>דמי שירות</span><b>${fmt(SERVICE_FEE)}</b></div>
-        <div class="s-row total-row"><b>סה"כ לתשלום</b><b style="color:var(--brand-dark)">${fmt(total + SERVICE_FEE)}</b></div>
+        ${booking.tip ? `<div class="s-row"><span>טיפ למטפלת 💜</span><b>${fmt(booking.tip)}</b></div>` : ''}
+        ${t.discount ? `<div class="s-row good"><span>קופון ${esc(booking.coupon)}</span><b>−${fmt(t.discount)}</b></div>` : ''}
+        ${t.pointsUsed ? `<div class="s-row good"><span>נקודות byoutoyou 💎</span><b>−${fmt(t.pointsUsed)}</b></div>` : ''}
+        <div class="s-row total-row"><b>סה"כ לתשלום</b><b style="color:var(--brand-dark)">${fmt(t.total)}</b></div>
       </div>
+
+      <h4 class="block-title">רוצה להוסיף טיפ למטפלת? 💜</h4>
+      <div class="tip-row">
+        ${[0,10,20,30].map(v => `<button class="tip-opt ${booking.tip===v?'selected':''}" onclick="setTip(${v})">${v === 0 ? 'בלי' : v + ' ₪'}</button>`).join('')}
+      </div>
+
+      <div class="coupon-row">
+        <input id="couponInput" type="text" placeholder="קוד קופון (נסי: WELCOME10)" value="${esc(booking.coupon || '')}" dir="ltr" style="text-align:left">
+        <button onclick="applyCoupon()">החילי</button>
+      </div>
+
+      ${getPoints() >= 10 ? `
+      <label class="points-toggle">
+        <input type="checkbox" ${booking.usePoints ? 'checked' : ''} onchange="togglePoints(this.checked)">
+        💎 יש לך ${getPoints()} נקודות — לשלם איתן עד ${fmt(t.maxPts || Math.min(getPoints(), Math.floor((t.subtotal - t.discount) * 0.5)))}
+      </label>` : ''}
+
       <div class="field" id="fCard">
         <label for="bCard">כרטיס אשראי</label>
-        <input id="bCard" type="text" inputmode="numeric" placeholder="4580 0000 0000 0000" maxlength="19" dir="ltr" style="text-align:left">
+        <input id="bCard" type="text" inputmode="numeric" placeholder="4580 0000 0000 0000" maxlength="19" dir="ltr" style="text-align:left" value="${esc(booking._card || '')}">
       </div>
       <div class="row-2">
         <div class="field" id="fExp">
           <label for="bExp">תוקף</label>
-          <input id="bExp" type="text" inputmode="numeric" placeholder="MM/YY" maxlength="5" dir="ltr" style="text-align:left">
+          <input id="bExp" type="text" inputmode="numeric" placeholder="MM/YY" maxlength="5" dir="ltr" style="text-align:left" value="${esc(booking._exp || '')}">
         </div>
         <div class="field" id="fCvv">
           <label for="bCvv">CVV</label>
-          <input id="bCvv" type="text" inputmode="numeric" placeholder="123" maxlength="3" dir="ltr" style="text-align:left">
+          <input id="bCvv" type="text" inputmode="numeric" placeholder="123" maxlength="3" dir="ltr" style="text-align:left" value="${esc(booking._cvv || '')}">
         </div>
       </div>
-      <div class="pay-note">🔒 <span>זהו דמו — לא מתבצע חיוב אמיתי ולא נשמרים פרטי אשראי. אפשר להקליד מספר לדוגמה.</span></div>
+      <div class="pay-note">🔒 <span>זהו דמו — לא מתבצע חיוב אמיתי ולא נשמרים פרטי אשראי. בלחיצה על התשלום את מאשרת את <a href="legal.html" target="_blank" style="text-decoration:underline">התקנון ומדיניות הביטולים</a>.</span></div>
       <div class="btn-row">
         <button class="btn-secondary" onclick="renderBookStep(2)">חזרה</button>
-        <button class="btn-primary" id="payBtn" onclick="submitBooking()">שלמי ${fmt(total + SERVICE_FEE)} והזמיני 💜</button>
+        <button class="btn-primary" id="payBtn" onclick="submitBooking()">שלמי ${fmt(t.total)} והזמיני 💜</button>
       </div>`;
     $('bCard').addEventListener('input', e => {
       e.target.value = e.target.value.replace(/\D/g,'').slice(0,16).replace(/(\d{4})(?=\d)/g,'$1 ');
@@ -1496,8 +1752,26 @@ function setWhen(w){
   renderBookStep(1);
 }
 function setSlot(s){ booking.slot = s; renderBookStep(1); }
+function setDay(d){ booking.day = d; renderBookStep(1); }
 
 function markInvalid(fieldId, on){ $(fieldId).classList.toggle('invalid', on); }
+
+/* שמירת שדות הכרטיס לפני רינדור מחדש של שלב 3 (טיפ/קופון/נקודות) */
+function saveCardFields(){
+  booking._card = $('bCard') ? $('bCard').value : booking._card;
+  booking._exp = $('bExp') ? $('bExp').value : booking._exp;
+  booking._cvv = $('bCvv') ? $('bCvv').value : booking._cvv;
+}
+function setTip(v){ saveCardFields(); booking.tip = v; renderBookStep(3); }
+function applyCoupon(){
+  saveCardFields();
+  const code = $('couponInput').value.trim().toUpperCase();
+  if(code === 'WELCOME10'){ booking.coupon = code; toast('הקופון הופעל — 10% הנחה! 🎉'); }
+  else if(!code){ booking.coupon = null; }
+  else { booking.coupon = null; toast('קוד לא מוכר — נסי WELCOME10'); }
+  renderBookStep(3);
+}
+function togglePoints(on){ saveCardFields(); booking.usePoints = on; renderBookStep(3); }
 
 function validateStep1(){
   if(booking.when === 'later' && !booking.slot){ toast('בחרי שעה מהרשימה 🕐'); return; }
@@ -1536,10 +1810,10 @@ async function submitBooking(){
   btn.textContent = 'מעבדים את התשלום…';
 
   try{
-    const total = booking.services.reduce((a,s) => a + s.price, 0) + SERVICE_FEE;
+    const t = bookingTotals();
     /* בפרודקשן: ה-SDK של ספק הסליקה ממיר את פרטי הכרטיס לטוקן,
        ורק הטוקן נשלח לשרת. מספר הכרטיס לא עוזב את הדפדפן. */
-    const payment = await api.processPayment({amount: total, cardToken: 'tok_demo'});
+    const payment = await api.processPayment({amount: t.total, cardToken: 'tok_demo'});
     if(!payment.ok) throw new Error('payment declined');
 
     const order = {
@@ -1548,8 +1822,15 @@ async function submitBooking(){
       providerId: booking.provider.id,
       providerName: booking.provider.name,
       services: booking.services.map(s => s.name),
-      total,
-      when: booking.when === 'now' ? 'עכשיו' : 'היום ' + booking.slot,
+      items: booking.services.map(s => ({name: s.name, price: s.price})),
+      subtotal: t.subtotal,
+      serviceFee: SERVICE_FEE,
+      tip: booking.tip,
+      coupon: booking.coupon,
+      discount: t.discount,
+      pointsUsed: t.pointsUsed,
+      total: t.total,
+      when: booking.when === 'now' ? 'עכשיו' : booking.day + ' ' + booking.slot,
       address: booking.address,
       customerName: booking.name,
       phone: booking.phone,
@@ -1558,6 +1839,7 @@ async function submitBooking(){
       createdAt: Date.now(),
       status: 'active',
     };
+    if(t.pointsUsed) setPoints(getPoints() - t.pointsUsed);
     await api.createBooking(order);
     await refreshBookings();
     closeModal('bookOverlay');
@@ -1670,13 +1952,20 @@ function drawTracking(orderId){
     <div class="track-provider">
       ${avatarHTML(p)}
       <div><b>${esc(p.name)}</b><span>${esc(o.services.join(' + '))}</span></div>
-      <button class="call" onclick="toast('בדמו אין שיחות — אבל היא כבר בדרך 😉')" aria-label="התקשרות">📞</button>
+      <button class="call" style="margin-right:auto" onclick="openChat('${o.id}')" aria-label="צ'אט">💬</button>
+      <button class="call" style="margin-right:0" onclick="toast('בדמו אין שיחות — אבל אפשר לדבר איתה בצ\\'אט 💬')" aria-label="התקשרות">📞</button>
     </div>
+    <button class="btn-secondary" style="width:100%;margin-top:12px" onclick="openReceipt('${o.id}')">🧾 צפייה בקבלה</button>
     ${ph === 'arrived' && o.status === 'active' ? `
       <div class="rate-box">
         <b>איך היה? דרגי את ${esc(p.name.split(' ')[0])}</b>
         <div class="stars">${[1,2,3,4,5].map(n =>
-          `<button aria-label="${n} כוכבים" onmouseenter="lightStars(${n})" onmouseleave="lightStars(0)" onclick="rateOrder('${o.id}',${n})">★</button>`).join('')}
+          `<button aria-label="${n} כוכבים" onmouseenter="lightStars(${n})" onmouseleave="lightStars(0)" onclick="selectStars(${n})">★</button>`).join('')}
+        </div>
+        <div id="reviewForm" style="display:none">
+          <textarea id="reviewText" placeholder="ספרי לנו איך היה (יופיע בפרופיל המטפלת)"></textarea>
+          <button class="btn-primary" onclick="submitReview('${o.id}')">שלחי דירוג וביקורת ★</button>
+          <button class="skip" onclick="submitReview('${o.id}', true)">שלחי דירוג בלי טקסט</button>
         </div>
       </div>` : ''}
     ${o.status === 'done' ? `
@@ -1687,26 +1976,160 @@ function drawTracking(orderId){
   positionCar(o);
 }
 
+let pendingStars = 0;
 function lightStars(n){
-  document.querySelectorAll('.stars button').forEach((b,i) => b.classList.toggle('lit', i < n));
+  const k = Math.max(n, pendingStars);
+  document.querySelectorAll('.stars button').forEach((b,i) => b.classList.toggle('lit', i < k));
+}
+function selectStars(n){
+  pendingStars = n;
+  lightStars(n);
+  const f = $('reviewForm');
+  if(f) f.style.display = 'block';
 }
 
-async function rateOrder(orderId, n){
-  await api.updateBooking(orderId, {status:'done', rating:n});
+async function submitReview(orderId, skipText){
+  if(!pendingStars){ toast('בחרי מספר כוכבים ★'); return; }
+  const o = getOrder(orderId);
+  const text = skipText ? '' : ($('reviewText') ? $('reviewText').value.trim() : '');
+  const earned = Math.floor((o ? o.total : 0) * 0.05);
+  await api.updateBooking(orderId, {status:'done', rating:pendingStars, reviewText:text});
+  if(text && o) addUserReview(o.providerId, {name:o.customerName || 'לקוחה', date:'עכשיו', stars:pendingStars, text});
+  if(earned) addPoints(earned);
   await refreshBookings();
   closeModal('trackOverlay');
   updateActiveBar();
-  toast('תודה על הדירוג! ' + '★'.repeat(n) + ' נשמח לראותך שוב 💜');
+  toast('תודה! ' + '★'.repeat(pendingStars) + (earned ? ' · צברת ' + earned + ' נקודות 💎' : '') + ' נשמח לראותך שוב 💜');
+  pendingStars = 0;
 }
 
 function openTracking(orderId){
   clearInterval(trackTimer);
+  pendingStars = 0;
   drawTracking(orderId);
   openModal('trackOverlay');
+  /* בהגעה אין רינדור מחדש — כדי לא למחוק את טופס הדירוג בזמן הקלדה */
+  if(orderPhase(getOrder(orderId)) === 'arrived') return;
   trackTimer = setInterval(() => {
     if(!$('trackOverlay').classList.contains('open')){ clearInterval(trackTimer); return; }
     drawTracking(orderId);
+    if(orderPhase(getOrder(orderId)) === 'arrived') clearInterval(trackTimer);
   }, 1000);
+}
+
+/* ================= EVENT LEADS ================= */
+const LEADS_KEY = 'byoutoyou_event_leads';
+let currentEventPkg = '';
+function openEventForm(pkg){
+  currentEventPkg = pkg;
+  $('eventTitle').textContent = 'בקשת הצעה — ' + pkg;
+  openModal('eventOverlay');
+}
+function submitEventLead(){
+  const name = $('evName').value.trim(), phone = $('evPhone').value.trim();
+  const badName = name.length < 2, badPhone = !/^0\d{1,2}[- ]?\d{7}$/.test(phone.replace(/\s/g,''));
+  markInvalid('fEvName', badName); markInvalid('fEvPhone', badPhone);
+  if(badName || badPhone){ toast('בדקי שם וטלפון 📱'); return; }
+  const leads = lsGet(LEADS_KEY, []);
+  leads.unshift({
+    id: 'EV-' + Math.random().toString(36).slice(2,7).toUpperCase(),
+    pkg: currentEventPkg, name, phone,
+    date: $('evDate').value, count: $('evCount').value,
+    city: $('evCity').value.trim(), notes: $('evNotes').value.trim(),
+    createdAt: Date.now(), status: 'new',
+  });
+  lsSet(LEADS_KEY, leads);
+  closeModal('eventOverlay');
+  toast('הבקשה נשלחה! מנהלת אירועים תחזור אלייך בקרוב 💜');
+}
+
+/* ================= CHAT ================= */
+const CHAT_REPLIES = [
+  'מעולה, רשמתי לעצמי! 📝',
+  'אני כבר בדרך אלייך 🚗💨',
+  'אין שום בעיה יקירתי 💜',
+  'עוד כמה דקות ואני אצלך!',
+  'אם יש חניה נוחה בסביבה — עדכני אותי 🙏',
+  'מביאה איתי את כל הציוד, את רק תתרווחי 😉',
+];
+let chatOrderId = null;
+function getChat(orderId){ return lsGet(CHAT_KEY, {})[orderId] || null; }
+function saveChat(orderId, msgs){ const all = lsGet(CHAT_KEY, {}); all[orderId] = msgs; lsSet(CHAT_KEY, all); }
+const chatTime = t => new Date(t).toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'});
+
+function openChat(orderId){
+  chatOrderId = orderId;
+  const o = getOrder(orderId);
+  const p = PROVIDERS.find(x => x.id === o.providerId) || PROVIDERS[0];
+  let msgs = getChat(orderId);
+  if(!msgs){
+    msgs = [{who:'them', text:'היי! אני ' + p.name.split(' ')[0] + ' 💜 קיבלתי את ההזמנה ואני מתארגנת לצאת. יש קוד כניסה לבניין?', t:Date.now()}];
+    saveChat(orderId, msgs);
+  }
+  $('chatTitle').textContent = 'צ\'אט עם ' + p.name;
+  renderChat();
+  openModal('chatOverlay');
+  setTimeout(() => $('chatText').focus(), 200);
+}
+
+function renderChat(typing){
+  const msgs = getChat(chatOrderId) || [];
+  const box = $('chatMsgs');
+  box.innerHTML = msgs.map(m =>
+    `<div class="msg ${m.who === 'me' ? 'me' : 'them'}">${esc(m.text)}<span class="m-time">${chatTime(m.t)}</span></div>`).join('')
+    + (typing ? '<div class="typing">מקלידה…</div>' : '');
+  box.scrollTop = box.scrollHeight;
+}
+
+function sendChat(){
+  const input = $('chatText');
+  const text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  const msgs = getChat(chatOrderId) || [];
+  msgs.push({who:'me', text, t:Date.now()});
+  saveChat(chatOrderId, msgs);
+  renderChat(true);
+  const replyIdx = msgs.filter(m => m.who === 'me').length - 1;
+  setTimeout(() => {
+    const m2 = getChat(chatOrderId) || [];
+    m2.push({who:'them', text:CHAT_REPLIES[replyIdx % CHAT_REPLIES.length], t:Date.now()});
+    saveChat(chatOrderId, m2);
+    if($('chatOverlay').classList.contains('open')) renderChat();
+  }, 1500);
+}
+
+/* ================= RECEIPT ================= */
+function openReceipt(orderId){
+  const o = getOrder(orderId);
+  if(!o) return;
+  const d = new Date(o.createdAt);
+  $('receiptBody').innerHTML = `
+    <div class="r-logo">💅 byoutoyou</div>
+    <div class="r-sub">ביוטי עד הבית · קבלה מס' ${esc(o.id)} · ${d.toLocaleDateString('he-IL')} ${chatTime(o.createdAt)}</div>
+    <div class="s-row"><span>לקוחה</span><b>${esc(o.customerName || '')}</b></div>
+    <div class="s-row"><span>מטפלת</span><b>${esc(o.providerName)}</b></div>
+    <div class="s-row"><span>כתובת</span><b>${esc(o.address || '')}</b></div>
+    <div style="border-top:1px dashed var(--ink-3);margin:10px 0"></div>
+    ${(o.items || o.services.map(n => ({name:n, price:null}))).map(it =>
+      `<div class="s-row"><span>${esc(it.name)}</span><b>${it.price != null ? fmt(it.price) : ''}</b></div>`).join('')}
+    <div class="s-row"><span>דמי שירות</span><b>${fmt(o.serviceFee != null ? o.serviceFee : SERVICE_FEE)}</b></div>
+    ${o.tip ? `<div class="s-row"><span>טיפ למטפלת</span><b>${fmt(o.tip)}</b></div>` : ''}
+    ${o.discount ? `<div class="s-row good"><span>הנחת קופון ${esc(o.coupon || '')}</span><b>−${fmt(o.discount)}</b></div>` : ''}
+    ${o.pointsUsed ? `<div class="s-row good"><span>מימוש נקודות</span><b>−${fmt(o.pointsUsed)}</b></div>` : ''}
+    <div class="s-row total-row"><b>סה"כ שולם</b><b>${fmt(o.total)}</b></div>
+    <div style="border-top:1px dashed var(--ink-3);margin:10px 0"></div>
+    <div class="s-row"><span>אסמכתה</span><b dir="ltr">${esc(o.txId || '—')}</b></div>
+    <div class="r-sub" style="margin-top:10px">גרסת דמו — אינה מהווה מסמך חשבונאי</div>`;
+  openModal('receiptOverlay');
+}
+
+function printReceipt(){
+  const w = window.open('', '_blank');
+  w.document.write('<html dir="rtl" lang="he"><head><meta charset="UTF-8"><title>קבלה — byoutoyou</title></head>' +
+    '<body style="font-family:sans-serif;max-width:420px;margin:30px auto">' + $('receiptBody').innerHTML + '</body></html>');
+  w.document.close();
+  w.print();
 }
 
 /* ================= ACTIVE ORDER BAR (Wolt-style) ================= */
@@ -1743,6 +2166,12 @@ function openBookings(){
           <div class="bi">
             <b>${esc(o.providerName)}</b>
             <span>${esc(o.services.join(' + '))} · ${fmt(o.total)}</span>
+            <span style="display:flex;gap:12px;margin-top:3px">
+              <button style="font-size:.78rem;color:var(--brand-dark);font-weight:700;text-decoration:underline"
+                onclick="event.stopPropagation();openReceipt('${o.id}')">🧾 קבלה</button>
+              <button style="font-size:.78rem;color:var(--brand-dark);font-weight:700;text-decoration:underline"
+                onclick="event.stopPropagation();closeModal('bookingsOverlay');openProfile('${o.providerId}')">🔁 הזמיני שוב</button>
+            </span>
           </div>
           <span class="bk-status ${o.status === 'active' ? 'active' : 'done'}">${o.status === 'active' ? 'פעילה' : 'הושלמה'}</span>
         </div>`;
@@ -1753,6 +2182,7 @@ function openBookings(){
 /* ================= INIT ================= */
 (async () => {
   $('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
+  $('ptsCount').textContent = getPoints();
   renderCats();
   render();
   await refreshBookings();

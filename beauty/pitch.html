@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>byoutoyou — המצגת: כל מה שהפלטפורמה יודעת לעשות</title>
+<meta name="description" content="byoutoyou — Wolt לביוטי. מרקטפלייס, מעקב חי, סליקה, דשבורדים ותשתית מוכנה להשקה. המצגת המלאה.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#faf7f5;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#9a8fa0;
+    --brand:#c94f7c;--brand-dark:#a83a64;--brand-soft:#fbeef3;--green:#1fa97a;--green-soft:#e6f7f0;
+    --gold:#e8a33d;--line:#efe7ea;--shadow:0 2px 12px rgba(60,30,50,.07);--shadow-lg:0 12px 40px rgba(60,30,50,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:980px;margin:0 auto;padding:0 20px}
+  header{position:sticky;top:0;z-index:50;background:rgba(250,247,245,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:1080px;margin:0 auto;padding:0 20px}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:900;font-size:1.35rem}
+  .logo .mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(201,79,124,.35)}
+  .logo small{font-weight:500;color:var(--ink-2);font-size:.72rem;display:block;line-height:1;margin-top:2px}
+  .btn-ghost{padding:8px 16px;border-radius:99px;font-weight:600;font-size:.92rem;color:var(--ink-2)}
+  .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
+  .btn-primary{background:linear-gradient(135deg,#c94f7c,#a83a64);color:#fff;font-weight:700;padding:13px 26px;border-radius:12px;display:inline-block;box-shadow:0 6px 18px rgba(201,79,124,.35);transition:.2s}
+  .btn-primary:hover{transform:translateY(-1px)}
+
+  .hero{
+    text-align:center;padding:64px 0 46px;position:relative;overflow:hidden;
+    background:radial-gradient(800px 400px at 50% -10%,rgba(201,79,124,.14),transparent 60%),linear-gradient(180deg,#fdf9fa,var(--bg));
+  }
+  .hero .kicker{display:inline-block;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:7px 18px;font-weight:700;font-size:.85rem;color:var(--brand-dark);box-shadow:var(--shadow);margin-bottom:18px}
+  .hero h1{font-size:clamp(2rem,5.5vw,3.4rem);font-weight:900;line-height:1.12;letter-spacing:-1px}
+  .hero h1 .grad{background:linear-gradient(90deg,#c94f7c,#8e4fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--ink-2);font-size:1.12rem;max-width:56ch;margin:16px auto 26px}
+
+  .numbers{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:0 0 10px}
+  .num{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;text-align:center;box-shadow:var(--shadow)}
+  .num b{font-size:1.7rem;font-weight:900;display:block;letter-spacing:-.5px}
+  .num span{font-size:.82rem;color:var(--ink-2)}
+
+  section{padding:38px 0}
+  .sec-title{text-align:center;margin-bottom:8px}
+  .sec-title .em{font-size:1.9rem;display:block;margin-bottom:6px}
+  .sec-title h2{font-size:1.7rem;font-weight:900;letter-spacing:-.5px}
+  .sec-title p{color:var(--ink-2);max-width:60ch;margin:8px auto 0}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+  @media(max-width:720px){.split{grid-template-columns:1fr}}
+  .prob{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+  .prob h3{font-size:1.05rem;font-weight:800;margin-bottom:10px}
+  .prob ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+  .prob li{font-size:.92rem;color:var(--ink-2);display:flex;gap:9px}
+  .prob li::before{content:'✗';color:#c93a3a;font-weight:900;flex:none}
+  .prob.sol li::before{content:'✓';color:var(--green)}
+
+  .feats{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:16px;margin-top:26px}
+  .feat{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow);transition:.25s}
+  .feat:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+  .feat .ico{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;margin-bottom:12px;background:var(--brand-soft)}
+  .feat h3{font-size:1.02rem;font-weight:800;margin-bottom:5px}
+  .feat p{font-size:.88rem;color:var(--ink-2)}
+  .feat .tag{display:inline-block;margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:2px 9px;font-size:.72rem;font-weight:700;color:var(--brand-dark)}
+
+  .band{background:linear-gradient(135deg,#2a1e30,#4a2440);color:#fff;border-radius:26px;padding:36px;margin-top:26px}
+  .band h3{font-size:1.3rem;font-weight:900;margin-bottom:14px}
+  .band .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+  .band .col b{display:block;margin-bottom:4px}
+  .band .col p{font-size:.86rem;color:rgba(255,255,255,.72)}
+  .band .col .bnum{font-size:1.5rem;font-weight:900;display:block;margin-bottom:2px;background:linear-gradient(90deg,#e66aa0,#b98aef);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .steps-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:24px}
+  .sf{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--shadow);position:relative}
+  .sf .n{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);color:#fff;font-weight:800;display:grid;place-items:center;margin:0 auto 8px;font-size:.9rem}
+  .sf b{font-size:.92rem;display:block}
+  .sf span{font-size:.78rem;color:var(--ink-2)}
+
+  table.biz{width:100%;border-collapse:collapse;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);margin-top:22px;font-size:.92rem}
+  table.biz th{background:var(--ink);color:#fff;padding:12px 16px;text-align:right;font-size:.85rem}
+  table.biz td{padding:12px 16px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+  table.biz td b{color:var(--ink)}
+  table.biz tr:last-child td{border-bottom:none}
+
+  .links{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:24px}
+  .lnk{background:var(--surface);border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);transition:.2s;font-weight:700}
+  .lnk:hover{border-color:var(--brand);transform:translateY(-2px)}
+  .lnk .li{width:40px;height:40px;border-radius:12px;background:var(--brand-soft);display:grid;place-items:center;font-size:1.2rem;flex:none}
+  .lnk small{display:block;font-weight:500;color:var(--ink-3);font-size:.76rem}
+
+  .final{text-align:center;padding:50px 0 70px}
+  .final h2{font-size:1.8rem;font-weight:900;letter-spacing:-.5px}
+  .final p{color:var(--ink-2);margin:10px 0 24px}
+  footer{padding:0 0 40px;color:var(--ink-3);font-size:.82rem;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="logo" href="index.html"><span class="mark">💅</span><span>byoutoyou<small>ביוטי עד הבית</small></span></a>
+    <div style="display:flex;gap:6px;align-items:center">
+      <a class="btn-ghost" href="index.html">→ לאפליקציה החיה</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+  <div class="container">
+    <span class="kicker">💅 byoutoyou.com · המצגת המלאה</span>
+    <h1>ה-Wolt של עולם הביוטי.<br><span class="grad">בנוי. עובד. באוויר.</span></h1>
+    <p>פלטפורמה דו-צדדית מלאה להזמנת שירותי ביוטי עד הבית — מהזמנה בקליק, דרך מעקב חי על מפה, ועד דשבורד רווחים למטפלת ודשבורד ניהול לפלטפורמה. לא מצגת של רעיון — <b>מוצר חי שאפשר ללחוץ עליו עכשיו.</b></p>
+    <a class="btn-primary" href="index.html">נסו את האפליקציה החיה ←</a>
+  </div>
+</div>
+
+<!-- ================= NUMBERS ================= -->
+<section>
+  <div class="container">
+    <div class="numbers">
+      <div class="num"><b>₪4.5 מיליארד</b><span>שוק הביוטי בישראל בשנה</span></div>
+      <div class="num"><b>25</b><span>מטפלות ב-5 קטגוריות (דמו)</span></div>
+      <div class="num"><b>6</b><span>מסכים מלאים: אפליקציה, מטפלת, מנהל, הצטרפות, משפטי, מצגת</span></div>
+      <div class="num"><b>20%</b><span>עמלת פלטפורמה — מודל Uber מוכח</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROBLEM / SOLUTION ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">🎯</span>
+      <h2>הבעיה שאנחנו פותרים</h2>
+    </div>
+    <div class="split">
+      <div class="prob">
+        <h3>😤 היום</h3>
+        <ul>
+          <li>לתפוס תור למניקוריסטית טובה = שבועיים מראש</li>
+          <li>לצאת מהבית עם שני ילדים בשביל שעה בסלון</li>
+          <li>אין דרך להשוות מחירים ודירוגים אמיתיים</li>
+          <li>מטפלות מוכשרות תקועות בלי לקוחות — או משלמות הון על כיסא בסלון</li>
+          <li>תיאום בוואטסאפ, תשלום במזומן, אפס בטחון</li>
+        </ul>
+      </div>
+      <div class="prob sol">
+        <h3>💜 עם byoutoyou</h3>
+        <ul>
+          <li>מזמינים מטפלת מוסמכת עד הבית — עכשיו או בתיאום</li>
+          <li>משווים מחירים, דירוגים וביקורות אמיתיות במקום אחד</li>
+          <li>תשלום מאובטח מראש, מחיר סגור, בלי הפתעות</li>
+          <li>המטפלת עובדת מתי שנוח לה, בלי שכירות ובלי תיווך</li>
+          <li>מעקב חי כמו ב-Wolt: רואים אותה מתקרבת על המפה</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CUSTOMER FEATURES ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">✨</span>
+      <h2>חוויית הלקוחה — 15 פיצ'רים חיים</h2>
+      <p>כל פיצ'ר ברשימה עובד באתר עכשיו. אפשר ללחוץ, להזמין ולראות.</p>
+    </div>
+    <div class="feats">
+      <div class="feat"><div class="ico">🛍️</div><h3>מרקטפלייס מלא</h3><p>25 מטפלות ב-5 קטגוריות: מניקור, שיער, איפור, גבות וריסים, טיפולי פנים — עם פרופיל עשיר, תיק עבודות וביקורות לכל אחת.</p><span class="tag">ליבת המוצר</span></div>
+      <div class="feat"><div class="ico">🗺️</div><h3>מעקב חי בסגנון Wolt</h3><p>מפה אנימטיבית עם הרכב של המטפלת נוסע אלייך במסלול, ספירת דקות לאחור וציר סטטוס חי. ההתקדמות נשמרת גם אחרי רענון.</p><span class="tag">הוואו של הדמו</span></div>
+      <div class="feat"><div class="ico">📱</div><h3>בר הזמנה פעילה צף</h3><p>כמו ב-Wolt — ההזמנה הפעילה מלווה אותך בתחתית המסך עם סטטוס ופס התקדמות, מכל מקום באתר.</p><span class="tag">UX</span></div>
+      <div class="feat"><div class="ico">💬</div><h3>צ'אט חי עם המטפלת</h3><p>שולחים קוד כניסה לבניין, מקבלים עדכונים — שיחה מלאה עם בועות, "מקלידה…" והיסטוריה שנשמרת.</p><span class="tag">אמון</span></div>
+      <div class="feat"><div class="ico">⚡</div><h3>עכשיו או בתיאום</h3><p>הזמנה מיידית עם זמן הגעה משוער — או תיאום מלא: בחירת יום ושעה מתוך זמינות אמיתית.</p><span class="tag">גמישות</span></div>
+      <div class="feat"><div class="ico">🔎</div><h3>חיפוש, סינון ומיון</h3><p>חיפוש חופשי לפי שם/טיפול, פילטרים (זמינות, דירוג, מאומתות, תקציב, מועדפות) ו-4 מצבי מיון.</p><span class="tag">גילוי</span></div>
+      <div class="feat"><div class="ico">🏆</div><h3>תגיות חכמות</h3><p>האלגוריתם מסמן בזמן אמת: "המובילה באזור", "הכי מהירה", "המחיר הטוב ביותר" — על בסיס הנתונים המוצגים.</p><span class="tag">חכם</span></div>
+      <div class="feat"><div class="ico">💳</div><h3>קופה חכמה</h3><p>תשלום מאובטח עם ולידציה מלאה, קוד קופון (נסו WELCOME10), טיפ למטפלת שעובר אליה ב-100%, ואישור תקנון.</p><span class="tag">המרה</span></div>
+      <div class="feat"><div class="ico">💎</div><h3>מועדון נקודות</h3><p>5% חזרה על כל טיפול. הנקודות נצברות אוטומטית וניתנות למימוש בקופה — מנוע החזרתיות של הפלטפורמה.</p><span class="tag">Retention</span></div>
+      <div class="feat"><div class="ico">⭐</div><h3>דירוג + ביקורת כתובה</h3><p>בסיום הטיפול: דירוג כוכבים וביקורת שמתפרסמת מיידית בפרופיל המטפלת. רק לקוחות אמיתיות מדרגות.</p><span class="tag">אמון</span></div>
+      <div class="feat"><div class="ico">🧾</div><h3>קבלה דיגיטלית</h3><p>פירוט מלא של כל עסקה — שירותים, דמי שירות, טיפ, הנחות ואסמכתה — עם הדפסה / שמירה כ-PDF.</p><span class="tag">שקיפות</span></div>
+      <div class="feat"><div class="ico">❤️</div><h3>מועדפות + הזמיני שוב</h3><p>שומרים את המטפלות האהובות בלב אחד, ומזמינים שוב בקליק מההיסטוריה. הדרך הקצרה להזמנה שנייה.</p><span class="tag">Retention</span></div>
+      <div class="feat"><div class="ico">🎉</div><h3>אירועים וחבילות</h3><p>חבילת כלה, בת מצווה, איפור כל המשפחה וערב פינוק קבוצתי — טופס פנייה שהופך לליד אצל מנהלת האירועים.</p><span class="tag">סל גדול</span></div>
+      <div class="feat"><div class="ico">🗂️</div><h3>ההזמנות שלי</h3><p>היסטוריה מלאה עם סטטוס חי, קבלות, חזרה למעקב והזמנה חוזרת — הכול נשמר גם אחרי סגירת הדפדפן.</p><span class="tag">ניהול</span></div>
+      <div class="feat"><div class="ico">📲</div><h3>מובייל-פירסט, עברית, RTL</h3><p>עיצוב נקי שנבנה קודם לטלפון: bottom-sheets, צ'יפים, אנימציות עדינות ונגישות מקלדת מלאה.</p><span class="tag">Craft</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROVIDER SIDE ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">💼</span>
+      <h2>צד המטפלת — פלטפורמה, לא רק אתר</h2>
+      <p>כמו שנהגת Uber לא צריכה תחנת מוניות — מטפלת ביוטי לא צריכה כיסא בסלון.</p>
+    </div>
+    <div class="steps-flow">
+      <div class="sf"><div class="n">1</div><b>הצטרפות דיגיטלית</b><span>טופס 3 שלבים: פרטים, שירותים ומחירים, העלאת תעודות</span></div>
+      <div class="sf"><div class="n">2</div><b>הסכם חתום מראש</b><span>הסכם מטפלת עצמאית מלא עם חתימה דיגיטלית — עמלה, ביטוחים, תקני היגיינה</span></div>
+      <div class="sf"><div class="n">3</div><b>אישור מנהל</b><span>הבקשה מגיעה לדשבורד הניהול — אישור או דחייה בקליק</span></div>
+      <div class="sf"><div class="n">4</div><b>דשבורד אישי</b><span>כניסה ב-SMS (בלי סיסמאות!) — רווחים, יומן, מחירים וזמינות</span></div>
+    </div>
+    <div class="band">
+      <h3>דשבורד המטפלת כולל:</h3>
+      <div class="cols">
+        <div class="col"><span class="bnum">₪</span><b>רווחים בשקיפות מלאה</b><p>ברוטו, נטו אחרי עמלת 20%, טיפים (100% שלה), גרף 14 יום ומשיכה לבנק</p></div>
+        <div class="col"><span class="bnum">🗓️</span><b>ההזמנות שלה</b><p>כל טיפול עם לקוחה, כתובת, סכום, נטו ודירוג שקיבלה</p></div>
+        <div class="col"><span class="bnum">🟢</span><b>שליטה מלאה</b><p>מתג "זמינה עכשיו", עריכת שירותים ומחירים בזמן אמת</p></div>
+        <div class="col"><span class="bnum">📲</span><b>כניסה חכמה</b><p>אימות SMS או Google — בלי עוד סיסמה לזכור (Firebase Auth בפרודקשן)</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ADMIN ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">🎛️</span>
+      <h2>דשבורד הניהול — הפלטפורמה בשליטה</h2>
+      <p>כל מה שמנהל הפלטפורמה צריך לראות, במסך אחד. מתעדכן חי מהזמנות אמיתיות באתר.</p>
+    </div>
+    <div class="feats">
+      <div class="feat"><div class="ico">📊</div><h3>KPIs חיים</h3><p>מחזור 30 יום, הכנסות הפלטפורמה (עמלה), הזמנות פעילות, דירוג ממוצע ובקשות ממתינות.</p></div>
+      <div class="feat"><div class="ico">📈</div><h3>גרפים</h3><p>הכנסות יומיות ל-14 יום ופילוח הכנסות לפי קטגוריה — לראות מה מוכר ואיפה לצמוח.</p></div>
+      <div class="feat"><div class="ico">🧾</div><h3>כל ההזמנות</h3><p>לקוחה, מטפלת, שירותים, כתובת, סכום, עמלה, דירוג וסטטוס. הזמנות מהאתר מסומנות "חי".</p></div>
+      <div class="feat"><div class="ico">✅</div><h3>אישור מטפלות</h3><p>בקשות הצטרפות מהטופס מגיעות לכאן — עם השירותים והמחירים שהציעו, ואישור/דחייה בקליק.</p></div>
+      <div class="feat"><div class="ico">🎉</div><h3>לידים של אירועים</h3><p>כל פנייה מ"אירועים וחבילות" — כלה, בת מצווה, איפור משפחתי — מוכנה לחזרה טלפונית.</p></div>
+      <div class="feat"><div class="ico">🏅</div><h3>טבלת מטפלות</h3><p>25 המטפלות מדורגות לפי מחזור, עם עמלה, דירוג, זמינות וסטטוס אימות.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TRUST & LEGAL ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">⚖️</span>
+      <h2>אמון, משפט ורגולציה — מהיום הראשון</h2>
+    </div>
+    <div class="feats">
+      <div class="feat"><div class="ico">📋</div><h3>תקנון שימוש מלא</h3><p>זכויות הלקוחה, אחריות, בטיחות והיגיינה, מועדון נקודות — כתוב בגובה העיניים.</p></div>
+      <div class="feat"><div class="ico">🔒</div><h3>מדיניות פרטיות</h3><p>לפי חוק הגנת הפרטיות ותיקון 13 — איזה מידע נאסף, למה, וזכויות העיון והמחיקה.</p></div>
+      <div class="feat"><div class="ico">↩️</div><h3>מדיניות ביטולים הוגנת</h3><p>ביטול חינם עד 3 שעות לפני, פיצוי אוטומטי אם המטפלת ביטלה, החזרים תוך 3-5 ימים.</p></div>
+      <div class="feat"><div class="ico">✍️</div><h3>הסכם מטפלות</h3><p>הסכם עצמאית מלא: עמלה שקופה, ביטוחים, תקני היגיינה של משרד הבריאות וסיום הוגן.</p></div>
+      <div class="feat"><div class="ico">♿</div><h3>הצהרת נגישות</h3><p>לפי ת"י 5568 ו-WCAG 2.1 AA — חובה חוקית בישראל, ואצלנו כבר מיושם: ניווט מקלדת, ARIA וניגודיות.</p></div>
+      <div class="feat"><div class="ico">🛡️</div><h3>מטפלות מאומתות</h3><p>בדיקת תעודות, ביטוח אחריות מקצועית וראיון וידאו לפני שמטפלת עולה לאוויר.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TECH ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">🛠️</span>
+      <h2>מתחת למכסה — דמו מקדימה, תשתית מאחור</h2>
+      <p>האתר רץ בדמו מלא, אבל בנוי מהיום הראשון כך שהמעבר לפרודקשן הוא החלפת דגל אחד.</p>
+    </div>
+    <table class="biz">
+      <tr><th>שכבה</th><th>בדמו (עכשיו)</th><th>בהשקה (מוכן)</th></tr>
+      <tr><td><b>נתונים</b></td><td>25 מטפלות + מחולל היסטוריה</td><td>Firestore / DB דרך אותה שכבת API — <code>GET /providers</code></td></tr>
+      <tr><td><b>הזמנות</b></td><td>localStorage בדפדפן</td><td><code>POST /bookings</code> — אותו JSON בדיוק</td></tr>
+      <tr><td><b>סליקה</b></td><td>סימולציה עם ולידציה מלאה</td><td>Grow / PayPlus בטוקניזציה — הכרטיס לא נוגע בשרת (PCI)</td></tr>
+      <tr><td><b>מעקב חי</b></td><td>סימולציית זמן אמת</td><td>מיקום מאפליקציית המטפלת דרך Firestore listeners</td></tr>
+      <tr><td><b>התחברות</b></td><td>קוד דמו</td><td>Firebase Auth — SMS OTP + Google</td></tr>
+      <tr><td><b>אחסון</b></td><td>Vercel CDN + דומיין byoutoyou.com</td><td>נשאר. סטטי = מהיר, זול, בלתי שביר</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= BUSINESS ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">💰</span>
+      <h2>מודל עסקי</h2>
+    </div>
+    <table class="biz">
+      <tr><th>מקור הכנסה</th><th>מנגנון</th><th>למה זה עובד</th></tr>
+      <tr><td><b>עמלת פלטפורמה 20%</b></td><td>מכל עסקה, ירידה אוטומטית לפני התשלום למטפלת</td><td>מודל Uber/Wolt מוכח — הכנסה גדלה עם כל הזמנה</td></tr>
+      <tr><td><b>דמי שירות 10 ₪</b></td><td>קבוע לכל הזמנה, שקוף בקופה</td><td>מכסה סליקה ותפעול</td></tr>
+      <tr><td><b>חבילות אירועים</b></td><td>כלה, בת מצווה, קבוצות — כרטיס ממוצע גבוה פי 4</td><td>לידים נכנסים ישירות לדשבורד</td></tr>
+      <tr><td><b>מועדון הנקודות</b></td><td>5% חזרה — עלות שיווק שהופכת להזמנה הבאה</td><td>CAC נמוך, LTV גבוה</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ================= LINKS ================= -->
+<section>
+  <div class="container">
+    <div class="sec-title">
+      <span class="em">🖱️</span>
+      <h2>אל תאמינו לנו — תלחצו</h2>
+      <p>כל המסכים חיים. קודי דמו: מנהל <b>2026</b> · מטפלת <b>1234</b> · קופון <b>WELCOME10</b></p>
+    </div>
+    <div class="links">
+      <a class="lnk" href="index.html"><span class="li">💅</span><span>האפליקציה<small>הזמינו טיפול ותעקבו על המפה</small></span></a>
+      <a class="lnk" href="join.html"><span class="li">💼</span><span>הצטרפות מטפלת<small>טופס + הסכם דיגיטלי</small></span></a>
+      <a class="lnk" href="pro.html"><span class="li">📲</span><span>דשבורד מטפלת<small>רווחים, יומן ומחירים</small></span></a>
+      <a class="lnk" href="admin.html"><span class="li">🎛️</span><span>דשבורד ניהול<small>כל נתוני הפלטפורמה</small></span></a>
+      <a class="lnk" href="legal.html"><span class="li">⚖️</span><span>מרכז משפטי<small>תקנון, פרטיות, ביטולים, נגישות</small></span></a>
+    </div>
+  </div>
+</section>
+
+<div class="final container">
+  <h2>byoutoyou. ביוטי עד הבית. 💜</h2>
+  <p>שוק של מיליארדים, חוויה של Wolt, ותשתית שמוכנה להשקה — הכול באוויר, עכשיו.</p>
+  <a class="btn-primary" href="index.html">להתחיל להזמין ←</a>
+</div>
+
+<footer>byoutoyou © 2026 · byoutoyou.com · גרסת דמו לתחרות</footer>
+
+</body>
+</html>
