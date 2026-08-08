@@ -740,6 +740,7 @@
       <button class="btn-ghost hide-m" onclick="scrollToId('how')">איך זה עובד</button>
       <button class="btn-ghost hide-m" onclick="scrollToId('gifts')">🎁 מתנות</button>
       <button class="btn-ghost hide-m care-link" onclick="scrollToId('hospital')">🏥 care</button>
+      <button class="btn-ghost hide-m" id="sndBtn" aria-label="הפעלת צלילים" onclick="toggleSound()">🔇</button>
       <a class="btn-ghost hide-m" href="join.html">הצטרפי כמטפלת</a>
       <button class="btn-ghost" id="pointsBtn" title="נקודות byoutoyou — 5% חזרה על כל טיפול, למימוש בקופה" aria-label="יתרת נקודות"
         onclick="toast('צוברים 5% נקודות על כל טיפול — ומשלמים איתן בקופה 💎')">💎 <span id="ptsCount" class="num">0</span> נק'</button>
@@ -2336,6 +2337,8 @@ async function submitBooking(){
       createdAt: Date.now(),
       status: 'active',
     };
+    chime(784);
+    if(navigator.vibrate) navigator.vibrate(15);
     if(t.pointsUsed) setPoints(getPoints() - t.pointsUsed);
     if(t.giftUsed){
       const gifts = lsGet(GIFTS_KEY, []);
@@ -2708,6 +2711,7 @@ function buyGift(){
         <button class="btn-secondary" style="flex:1" onclick="closeModal('giftOverlay')">סגירה</button>
         <button class="btn-primary" onclick="closeModal('giftOverlay');scrollToId('browse')">להזמנת טיפול עם השובר ←</button>
       </div>`;
+    chime(660);
     toast('השובר נוצר ונשלח! 🎁');
   }, 1200);
 }
@@ -2947,6 +2951,32 @@ window.addEventListener('scroll', () => { if(tourIdx >= 0) positionTour(); }, {p
 window.addEventListener('resize', () => { if(tourIdx >= 0) positionTour(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape' && tourIdx >= 0) endTour(); });
 
+/* ================= Pass 5: צלילים (מושתק כברירת מחדל) ================= */
+let AC = null;
+function soundMuted(){ return localStorage.getItem('by_muted') !== '0'; }
+function toggleSound(){
+  const unmuting = soundMuted();
+  localStorage.setItem('by_muted', unmuting ? '0' : '1');
+  $('sndBtn').textContent = unmuting ? '🔊' : '🔇';
+  toast(unmuting ? 'צלילים הופעלו 🔊' : 'צלילים כובו');
+  if(unmuting) chime(660);
+}
+function chime(freq = 660, dur = .18){
+  if(soundMuted()) return;
+  try{
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if(AC.state === 'suspended') AC.resume();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    o.connect(g); g.connect(AC.destination);
+    const t = AC.currentTime;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(.12, t + .02);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.start(t); o.stop(t + dur);
+  }catch(e){}
+}
+
 /* ================= ANCHOR BAR (Pass 4) ================= */
 const ANCHOR_SECTIONS = ['browse','how','events','hospital','gifts'];
 let anchorTick = false;
@@ -2971,6 +3001,7 @@ window.addEventListener('scroll', () => {
   $('nowCount').textContent = PROVIDERS.filter(p => p.availableNow).length;
   $('provCount').textContent = PROVIDERS.length;
   $('ptsCount').textContent = getPoints();
+  $('sndBtn').textContent = soundMuted() ? '🔇' : '🔊';
   renderCats();
   render();
   await refreshBookings();
