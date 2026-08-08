@@ -637,6 +637,47 @@
 
 
 
+
+  /* ---------- Pass 4: flow ---------- */
+  .anchor-bar{
+    position:sticky;top:64px;z-index:40;background:rgba(250,247,245,.92);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    transform:translateY(-10px);opacity:0;pointer-events:none;
+    transition:transform var(--dur-2) var(--ease-out),opacity var(--dur-2) var(--ease-out);
+  }
+  .anchor-bar.on{transform:none;opacity:1;pointer-events:auto}
+  .anchor-in{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-top:6px;padding-bottom:6px}
+  .anchor-in::-webkit-scrollbar{display:none}
+  .anchor-in button{
+    flex:none;padding:6px 14px;border-radius:99px;font-weight:600;font-size:.84rem;color:var(--ink-2);
+    transition:background var(--dur-1) var(--ease-out),color var(--dur-1) var(--ease-out);white-space:nowrap;
+  }
+  .anchor-in button.active{background:var(--ink);color:#fff}
+  .anchor-in button.care{color:#8e4fc9;font-weight:700}
+  .anchor-in button.care.active{background:#8e4fc9;color:#fff}
+  #gifts{background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .hero-care{
+    margin-top:14px;display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+    background:#f6f0fb;border:1px solid #e4d5f2;border-radius:99px;padding:7px 16px;
+    font-size:.85rem;color:#6d3aa8;font-weight:600;transition:transform var(--dur-1) var(--ease-out);
+  }
+  .hero-care:hover{transform:translateY(-1px)}
+  .care-link{color:#8e4fc9 !important;font-weight:700}
+  .wa-share{
+    display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:12px;
+    background:#25D366;color:#fff;font-weight:700;padding:12px;border-radius:12px;font-size:.95rem;
+    transition:transform var(--dur-1) var(--ease-out);
+  }
+  .wa-share:active{transform:scale(.97)}
+  @keyframes voucherIn{0%{transform:scale(.82);opacity:0}100%{transform:scale(1);opacity:1}}
+  .gift-voucher{animation:voucherIn var(--dur-3) var(--ease-back)}
+  .t-dots{display:flex;gap:5px;margin-bottom:10px}
+  .t-dots span{width:7px;height:7px;border-radius:99px;background:var(--line);transition:background var(--dur-1) var(--ease-out),transform var(--dur-1) var(--ease-out)}
+  .t-dots span.on{background:var(--brand);transform:scale(1.25)}
+  .t-skip{margin-inline-start:auto;font-size:.82rem;color:var(--ink-2);text-decoration:none;background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:8px 13px;font-weight:600}
+  @keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .step-anim{animation:stepIn var(--dur-2) var(--ease-out)}
+  @media(max-width:560px){.anchor-bar{top:56px}}
   /* ---------- Pass 3: catalog hierarchy ---------- */
   .card-cat-nails{--h:#f6eef4}
   .card-cat-makeup{--h:#f3eefb}
@@ -698,12 +739,24 @@
       <button class="btn-ghost" onclick="startTour()">🎓 סיור</button>
       <button class="btn-ghost hide-m" onclick="scrollToId('how')">איך זה עובד</button>
       <button class="btn-ghost hide-m" onclick="scrollToId('gifts')">🎁 מתנות</button>
+      <button class="btn-ghost hide-m care-link" onclick="scrollToId('hospital')">🏥 care</button>
       <a class="btn-ghost hide-m" href="join.html">הצטרפי כמטפלת</a>
-      <button class="btn-ghost" id="pointsBtn" onclick="toast('צוברים 5% נקודות על כל טיפול — ומשלמים איתן בקופה 💎')">💎 <span id="ptsCount">0</span></button>
+      <button class="btn-ghost" id="pointsBtn" title="נקודות byoutoyou — 5% חזרה על כל טיפול, למימוש בקופה" aria-label="יתרת נקודות"
+        onclick="toast('צוברים 5% נקודות על כל טיפול — ומשלמים איתן בקופה 💎')">💎 <span id="ptsCount" class="num">0</span> נק'</button>
       <button class="btn-ghost bookings-badge" id="bookingsBtn" data-count="0" onclick="openBookings()">ההזמנות שלי</button>
     </div>
   </div>
 </header>
+
+<nav class="anchor-bar" id="anchorBar" aria-label="ניווט מהיר">
+  <div class="container anchor-in">
+    <button data-anchor="browse" onclick="scrollToId('browse')">💅 קטלוג</button>
+    <button data-anchor="how" onclick="scrollToId('how')">איך זה עובד</button>
+    <button data-anchor="events" onclick="scrollToId('events')">🎉 אירועים</button>
+    <button data-anchor="hospital" class="care" onclick="scrollToId('hospital')">🏥 care</button>
+    <button data-anchor="gifts" onclick="scrollToId('gifts')">🎁 מתנות</button>
+  </div>
+</nav>
 
 <!-- ============ HERO ============ -->
 <div class="hero">
@@ -722,6 +775,8 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
         </button>
       </div>
+      <div class="hero-care" onclick="scrollToId('hospital')" role="link" tabindex="0"
+           onkeydown="if(event.key==='Enter')scrollToId('hospital')">🏥 <b>byoutoyou care</b> — טיפוח עד מיטת בית החולים ←</div>
       <div class="hero-stats">
         <div class="stat"><b>4.9★</b><span>דירוג ממוצע</span></div>
         <div class="stat"><b id="provCount">–</b><span>מטפלות מוסמכות</span></div>
@@ -2022,7 +2077,7 @@ function goToBooking(){
     day: 'היום', slot: null,
     address: $('addrInput').value.trim(),
     name: '', phone: '', notes: '',
-    tip: 0, coupon: null, giftCode: null, usePoints: false,
+    tip: 0, tipTouched: false, coupon: null, giftCode: null, usePoints: false,
   };
   closeModal('profileOverlay');
   openModal('bookOverlay');
@@ -2048,9 +2103,11 @@ function setWizard(step){
 }
 
 function renderBookStep(step){
+  const animate = booking.step !== step;
   booking.step = step;
   setWizard(step);
   const p = booking.provider;
+  if(animate){ const b = $('bookBody'); b.classList.remove('step-anim'); void b.offsetWidth; b.classList.add('step-anim'); }
 
   if(step === 1){
     $('bookTitle').textContent = 'מתי שנגיע?';
@@ -2131,7 +2188,7 @@ function renderBookStep(step){
 
       <h4 class="block-title">רוצה להוסיף טיפ למטפלת? 💜</h4>
       <div class="tip-row">
-        ${[0,10,20,30].map(v => `<button class="tip-opt ${booking.tip===v?'selected':''}" onclick="setTip(${v})">${v === 0 ? 'בלי' : v + ' ₪'}</button>`).join('')}
+        ${[0,10,20,30].map(v => `<button class="tip-opt ${booking.tipTouched && booking.tip===v?'selected':''}" onclick="setTip(${v})">${v === 0 ? 'בלי' : v + ' ₪'}</button>`).join('')}
       </div>
 
       <div class="coupon-row">
@@ -2195,7 +2252,7 @@ function saveCardFields(){
   booking._exp = $('bExp') ? $('bExp').value : booking._exp;
   booking._cvv = $('bCvv') ? $('bCvv').value : booking._cvv;
 }
-function setTip(v){ saveCardFields(); booking.tip = v; renderBookStep(3); }
+function setTip(v){ saveCardFields(); booking.tip = v; booking.tipTouched = true; renderBookStep(3); }
 function applyCoupon(){
   saveCardFields();
   const code = $('couponInput').value.trim().toUpperCase();
@@ -2642,6 +2699,10 @@ function buyGift(){
         <div class="code" dir="ltr">${code}</div>
         <div class="v-note">למימוש: מזינים את הקוד בשדה הקופון בקופה · בדמו השובר נשמר בדפדפן הזה</div>
       </div>
+      <a class="wa-share" target="_blank" rel="noopener"
+         href="https://wa.me/?text=${encodeURIComponent('🎁 מתנה בשבילך מ' + gift.from + '! שובר byoutoyou על ' + gift.amount + ' ₪' + (gift.dedication ? '\n"' + gift.dedication + '"' : '') + '\nקוד השובר: ' + code + '\nלמימוש באתר: https://byoutoyou.com')}">
+        שיתוף השובר ב-WhatsApp 💬
+      </a>
       <p style="text-align:center;color:var(--ink-2);font-size:.88rem;margin-top:14px">בדמו: השובר "נשלח" ב-SMS ל־<b dir="ltr">${esc(gift.toPhone)}</b> 📲<br>רוצה לנסות? הזמיני טיפול והזיני את הקוד בקופה 😉</p>
       <div class="btn-row" style="margin-top:12px">
         <button class="btn-secondary" style="flex:1" onclick="closeModal('giftOverlay')">סגירה</button>
@@ -2810,16 +2871,11 @@ function openBookings(){
 /* ================= GUIDED TOUR (הדרכה כמו במשחק) ================= */
 const TOUR_KEY = 'byoutoyou_tour_done';
 const TOUR_STEPS = [
-  {el:null, title:'ברוכה הבאה ל-byoutoyou! 💜', text:'רוצה סיור קצר בכל מה שהפלטפורמה יודעת לעשות? כמו הדרכה במשחק — צעד אחרי צעד, פחות מ-2 דקות.', cta:'התחילי סיור 🎓'},
-  {el:'.search-card', title:'מתחילים בכתובת 📍', text:'מקלידים לאן להגיע — ורואים מיד את כל המטפלות הזמינות באזור, עם זמן הגעה משוער לכל אחת.'},
-  {el:'#cats', title:'5 עולמות של יופי במקום אחד', text:'מניקור, שיער, איפור, גבות וריסים וטיפולי פנים — 25 מטפלות מוסמכות בכל קטגוריה, הכול עד הבית.'},
-  {el:'#grid .card', title:'כרטיס מטפלת חכם 🏆', text:'דירוג אמיתי, תג "מאומתת", זמינות חיה ותגיות חכמות כמו "המובילה באזור". לחיצה על הלב ❤️ שומרת במועדפות.'},
-  {el:'.filters', title:'מסננים בקליק', text:'זמינות עכשיו, דירוג 4.8+, מאומתות או תקציב — ומיון לפי מחיר, דירוג או זמן הגעה. מוצאים בדיוק את המתאימה.'},
-  {el:'#events .grid', title:'אירועים וחבילות 🎉', text:'חבילת כלה, בת מצווה, איפור כל המשפחה וערב פינוק קבוצתי — משאירים פרטים ומנהלת אירועים חוזרת עם הצעה תוך שעתיים.'},
-  {el:'#hospital .hosp-banner', title:'byoutoyou care 🏥💜', text:'הפיצ\'ר שאנחנו הכי גאות בו: טיפוח עד מיטת בית החולים — אחרי ניתוח, באשפוז ממושך או אחרי לידה. כי לכל אישה מגיע להרגיש אישה, בכל מצב.'},
-  {el:'#gifts .grid', title:'שוברי מתנה 🎁', text:'שולחים שובר עם הקדשה אישית בדקה — ללידה, ליום הולדת או לכל העובדות בארגון. השובר נפדה בקופה כמו קופון, כולל יתרה.'},
-  {el:'#bookingsBtn', title:'הכול נשמר אצלך 🗓️', text:'אחרי הזמנה: מעקב חי על המפה כמו ב-Wolt, צ\'אט עם המטפלת, קבלה דיגיטלית ונקודות 💎 — 5% חזרה על כל טיפול.'},
-  {el:null, title:'ויש עוד! 🚀', text:'דשבורד אישי למטפלות (קוד דמו 1234), דשבורד ניהול (קוד 2026) והמצגת המלאה — הכול בקישורים למטה בעמוד. עכשיו תורך: הזמיני טיפול ותראי את הקסם ✨', cta:'סיימי סיור'},
+  {el:null, title:'ברוכה הבאה ל-byoutoyou! 💜', text:'סיור של דקה בדברים שחייבים לראות — כמו הדרכה במשחק. אפשר לדלג בכל רגע.', cta:'התחילי סיור 🎓'},
+  {el:'.search-card', title:'מתחילים בכתובת 📍', text:'מקלידים לאן להגיע — ורואים מיד 125 מטפלות מוסמכות ב-5 קטגוריות, עם זמן הגעה לכל אחת.'},
+  {el:'#grid .card', title:'מזמינים — ועוקבים חי 🚗', text:'בוחרים מטפלת, מזמינים בשלושה צעדים — ואז רואים אותה מתקרבת על המפה בזמן אמת, כמו ב-Wolt. יש גם צ\'אט.'},
+  {el:'#gifts .grid', title:'שוברי מתנה 🎁', text:'שולחים שובר עם הקדשה בדקה — והוא נפדה בקופה כמו קופון. ויש גם את byoutoyou care: טיפוח עד מיטת בית החולים 💜'},
+  {el:null, title:'עכשיו תורך ✨', text:'הזמיני טיפול, שלחי מתנה — והציצי גם בדשבורד המטפלת (קוד 1234) ובדשבורד הניהול (קוד 2026) בקישורים למטה.', cta:'סיימי סיור'},
 ];
 let tourIdx = -1, tourHole = null, tourTip = null;
 
@@ -2869,13 +2925,13 @@ function drawTour(){
   if(!tourTip){ tourTip = document.createElement('div'); tourTip.className = 'tour-tip'; document.body.appendChild(tourTip); }
   const first = tourIdx === 0, last = tourIdx === TOUR_STEPS.length - 1;
   tourTip.innerHTML = `
-    <span class="t-count">${tourIdx + 1} / ${TOUR_STEPS.length}</span>
+    <div class="t-dots">${TOUR_STEPS.map((_, i) => `<span class="${i === tourIdx ? 'on' : ''}"></span>`).join('')}</div>
     <h3>${s.title}</h3>
     <p>${s.text}</p>
     <div class="t-btns">
       ${!first ? '<button class="tour-back" onclick="tourBack()">הקודם</button>' : ''}
       <button class="tour-next" onclick="tourNext()">${s.cta || 'הבא ←'}</button>
-      ${!last ? '<button class="t-skip" onclick="endTour()">דלגי על הסיור</button>' : ''}
+      ${!last ? '<button class="t-skip" onclick="endTour()">דלגי ✕</button>' : ''}
     </div>`;
   if(s.el){
     const el = document.querySelector(s.el);
@@ -2890,6 +2946,25 @@ function drawTour(){
 window.addEventListener('scroll', () => { if(tourIdx >= 0) positionTour(); }, {passive:true});
 window.addEventListener('resize', () => { if(tourIdx >= 0) positionTour(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape' && tourIdx >= 0) endTour(); });
+
+/* ================= ANCHOR BAR (Pass 4) ================= */
+const ANCHOR_SECTIONS = ['browse','how','events','hospital','gifts'];
+let anchorTick = false;
+function updateAnchorBar(){
+  anchorTick = false;
+  const bar = $('anchorBar');
+  const heroH = document.querySelector('.hero').offsetHeight;
+  bar.classList.toggle('on', window.scrollY > heroH - 40);
+  let current = ANCHOR_SECTIONS[0];
+  for(const id of ANCHOR_SECTIONS){
+    const el = document.getElementById(id);
+    if(el && el.getBoundingClientRect().top < window.innerHeight * 0.45) current = id;
+  }
+  bar.querySelectorAll('button').forEach(b => b.classList.toggle('active', b.dataset.anchor === current));
+}
+window.addEventListener('scroll', () => {
+  if(!anchorTick){ anchorTick = true; requestAnimationFrame(updateAnchorBar); }
+}, {passive:true});
 
 /* ================= INIT ================= */
 (async () => {
