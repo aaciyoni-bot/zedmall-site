@@ -93,6 +93,10 @@
   .note{font-size:.76rem;color:var(--ink-3);margin-top:8px}
 
   .kpi .v,td,.chart .tip,.cat-bar .cb-head b{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+  /* ---------- Pass 1: touch feedback ---------- */
+  .btn-primary,.btn-ghost,.act{transition:transform var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out)}
+  .btn-primary:active,.btn-ghost:active,.act:active{transform:scale(.97)}
   /* ---------- Pass 0: foundations ---------- */
   :focus-visible{outline:2px solid var(--brand) !important;outline-offset:2px}
   :focus:not(:focus-visible){outline:none}
@@ -205,7 +209,17 @@ function draw(){
     {v: active, l: 'הזמנות פעילות כרגע', d: ''},
     {v: avgRating + ' ★', l: 'דירוג ממוצע', d: rated.length + ' דירוגים'},
     {v: apps.filter(a => a.status === 'pending').length, l: 'בקשות הצטרפות ממתינות', d: leads.filter(l => l.status === 'new').length + ' פניות אירועים'},
-  ].map(k => `<div class="kpi"><div class="v">${k.v}</div><div class="l">${k.l}</div>${k.d ? `<div class="d">${k.d}</div>` : ''}</div>`).join('');
+  ].map(k => `<div class="kpi"><div class="v num">${k.v}</div><div class="l">${k.l}</div>${k.d ? `<div class="d">${k.d}</div>` : ''}</div>`).join('');
+  /* Pass 1: המחזור נספר למעלה בכניסה */
+  const revEl = document.querySelector('#kpis .kpi .v');
+  if(revEl && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+    const t0 = performance.now(), dur = 700, ease = t => 1 - Math.pow(1 - t, 3);
+    (function step(now){
+      const p = Math.min(1, (now - t0) / dur);
+      revEl.textContent = Math.round(revenue * ease(p)).toLocaleString('he-IL') + ' ₪';
+      if(p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
 
   /* גרף 14 ימים */
   const DAY = 86400000, today = new Date(); today.setHours(0,0,0,0);

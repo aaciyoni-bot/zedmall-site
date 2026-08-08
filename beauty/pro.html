@@ -108,6 +108,12 @@
   .toast.show{opacity:1;transform:translateX(50%) translateY(0)}
 
   .kpi .v,.s-price,.payout b,td,.chart .tip{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+  /* ---------- Pass 1: touch feedback ---------- */
+  .btn-primary,.btn-ghost,.g-btn,.avail-toggle,.slot-card.gap,.payout button{
+    transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out);
+  }
+  .btn-primary:active,.btn-ghost:active,.g-btn:active,.avail-toggle:active,.slot-card.gap:active,.payout button:active{transform:scale(.97)}
   /* ---------- Pass 0: foundations ---------- */
   :focus-visible{outline:2px solid var(--brand) !important;outline-offset:2px}
   :focus:not(:focus-visible){outline:none}
@@ -263,7 +269,17 @@ function show(){
     {v: fmt(tips) , l: 'טיפים 💜 (100% שלך)'},
     {v: orders.length, l: 'טיפולים'},
     {v: avg + ' ★', l: 'הדירוג שלך'},
-  ].map(k => `<div class="kpi"><div class="v">${k.v}</div><div class="l">${k.l}</div></div>`).join('');
+  ].map(k => `<div class="kpi"><div class="v num">${k.v}</div><div class="l">${k.l}</div></div>`).join('');
+  /* Pass 1: הרווח נטו נספר למעלה בכניסה */
+  const netEl = document.querySelector('#kpis .kpi .v');
+  if(netEl && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+    const t0 = performance.now(), dur = 700, ease = t => 1 - Math.pow(1 - t, 3);
+    (function step(now){
+      const p = Math.min(1, (now - t0) / dur);
+      netEl.textContent = Math.round(net * ease(p)).toLocaleString('he-IL') + ' ₪';
+      if(p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
 
   /* גרף נטו יומי */
   const DAY = 86400000, today = new Date(); today.setHours(0,0,0,0);

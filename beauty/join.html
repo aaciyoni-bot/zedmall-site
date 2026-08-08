@@ -91,6 +91,10 @@
   .toast{position:fixed;bottom:24px;right:50%;transform:translateX(50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:99px;font-weight:600;font-size:.9rem;opacity:0;pointer-events:none;transition:.3s;z-index:200;white-space:nowrap}
   .toast.show{opacity:1;transform:translateX(50%) translateY(0)}
 
+
+  /* ---------- Pass 1: touch feedback ---------- */
+  .btn-primary,.btn-secondary,.add-svc,.upload,.btn-ghost{transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out),border-color var(--dur-1) var(--ease-out)}
+  .btn-primary:active,.btn-secondary:active,.btn-ghost:active,.upload:active{transform:scale(.98)}
   /* ---------- Pass 0: foundations ---------- */
   :focus-visible{outline:2px solid var(--brand) !important;outline-offset:2px}
   :focus:not(:focus-visible){outline:none}

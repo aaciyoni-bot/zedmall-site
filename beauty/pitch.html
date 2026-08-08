@@ -106,6 +106,10 @@
   .final p{color:var(--ink-2);margin:10px 0 24px}
   footer{padding:0 0 40px;color:var(--ink-3);font-size:.82rem;text-align:center}
 
+
+  /* ---------- Pass 1: touch feedback ---------- */
+  .btn-primary,.btn-ghost,.chip-link,.lnk{transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out),border-color var(--dur-1) var(--ease-out)}
+  .btn-primary:active,.btn-ghost:active,.chip-link:active,.lnk:active{transform:scale(.97)}
   /* ---------- Pass 0: foundations ---------- */
   :focus-visible{outline:2px solid var(--brand) !important;outline-offset:2px}
   :focus:not(:focus-visible){outline:none}
