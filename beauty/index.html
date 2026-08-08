@@ -636,6 +636,15 @@
 
   .price b,.s-price,.rating,.stat b,.summary-box .s-row b,.eta-chip,.gift-voucher .amount,.sheet-cta .total b,.kpi .v{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 
+
+  /* ---------- Pass 2: live tracking motion ---------- */
+  .t-step{transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out)}
+  .t-step.reveal{opacity:.15;transform:translateY(8px)}
+  .t-dot{transition:background var(--dur-2) var(--ease-out),border-color var(--dur-2) var(--ease-out),color var(--dur-2) var(--ease-out)}
+  .t-step.done .t-dot{animation:checkpop var(--dur-2) var(--ease-back)}
+  @keyframes checkpop{0%{transform:scale(.4)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+  @keyframes arrivepulse{0%{transform:scale(1)}40%{transform:scale(1.07)}100%{transform:scale(1)}}
+  .track-status h3.arrived{animation:arrivepulse .6s var(--ease-back)}
   /* ---------- Pass 1: touch feedback ---------- */
   .btn-primary,.btn-book,.btn-ghost,.btn-secondary,.btn-light,.cat,.card,.svc,.bk-item,.pill,.slot,.time-opt,.amount-opt,.tip-opt,.btn-close,.svc-check{
     transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-1) var(--ease-out),
@@ -2278,7 +2287,6 @@ async function submitBooking(){
 /* ציר הזמן של הדמו דחוס: "הנסיעה" כולה אורכת ~90 שניות, אבל הספירה
    לאחור מוצגת בדקות אמיתיות לפי ה-ETA של נותנת השירות. */
 const DEMO_PREP_SEC = 12, DEMO_TOTAL_SEC = 90;
-let trackTimer = null;
 
 function getOrder(id){ return loadBookings().find(o => o.id === id); }
 function orderElapsed(o){ return (Date.now() - o.createdAt) / 1000; }
@@ -2364,7 +2372,7 @@ function drawTracking(orderId){
   $('trackBody').innerHTML = `
     <div class="map-wrap">
       ${mapSVG(p)}
-      <div class="eta-chip">${etaLabel(o)}</div>
+      <div class="eta-chip" id="etaChip">${etaLabel(o)}</div>
     </div>
     <div class="track-status">
       <h3>${titles[ph]}</h3>
@@ -2428,18 +2436,78 @@ async function submitReview(orderId, skipText){
   pendingStars = 0;
 }
 
+/* Pass 2: לולאת rAF חלקה — הרכב זז ברציפות, טקסטים מתעדכנים בלי לרנדר מחדש את כל המודאל */
+let trackRAF = null, trackPhaseState = null, _lastEtaTxt = '';
+function stopTrackLoop(){ if(trackRAF){ cancelAnimationFrame(trackRAF); trackRAF = null; } }
+
+function updateTrackSteps(o){
+  const ph = orderPhase(o);
+  const idx = ph === 'prep' ? 1 : ph === 'drive' ? 2 : 3;
+  const arrived = ph === 'arrived';
+  document.querySelectorAll('#trackBody .t-step').forEach((el, i) => {
+    el.classList.toggle('done', i < idx || arrived);
+    el.classList.toggle('current', !arrived && i === idx);
+    el.classList.toggle('pending', !arrived && i > idx);
+  });
+}
+
+function celebrateArrival(){
+  const map = document.querySelector('#trackBody .map-wrap');
+  if(map){ const r = map.getBoundingClientRect(); burstConfetti(r.left + r.width/2, r.top + r.height/2, 24); }
+  const h = document.querySelector('#trackBody .track-status h3');
+  if(h) h.classList.add('arrived');
+  if(typeof chime === 'function') chime(880, .28);
+}
+
+function startTrackLoop(orderId){
+  stopTrackLoop();
+  const tick = () => {
+    if(!$('trackOverlay').classList.contains('open')){ stopTrackLoop(); return; }
+    const o = getOrder(orderId);
+    if(!o){ stopTrackLoop(); return; }
+    positionCar(o);
+    const chip = $('etaChip');
+    if(chip){
+      const t = etaLabel(o);
+      if(t !== _lastEtaTxt){ chip.textContent = t; _lastEtaTxt = t; }
+    }
+    const ph = orderPhase(o);
+    if(ph !== trackPhaseState){
+      trackPhaseState = ph;
+      if(ph === 'arrived'){
+        drawTracking(orderId);
+        celebrateArrival();
+        stopTrackLoop();
+        return;
+      }
+      updateTrackSteps(o);
+      const st = document.querySelector('#trackBody .track-status h3');
+      if(st){
+        const p = PROVIDERS.find(x => x.id === o.providerId) || PROVIDERS[0];
+        st.textContent = ph === 'prep' ? 'ההזמנה התקבלה! 💜' : p.name.split(' ')[0] + ' בדרך אלייך';
+      }
+    }
+    trackRAF = requestAnimationFrame(tick);
+  };
+  trackRAF = requestAnimationFrame(tick);
+}
+
 function openTracking(orderId){
-  clearInterval(trackTimer);
+  stopTrackLoop();
   pendingStars = 0;
+  _lastEtaTxt = '';
+  const o = getOrder(orderId);
+  trackPhaseState = o ? orderPhase(o) : null;
   drawTracking(orderId);
   openModal('trackOverlay');
-  /* בהגעה אין רינדור מחדש — כדי לא למחוק את טופס הדירוג בזמן הקלדה */
-  if(orderPhase(getOrder(orderId)) === 'arrived') return;
-  trackTimer = setInterval(() => {
-    if(!$('trackOverlay').classList.contains('open')){ clearInterval(trackTimer); return; }
-    drawTracking(orderId);
-    if(orderPhase(getOrder(orderId)) === 'arrived') clearInterval(trackTimer);
-  }, 1000);
+  /* שלבי הסטטוס נחשפים ברצף מדורג */
+  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    const steps = document.querySelectorAll('#trackBody .t-step');
+    steps.forEach(el => el.classList.add('reveal'));
+    steps.forEach((el, i) => setTimeout(() => el.classList.remove('reveal'), 150 + i * 450));
+  }
+  if(trackPhaseState === 'arrived') return;
+  startTrackLoop(orderId);
 }
 
 /* ================= EVENT LEADS ================= */
