@@ -622,11 +622,10 @@
     #grid .rating{font-size:.72rem;flex:none;gap:2px}
     #grid .rating .rev{display:none}
     #grid .card-top .info > div{gap:5px !important}
-    #grid .badge-now,#grid .badge-later{font-size:.54rem;padding:2px 5px;gap:3px;overflow:hidden;flex-shrink:1;min-width:0}
-    #grid .badge-now .dot{width:4px;height:4px}
+    #grid .avail-mini,#grid .later-mini{font-size:.62rem;gap:3px;overflow:hidden;flex-shrink:1;min-width:0}
+    #grid .avail-mini .dot{width:5px;height:5px}
     #grid .card-tags{padding:8px 10px 0;gap:4px;height:26px;overflow:hidden;flex-wrap:nowrap}
     #grid .card-tags .tag{font-size:.62rem;padding:2px 6px;white-space:nowrap}
-    #grid .card-tags .tag:nth-child(n+3){display:none}
     #grid .card-bottom{padding:9px 10px 11px;margin-top:9px;flex-wrap:wrap;gap:6px}
     #grid .price b{font-size:.92rem}
     #grid .price span{font-size:.66rem}
@@ -637,6 +636,20 @@
   .price b,.s-price,.rating,.stat b,.summary-box .s-row b,.eta-chip,.gift-voucher .amount,.sheet-cta .total b,.kpi .v{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
 
 
+
+  /* ---------- Pass 3: catalog hierarchy ---------- */
+  .card-cat-nails{--h:#f6eef4}
+  .card-cat-makeup{--h:#f3eefb}
+  .card-cat-hair{--h:#eef4f6}
+  .card-cat-face{--h:#eef6f1}
+  .card-cat-brows{--h:#faf2ec}
+  #grid .card .card-cover{background:var(--h,#f4f0f6)}
+  #grid .card.featured .card-cover{background:linear-gradient(135deg,var(--brand),#8e4fc9)}
+  #grid .card .card-cover .em{opacity:.55}
+  #grid .card.featured .card-cover .em{opacity:.35}
+  .avail-mini{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:700;color:var(--green)}
+  .avail-mini .dot{width:7px;height:7px;border-radius:99px;background:var(--green);animation:pulse 1.6s infinite;flex:none}
+  .later-mini{display:inline-flex;align-items:center;gap:4px;font-size:.74rem;font-weight:600;color:var(--ink-3)}
   /* ---------- Pass 2: live tracking motion ---------- */
   .t-step{transition:opacity var(--dur-2) var(--ease-out),transform var(--dur-2) var(--ease-out)}
   .t-step.reveal{opacity:.15;transform:translateY(8px)}
@@ -1885,13 +1898,14 @@ function render(){
   $('grid').innerHTML = list.map(p => {
     const minPrice = Math.min(...p.services.map(s => s.price));
     const avail = p.availableNow
-      ? '<span class="badge-now"><span class="dot"></span>זמינה עכשיו</span>'
-      : '<span class="badge-later">🕐 ' + esc(p.nextSlot) + '</span>';
+      ? '<span class="avail-mini"><span class="dot"></span>זמינה עכשיו</span>'
+      : '<span class="later-mini">🕐 ' + esc(p.nextSlot) + '</span>';
     const badge = smartBadge(p);
+    const featured = p.id === topId;
     return `
-    <article class="card" onclick="openProfile('${p.id}')" role="button" tabindex="0" aria-label="פרופיל של ${esc(p.name)}"
+    <article class="card card-cat-${p.cat}${featured ? ' featured' : ''}" onclick="openProfile('${p.id}')" role="button" tabindex="0" aria-label="פרופיל של ${esc(p.name)}"
              onkeydown="if(event.key==='Enter')openProfile('${p.id}')">
-      <div class="card-cover" style="background:${p.grad}">
+      <div class="card-cover">
         <span class="em" style="right:6%;top:2px">${p.portfolio[0]}</span>
         <span class="em" style="left:12%;bottom:-14px;font-size:2.3rem">${p.portfolio[1]}</span>
         <span class="em" style="left:44%;top:-10px;font-size:2rem">${p.portfolio[2]}</span>
@@ -1911,7 +1925,7 @@ function render(){
           </div>
         </div>
       </div>
-      <div class="card-tags">${p.tags.map(t => '<span class="tag">' + esc(t) + '</span>').join('')}</div>
+      <div class="card-tags">${p.tags.slice(0, 2).map(t => '<span class="tag">' + esc(t) + '</span>').join('')}${p.tags.length > 2 ? '<span class="tag deco">+' + (p.tags.length - 2) + '</span>' : ''}</div>
       <div class="card-bottom">
         <div class="price"><b>מ־${fmt(minPrice)}</b><span>לטיפול</span></div>
         <div class="eta">🚗 ~${p.etaMin} דק'</div>
