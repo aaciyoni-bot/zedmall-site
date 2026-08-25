@@ -21,43 +21,108 @@
   }
 
   /* ===== מצב מעטפה (חתימה מרחוק) =====
-     #env=...    — מסמך שנשלח ללקוח לחתימה (מצב לקוח)
-     #signed=... — מסמך חתום שחזר מהלקוח (מצב קבלה אצל קהתי) */
+     קישור קצר (המסמך שמור בענן):   #eid=<id> — ללקוח לחתימה, #sid=<id> — חתום שחזר
+     קישור גיבוי (המסמך בתוך הקישור): #env=<data> / #signed=<data> */
   var MODE = "normal";
-  var envelope = null;
+  var HASH_KIND = null, HASH_RAW = null, DOC_ID = null;
   (function () {
-    var m = location.hash.match(/^#(env|signed)=(.+)$/);
+    var m = location.hash.match(/^#(env|signed|eid|sid)=(.+)$/);
     if (!m) return;
-    try {
-      envelope = decB64(m[2]);
-      if (envelope && envelope.form === FORM_ID) MODE = m[1] === "env" ? "client" : "received";
-      else if (envelope) MODE = m[1] === "env" ? "client" : "received"; // טופס אחר — עדיין ננסה להציג
-    } catch (e) { envelope = null; }
+    HASH_KIND = m[1];
+    HASH_RAW = m[2];
+    MODE = (HASH_KIND === "env" || HASH_KIND === "eid") ? "client" : "received";
+    if (HASH_KIND === "eid" || HASH_KIND === "sid") DOC_ID = HASH_RAW;
   })();
 
-  /* מעבר למעטפה כשהעמוד כבר פתוח — ניווט מלא מחדש כדי להחיל את המצב
-     (שינוי פרמטר השאילתה כופה טעינת עמוד אמיתית, בשונה מניווט-hash) */
+  /* מעבר למעטפה כשהעמוד כבר פתוח — ניווט מלא מחדש כדי להחיל את המצב */
   window.addEventListener("hashchange", function () {
-    if (/^#(env|signed)=/.test(location.hash)) {
+    if (/^#(env|signed|eid|sid)=/.test(location.hash)) {
       setTimeout(function () {
         location.href = location.pathname + "?r=" + Date.now() + location.hash;
       }, 0);
     }
   });
 
-  function encB64(obj) {
-    var bytes = new TextEncoder().encode(JSON.stringify(obj));
+  function b64FromBytes(bytes) {
     var bin = "";
     for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
     return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   }
-  function decB64(s) {
+  function bytesFromB64(s) {
     s = s.replace(/-/g, "+").replace(/_/g, "/");
     while (s.length % 4) s += "=";
     var bin = atob(s);
     var bytes = new Uint8Array(bin.length);
     for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    return JSON.parse(new TextDecoder().decode(bytes));
+    return bytes;
+  }
+  function encB64(obj) { return b64FromBytes(new TextEncoder().encode(JSON.stringify(obj))); }
+  function decB64(s) { return JSON.parse(new TextDecoder().decode(bytesFromB64(s))); }
+
+  /* דחיסת deflate — מקצרת את המטען פי 2-3. פורמט: "z." + base64url */
+  function encodePayload(obj) {
+    if (typeof CompressionStream === "undefined") return Promise.resolve(encB64(obj));
+    var stream = new Blob([new TextEncoder().encode(JSON.stringify(obj))])
+      .stream().pipeThrough(new CompressionStream("deflate-raw"));
+    return new Response(stream).arrayBuffer().then(function (ab) {
+      return "z." + b64FromBytes(new Uint8Array(ab));
+    }).catch(function () { return encB64(obj); });
+  }
+  function decodePayload(s) {
+    if (s.slice(0, 2) !== "z.") return Promise.resolve(decB64(s));
+    var stream = new Blob([bytesFromB64(s.slice(2))])
+      .stream().pipeThrough(new DecompressionStream("deflate-raw"));
+    return new Response(stream).arrayBuffer().then(function (ab) {
+      return JSON.parse(new TextDecoder().decode(new Uint8Array(ab)));
+    });
+  }
+
+  /* ===== אחסון מעטפות בענן (Firestore) — קישורים קצרים וחזרה ישירה לאתר =====
+     אם הענן לא זמין, נופלים אוטומטית לקישור ארוך שמכיל את המסמך עצמו. */
+  var FS_KEY = "AIzaSyAqkEfNwKZzofId0XCGcs17sVFh5NYryrM";
+  var FS_PID = "zedmall-4301c";
+  function fsUrl(id, extra) {
+    return "https://firestore.googleapis.com/v1/projects/" + FS_PID +
+      "/databases/(default)/documents/kehati_envelopes" + (id ? "/" + id : "") +
+      "?key=" + FS_KEY + (extra || "");
+  }
+  /* fetch עם מגבלת זמן — כדי שכשל ענן לא יתקע את המשתמש */
+  function fsFetch(url, opts, ms) {
+    var ctrl = typeof AbortController !== "undefined" ? new AbortController() : null;
+    opts = opts || {};
+    if (ctrl) opts.signal = ctrl.signal;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, ms || 6000) : null;
+    return fetch(url, opts).finally(function () { if (timer) clearTimeout(timer); });
+  }
+  function fsCreate(payload) {
+    return fsFetch(fsUrl(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields: {
+        data: { stringValue: payload },
+        status: { stringValue: "sent" },
+        created: { integerValue: String(Date.now()) }
+      } })
+    }).then(function (r) {
+      if (!r.ok) throw new Error("fs create " + r.status);
+      return r.json();
+    }).then(function (j) { return j.name.split("/").pop(); });
+  }
+  function fsGet(id) {
+    return fsFetch(fsUrl(id)).then(function (r) {
+      if (!r.ok) throw new Error("fs get " + r.status);
+      return r.json();
+    }).then(function (j) { return j.fields || {}; });
+  }
+  function fsSign(id, payload) {
+    return fsFetch(fsUrl(id, "&updateMask.fieldPaths=signed&updateMask.fieldPaths=status"), {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields: {
+        signed: { stringValue: payload },
+        status: { stringValue: "signed" }
+      } })
+    }).then(function (r) { if (!r.ok) throw new Error("fs sign " + r.status); });
   }
 
   /* ===== טוסט ===== */
@@ -78,8 +143,9 @@
     this.canvas = $("canvas", box);
     this.ctx = this.canvas.getContext("2d");
     this.dataUrl = null;
-    this.strokes = [];      // וקטורים — משמשים לשליחה בקישור (קומפקטי)
+    this.strokes = [];      // וקטורים — קומפקטיים לשמירה ולשליחה
     this.drawing = false;
+    this.locked = false;
     this.last = null;
     this.cur = null;
     var self = this;
@@ -88,6 +154,7 @@
     window.addEventListener("resize", function () { self.resize(); });
 
     this.canvas.addEventListener("pointerdown", function (e) {
+      if (self.locked) return;
       e.preventDefault();
       self.canvas.setPointerCapture(e.pointerId);
       self.drawing = true;
@@ -107,8 +174,11 @@
       ctx.moveTo(self.last.x, self.last.y);
       ctx.lineTo(p.x, p.y);
       ctx.stroke();
+      // דילול נקודות — שומרים נקודה רק אם זזה מספיק
+      var lp = self.cur[self.cur.length - 1];
+      var dx = p.x - lp[0], dy = p.y - lp[1];
+      if (dx * dx + dy * dy >= 4) self.cur.push([Math.round(p.x), Math.round(p.y)]);
       self.last = p;
-      self.cur.push([Math.round(p.x), Math.round(p.y)]);
     });
     function end() {
       if (!self.drawing) return;
@@ -117,13 +187,18 @@
       self.cur = null;
       self.dataUrl = self.canvas.toDataURL("image/png");
       self.box.classList.add("signed");
+      self.onchange && self.onchange();
       scheduleSave();
     }
     this.canvas.addEventListener("pointerup", end);
     this.canvas.addEventListener("pointercancel", end);
 
     var clearBtn = $(".sig-clear", box);
-    if (clearBtn) clearBtn.addEventListener("click", function () { self.clear(); scheduleSave(); });
+    if (clearBtn) clearBtn.addEventListener("click", function () {
+      if (self.locked) return;
+      self.clear();
+      scheduleSave();
+    });
   }
   SignaturePad.prototype.pos = function (e) {
     var r = this.canvas.getBoundingClientRect();
@@ -138,8 +213,8 @@
     this.canvas.height = Math.round(r.height * dpr);
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     this.refW = r.width;
-    this.refH = r.height;
-    if (this.dataUrl) this.load(this.dataUrl);
+    if (this.strokes.length) this.loadStrokes({ s: this.strokes, w: this.refW });
+    else if (this.dataUrl) this.load(this.dataUrl);
   };
   SignaturePad.prototype.clear = function () {
     var r = this.rect();
@@ -160,27 +235,30 @@
     };
     img.src = dataUrl;
   };
-  /* ציור חתימה מוקטורים שהגיעו בקישור */
+  /* ציור חתימה מוקטורים, מנורמלת לרוחב הנוכחי */
   SignaturePad.prototype.loadStrokes = function (sig) {
     var r = this.rect();
     if (!r.width || !sig || !sig.s || !sig.s.length) return;
     var sc = r.width / (sig.w || r.width);
+    var scaled = sig.s.map(function (stroke) {
+      return stroke.map(function (p) { return [Math.round(p[0] * sc), Math.round(p[1] * sc)]; });
+    });
     var ctx = this.ctx;
     ctx.clearRect(0, 0, r.width, r.height);
     ctx.strokeStyle = "#18344a";
     ctx.lineWidth = 2.2;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    sig.s.forEach(function (stroke) {
+    scaled.forEach(function (stroke) {
       ctx.beginPath();
       stroke.forEach(function (p, i) {
-        if (i === 0) ctx.moveTo(p[0] * sc, p[1] * sc);
-        else ctx.lineTo(p[0] * sc, p[1] * sc);
+        if (i === 0) ctx.moveTo(p[0], p[1]);
+        else ctx.lineTo(p[0], p[1]);
       });
       ctx.stroke();
     });
-    this.strokes = sig.s;
-    this.refW = sig.w || r.width;
+    this.strokes = scaled;
+    this.refW = r.width;
     this.dataUrl = this.canvas.toDataURL("image/png");
     this.box.classList.add("signed");
   };
@@ -191,8 +269,13 @@
   };
   SignaturePad.prototype.loadSig = function (sig) {
     if (!sig) return;
-    if (sig.s) this.loadStrokes(sig);
+    if (typeof sig === "string") this.load(sig);        // טיוטות ישנות
+    else if (sig.s) this.loadStrokes(sig);
     else if (sig.d) this.load(sig.d);
+  };
+  SignaturePad.prototype.lock = function () {
+    this.locked = true;
+    this.box.classList.add("sig-locked");
   };
 
   var pads = {};
@@ -201,6 +284,24 @@
   });
   /* איזה פנקס חותם הלקוח מרחוק */
   var CLIENT_PAD = pads.client ? "client" : Object.keys(pads)[0];
+
+  /* חתימת ברירת מחדל של המתווך — נשמרת פעם אחת ומוטבעת מראש בכל טופס חדש */
+  var DEFAULT_SIG_KEY = "kehati-default-sig";
+  if (pads.broker && MODE === "normal") {
+    pads.broker.onchange = function () {
+      var sig = pads.broker.sigData();
+      if (sig && sig.s) {
+        storageSet(DEFAULT_SIG_KEY, JSON.stringify(sig));
+        toast("החתימה נשמרה ותוטבע אוטומטית בטפסים הבאים");
+      }
+    };
+  }
+  function stampDefaultSig() {
+    if (!pads.broker || pads.broker.dataUrl) return;
+    var raw = storageGet(DEFAULT_SIG_KEY);
+    if (!raw) return;
+    try { pads.broker.loadSig(JSON.parse(raw)); } catch (e) {}
+  }
 
   /* ===== סעיפים: כפתורי הסתרה + שמירת מקור ===== */
   var clauseOriginals = {};
@@ -308,7 +409,8 @@
       };
     });
     Object.keys(pads).forEach(function (k) {
-      if (pads[k].dataUrl) data.sigs[k] = pads[k].dataUrl;
+      var sig = pads[k].sigData();
+      if (sig) data.sigs[k] = sig;
     });
     return data;
   }
@@ -353,7 +455,7 @@
       if (btn) btn.textContent = c.hidden ? "החזר" : "הסתר";
     });
     Object.keys(data.sigs || {}).forEach(function (k) {
-      if (pads[k]) pads[k].load(data.sigs[k]);
+      if (pads[k]) pads[k].loadSig(data.sigs[k]);
     });
     return true;
   }
@@ -501,6 +603,7 @@
       renumberPropRows();
     }
     autoFill();
+    stampDefaultSig();
     updateProgress();
     toast("הטופס נוקה");
   });
@@ -522,87 +625,158 @@
   var sendBtn = $("#send-btn");
   if (sendBtn && MODE === "normal") {
     sendBtn.addEventListener("click", function () {
+      sendBtn.disabled = true;
       var env = buildEnvelope();
       delete env.sigs[CLIENT_PAD];   // הלקוח יחתום בעצמו
-      var link = pageBase() + "#env=" + encB64(env);
-      if (link.length > 30000) { toast("המסמך גדול מדי לשליחה בקישור — צמצמו תוכן"); return; }
       var name = clientName();
-      logPush("kehati-sent", {
-        form: FORM_ID, title: document.title.split("—")[0].trim(),
-        name: name || "(ללא שם)", at: env.t, url: link
-      });
-      var msg = "שלום" + (name ? " " + name : "") + ",\n" +
-        "מצורף מסמך לחתימתך הדיגיטלית מאת אבי קהתי — יועץ נדל\"ן.\n" +
-        "פותחים את הקישור, חותמים באצבע ולוחצים \"אישור ושליחה\":\n\n" + link;
-      if (navigator.clipboard) navigator.clipboard.writeText(link).catch(function () {});
-      window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
-      toast("הקישור הועתק ונפתח וואטסאפ לבחירת הלקוח");
+
+      encodePayload(env).then(function (payload) {
+        // קודם מנסים ענן — קישור קצר; אם לא זמין, הקישור מכיל את המסמך
+        return fsCreate(payload).then(function (id) {
+          return { link: pageBase() + "#eid=" + id, docId: id, cloud: true };
+        }).catch(function () {
+          return { link: pageBase() + "#env=" + payload, docId: null, cloud: false };
+        });
+      }).then(function (res) {
+        if (res.link.length > 30000) { toast("המסמך גדול מדי לשליחה בקישור — צמצמו תוכן"); return; }
+        logPush("kehati-sent", {
+          form: FORM_ID, title: document.title.split("—")[0].trim(),
+          name: name || "(ללא שם)", at: env.t, url: res.link, docId: res.docId
+        });
+        var msg = "שלום" + (name ? " " + name : "") + ",\n" +
+          "מסמך לחתימתך הדיגיטלית מאת אבי קהתי — יועץ נדל\"ן.\n" +
+          "פותחים, חותמים באצבע ולוחצים \"אישור\":\n" + res.link;
+        if (navigator.clipboard) navigator.clipboard.writeText(res.link).catch(function () {});
+        window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
+        toast(res.cloud ? "הקישור מוכן — נפתח וואטסאפ לבחירת הלקוח" : "הקישור מוכן (מצב ללא ענן) — נפתח וואטסאפ");
+      }).finally(function () { sendBtn.disabled = false; });
     });
   }
 
+  /* ===== מסך סיום ללקוח ===== */
+  function showDone(html) {
+    var done = document.createElement("div");
+    done.className = "env-done no-print";
+    done.innerHTML = '<div class="env-done-card">' + html + "</div>";
+    document.body.appendChild(done);
+  }
+
   /* ===== אתחול לפי מצב ===== */
-  if (MODE === "client" && envelope) {
+  function initClient(env) {
     document.body.classList.add("env-client");
-    applyEnvelope(envelope);
+    applyEnvelope(env);
+    // חתימת המתווך ושאר הפנקסים נעולים — הלקוח חותם רק בפנקס שלו
+    Object.keys(pads).forEach(function (k) {
+      if (k !== CLIENT_PAD) pads[k].lock();
+    });
     showBanner(
       '<b>✍️ מסמך לחתימתך</b> — נשלח אליך על ידי אבי קהתי, יועץ נדל"ן. ' +
-      'ניתן להשלים פרטים חסרים, לחתום בהחלקת אצבע בתחתית המסמך, וללחוץ על <b>"אישור ושליחה"</b>.'
+      'ניתן להשלים פרטים חסרים, לחתום בהחלקת אצבע בשדה <b>"' +
+      ($(".sig-box[data-sig=\"" + CLIENT_PAD + "\"] .sig-label") ? $(".sig-box[data-sig=\"" + CLIENT_PAD + "\"] .sig-label").textContent : "החתימה") +
+      '"</b>, וללחוץ על <b>"אישור"</b>.'
     );
-    // כפתור אישור גדול
     var approve = document.createElement("button");
     approve.type = "button";
     approve.className = "btn btn-primary approve-btn no-print";
-    approve.textContent = "✅ אישור ושליחה לאבי קהתי";
+    approve.textContent = "✅ אישור המסמך";
     approve.addEventListener("click", function () {
       var pad = pads[CLIENT_PAD];
       if (!pad || !pad.dataUrl) {
         toast("נא לחתום תחילה בשדה החתימה");
-        var box = pad && pad.box;
-        if (box) box.scrollIntoView({ behavior: "smooth", block: "center" });
+        if (pad && pad.box) pad.box.scrollIntoView({ behavior: "smooth", block: "center" });
         return;
       }
+      approve.disabled = true;
       var out = buildEnvelope();
       out.signedAt = Date.now();
-      var link = pageBase() + "#signed=" + encB64(out);
-      if (link.length > 30000) { toast("המסמך גדול מדי — פנו לאבי טלפונית"); return; }
-      if (navigator.clipboard) navigator.clipboard.writeText(link).catch(function () {});
-      var msg = "שלום אבי, חתמתי על המסמך ✍️\n" + (clientName() ? "מאת: " + clientName() + "\n" : "") + "\n" + link;
-      window.open("https://wa.me/" + BROKER_PHONE + "?text=" + encodeURIComponent(msg), "_blank");
-      // מסך סיום
-      var done = document.createElement("div");
-      done.className = "env-done no-print";
-      done.innerHTML = '<div class="env-done-card"><div style="font-size:44px">✅</div>' +
-        "<h2>המסמך נחתם</h2>" +
-        "<p>נפתח עבורך וואטסאפ עם קישור המסמך החתום — יש רק ללחוץ שליחה.<br>" +
-        'אם וואטסאפ לא נפתח, הקישור הועתק — הדביקו ושלחו אותו לאבי: 052-8119445.</p>' +
-        '<button type="button" class="btn btn-primary" onclick="window.print()">🖨️ שמירת עותק (PDF)</button></div>';
-      document.body.appendChild(done);
+      encodePayload(out).then(function (payload) {
+        if (DOC_ID) {
+          // חזרה ישירה לענן — קהתי רואה את המסמך באתר, בלי לשלוח כלום
+          return fsSign(DOC_ID, payload).then(function () {
+            showDone('<div style="font-size:44px">✅</div><h2>המסמך נחתם ונשלח</h2>' +
+              "<p>המסמך החתום הועבר ישירות לאבי קהתי ויופיע אצלו במערכת.<br>אין צורך בפעולה נוספת.</p>" +
+              '<button type="button" class="btn btn-primary" onclick="window.print()">🖨️ שמירת עותק (PDF)</button>' +
+              '<a class="btn" style="margin-top:8px" href="https://wa.me/' + BROKER_PHONE +
+              '?text=' + encodeURIComponent("שלום אבי, חתמתי על המסמך באתר ✍️✓") + '" target="_blank" rel="noopener">💬 שליחת עדכון לאבי בוואטסאפ (לא חובה)</a>');
+          });
+        }
+        throw new Error("no cloud doc");
+      }).catch(function () {
+        // גיבוי: המסמך החתום חוזר כקישור בוואטסאפ
+        encodePayload(out).then(function (payload) {
+          var link = pageBase() + "#signed=" + payload;
+          if (navigator.clipboard) navigator.clipboard.writeText(link).catch(function () {});
+          var msg = "שלום אבי, חתמתי על המסמך ✍️\n" + (clientName() ? "מאת: " + clientName() + "\n" : "") + link;
+          window.open("https://wa.me/" + BROKER_PHONE + "?text=" + encodeURIComponent(msg), "_blank");
+          showDone('<div style="font-size:44px">✅</div><h2>המסמך נחתם</h2>' +
+            "<p>נפתח וואטסאפ עם קישור המסמך החתום לאבי — יש רק ללחוץ שליחה.<br>" +
+            "אם וואטסאפ לא נפתח, הקישור הועתק — הדביקו ושלחו לאבי: 052-8119445.</p>" +
+            '<button type="button" class="btn btn-primary" onclick="window.print()">🖨️ שמירת עותק (PDF)</button>');
+        });
+      }).finally(function () { approve.disabled = false; });
     });
     var toolbar = $(".toolbar");
     if (toolbar) toolbar.insertBefore(approve, toolbar.firstChild);
     autoFill();
     updateProgress();
-  } else if (MODE === "received" && envelope) {
+  }
+
+  function initReceived(env, sourceUrl) {
     document.body.classList.add("env-received");
-    applyEnvelope(envelope);
-    var when = envelope.signedAt ? new Date(envelope.signedAt) : null;
+    applyEnvelope(env);
+    var when = env.signedAt ? new Date(env.signedAt) : null;
     var p2 = function (n) { return (n < 10 ? "0" : "") + n; };
     showBanner(
       '<b>📥 מסמך חתום התקבל מהלקוח</b>' +
       (clientName() ? " — " + clientName() : "") +
       (when ? " · נחתם ב-" + p2(when.getDate()) + "/" + p2(when.getMonth() + 1) + "/" + when.getFullYear() +
         " " + p2(when.getHours()) + ":" + p2(when.getMinutes()) : "") +
-      '. המסמך נשמר ברשימת "מסמכים שהתקבלו" באזור האישי. מומלץ להדפיס או לשמור כ-PDF.',
+      '. מומלץ להדפיס או לשמור כ-PDF.',
       "received"
     );
     logPush("kehati-inbox", {
       form: FORM_ID, title: document.title.split("—")[0].trim(),
-      name: clientName() || "(ללא שם)", at: envelope.signedAt || envelope.t, url: location.href
+      name: clientName() || "(ללא שם)", at: env.signedAt || env.t, url: sourceUrl
     }, "at");
     updateProgress();
+  }
+
+  function initFailed(msg) {
+    showBanner("<b>⚠️ " + msg + "</b> — ייתכן שהקישור שגוי או שהמסמך אינו זמין. פנו לאבי: 052-8119445.", "");
+  }
+
+  if (MODE === "client") {
+    if (HASH_KIND === "eid") {
+      fsGet(DOC_ID).then(function (fields) {
+        var raw = fields.data && fields.data.stringValue;
+        if (!raw) throw new Error("empty");
+        return decodePayload(raw).then(initClient);
+      }).catch(function () { initFailed("לא ניתן לטעון את המסמך"); });
+    } else {
+      decodePayload(HASH_RAW).then(initClient).catch(function () { initFailed("לא ניתן לפענח את הקישור"); });
+    }
+  } else if (MODE === "received") {
+    if (HASH_KIND === "sid") {
+      fsGet(DOC_ID).then(function (fields) {
+        var raw = (fields.signed && fields.signed.stringValue) || (fields.data && fields.data.stringValue);
+        if (!raw) throw new Error("empty");
+        var isSigned = !!(fields.signed && fields.signed.stringValue);
+        return decodePayload(raw).then(function (env) {
+          if (isSigned) initReceived(env, location.href);
+          else {
+            applyEnvelope(env);
+            showBanner("<b>⏳ המסמך עדיין לא נחתם על ידי הלקוח</b> — זהו העותק שנשלח אליו.", "");
+          }
+        });
+      }).catch(function () { initFailed("לא ניתן לטעון את המסמך"); });
+    } else {
+      decodePayload(HASH_RAW).then(function (env) { initReceived(env, location.href); })
+        .catch(function () { initFailed("לא ניתן לפענח את הקישור"); });
+    }
   } else {
     var hadDraft = restore();
     autoFill();
+    stampDefaultSig();
     updateProgress();
     if (hadDraft) toast("טיוטה שמורה נטענה");
   }

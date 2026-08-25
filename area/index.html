@@ -129,6 +129,9 @@ body.mode-dash .dash { display: block; }
 }
 .env-item button.ei-del:hover { color: #e08d7a; }
 .env-empty { color: #5f6f80; font-size: 13px; }
+.ei-status { font-size: 12.5px; color: var(--mist); white-space: nowrap; }
+.ei-status.st-signed { color: #7fc7a5; font-weight: 600; }
+.st-signed-open { border-color: #7fc7a5 !important; color: #7fc7a5 !important; }
 </style>
 </head>
 <body class="mode-login">
@@ -279,6 +282,13 @@ body.mode-dash .dash { display: block; }
       var date = document.createElement("span");
       date.className = "ei-date";
       date.textContent = fmtDate(rec.at);
+      var status = null;
+      if (!receivedStyle && rec.docId) {
+        status = document.createElement("span");
+        status.className = "ei-status";
+        status.textContent = "⏳ בודק…";
+        checkEnvelopeStatus(rec, status);
+      }
       var open = document.createElement("a");
       open.className = "ei-open";
       open.href = rec.url;
@@ -294,10 +304,37 @@ body.mode-dash .dash { display: block; }
         renderEnvList(storageKey, elId, receivedStyle);
       });
       row.appendChild(name); row.appendChild(title); row.appendChild(date);
+      if (status) row.appendChild(status);
       row.appendChild(open); row.appendChild(del);
       el.appendChild(row);
     });
   }
+
+  /* בדיקת סטטוס חתימה מול הענן — כשלקוח חותם, זה מופיע כאן ישירות */
+  var FS_KEY = "AIzaSyAqkEfNwKZzofId0XCGcs17sVFh5NYryrM";
+  var FS_PID = "zedmall-4301c";
+  function checkEnvelopeStatus(rec, statusEl) {
+    fetch("https://firestore.googleapis.com/v1/projects/" + FS_PID +
+          "/databases/(default)/documents/kehati_envelopes/" + rec.docId + "?key=" + FS_KEY)
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) {
+        var f = j.fields || {};
+        var signed = f.status && f.status.stringValue === "signed";
+        if (signed) {
+          statusEl.textContent = "✅ נחתם!";
+          statusEl.classList.add("st-signed");
+          var openSigned = document.createElement("a");
+          openSigned.className = "ei-open st-signed-open";
+          openSigned.href = rec.url.split("#")[0] + "#sid=" + rec.docId;
+          openSigned.textContent = "צפייה במסמך החתום";
+          statusEl.parentNode.insertBefore(openSigned, statusEl.nextSibling);
+        } else {
+          statusEl.textContent = "⏳ ממתין לחתימה";
+        }
+      })
+      .catch(function () { statusEl.textContent = ""; });
+  }
+
   renderEnvList("kehati-inbox", "inbox-list", true);
   renderEnvList("kehati-sent", "sent-list", false);
 })();

@@ -551,6 +551,28 @@ body.env-client .prop-remove,
 body.env-client .add-row-btn { display: none !important; }
 body.env-client .brand { pointer-events: none; }
 
+/* חתימה נעולה — הלקוח לא יכול לגעת בחתימת המתווך */
+.sig-locked .sig-canvas-wrap {
+  border-style: solid;
+  border-color: #cfe3d7;
+  background: #f6faf7;
+  pointer-events: none;
+}
+.sig-locked canvas { cursor: default; }
+.sig-locked .sig-clear { display: none !important; }
+.sig-locked .sig-canvas-wrap::after {
+  content: "🔒 חתימה מאומתת";
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: 11px;
+  color: var(--ok);
+  background: #fff;
+  border: 1px solid #cfe3d7;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
 .approve-btn {
   background: var(--ok) !important;
   border-color: var(--ok) !important;
@@ -768,6 +790,7 @@ body.env-client .brand { pointer-events: none; }
 
   .sig-grid { break-inside: avoid; margin-top: 30px; }
   .sig-canvas-wrap { border: 0; background: transparent; }
+  .sig-locked .sig-canvas-wrap::after { display: none; }
   .sig-label { border-top-color: #000; }
 
   .clauses, .frow, .sec-title { break-inside: avoid-page; }
