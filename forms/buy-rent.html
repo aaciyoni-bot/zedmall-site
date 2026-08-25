@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הזמנת שירותי תיווך לקנייה/שכירות — אבי קהתי יועץ נדל"ן</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="טופס הזמנת שירותי תיווך לקנייה ו/או שכירת נכס מקרקעין — מילוי, חתימה דיגיטלית והדפסה">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="forms.css">
+</head>
+<body data-form="buy-rent">
+<script src="../area/auth.js"></script>
+<script>KehatiAuth.guard("../area/");</script>
+
+<header class="site-header no-print">
+  <a class="brand" href="../area/">
+    <span class="brand-mark">אק</span>
+    <span class="brand-text"><b>אבי קהתי</b><span>יועץ נדל"ן — מערכת מסמכים</span></span>
+  </a>
+  <a class="back-link" href="../area/">→ לאזור האישי</a>
+</header>
+
+<div class="toolbar no-print">
+  <button type="button" id="print-btn" class="btn btn-primary">🖨️ הדפסה / שמירה כ-PDF</button>
+  <button type="button" id="edit-toggle" class="btn">✏️ <span class="btn-label">עריכת סעיפים</span></button>
+  <button type="button" id="share-btn" class="btn">🔗 שיתוף</button>
+  <button type="button" id="clear-btn" class="btn btn-danger-text">🗑️ ניקוי טופס</button>
+  <span class="toolbar-spacer"></span>
+  <span class="save-note" id="save-note"></span>
+  <span class="progress-wrap"><span id="progress-text">0% מולא</span><span class="progress-track"><span class="progress-bar" id="progress-bar"></span></span></span>
+  <div class="edit-hint">מצב עריכה פעיל: לחצו על כל סעיף כדי לערוך את נוסחו, או על "הסתר" כדי להשמיט אותו מההדפסה. בסיום לחצו על "סיום עריכה".</div>
+</div>
+
+<div class="sheet-wrap">
+<main class="sheet">
+
+  <header class="doc-head">
+    <div class="broker">
+      <span class="broker-mark">אק</span>
+      <div>
+        <div class="broker-name">אבי קהתי</div>
+        <div class="broker-title">יועץ נדל"ן</div>
+      </div>
+    </div>
+    <div class="broker-details">
+      מס' רישיון: 31924998 &nbsp;|&nbsp; ת.ז: 038273918 &nbsp;|&nbsp; ע.מ: 038273918<br>
+      בית אל &nbsp;|&nbsp; נייד: <a href="tel:0528119445">052-8119445</a><br>
+      <a href="mailto:nadlankehati@gmail.com">nadlankehati@gmail.com</a>
+    </div>
+  </header>
+
+  <h1 class="doc-title">הזמנת שירותי תיווך<br>לקנייה ו/או השכרת נכס מקרקעין</h1>
+  <p class="doc-subtitle">בהתאם ל"חוק המתווכים במקרקעין, התשנ"ו–1996"</p>
+
+  <div class="doc-meta">
+    <label class="f"><span>טופס מס':</span><input type="text" name="form_number" data-autonum class="w-m" placeholder=" "></label>
+    <label class="f"><span>תאריך:</span><input type="text" name="form_date" data-today class="w-m" placeholder=" "></label>
+  </div>
+
+  <h2 class="sec-title">פרטי המזמין/נה</h2>
+  <div class="frow">
+    <label class="f grow"><span>שם מלא:</span><input type="text" name="c1_name" placeholder=" "></label>
+    <label class="f w-m"><span>ת.ז:</span><input type="text" name="c1_id" inputmode="numeric" placeholder=" "></label>
+    <label class="f w-m"><span>נייד:</span><input type="text" name="c1_phone" inputmode="tel" placeholder=" "></label>
+  </div>
+  <div class="frow">
+    <label class="f grow"><span>ובין:</span><input type="text" name="c2_name" placeholder=" "></label>
+    <label class="f w-m"><span>ת.ז:</span><input type="text" name="c2_id" inputmode="numeric" placeholder=" "></label>
+    <label class="f w-m"><span>נייד:</span><input type="text" name="c2_phone" inputmode="tel" placeholder=" "></label>
+  </div>
+  <div class="frow">
+    <label class="f block"><span>כתובת:</span><input type="text" name="c_address" placeholder=" "></label>
+  </div>
+  <div class="frow">
+    <label class="f block"><span>מייל:</span><input type="email" name="c_email" inputmode="email" placeholder=" "></label>
+  </div>
+
+  <h2 class="sec-title">תנאי ההזמנה</h2>
+  <ol class="clauses">
+    <li class="clause" data-id="c1"><div class="clause-body">הלקוח מזמין שירותי תיווך מקרקעין מהמתווך, כדי לקבל שירותי תיווך בקשר לנכסים המפורטים להלן.</div></li>
+    <li class="clause" data-id="c2"><div class="clause-body">הלקוח מאשר כי המתווך הציג בפניו את הנכסים המפורטים להלן, והוא מתחייב לדווח למתווך מיד על כל משא ומתן המתנהל עמו ו/או עם שולחו בקשר לאחד או יותר מהנכסים, וכן מיד עם חתימת הסכם מחייב ו/או התחייבות לביצוע העסקה, המוקדם מביניהם, ביחס לאחד או יותר מהנכסים להלן.</div></li>
+    <li class="clause" data-id="c3"><div class="clause-body">למען הסר ספק, הלקוח מצהיר כי מובן לו וכי הוא מסכים, כי כל הסכם אשר ייחתם בין הלקוח ו/או מי מטעמו לבין בעל הנכס, בנוגע לכל אחד מהנכסים המפורטים מטה, יחייב את הלקוח בדמי התיווך כמפורט בסעיף 5 להלן.</div></li>
+    <li class="clause" data-id="c4"><div class="clause-body">הלקוח מתחייב לא למסור לגורם כלשהו מידע שקיבל מהמתווך בנוגע לנכסים שלהלן, ומתחייב לפצות את המתווך על כל נזק שייגרם לו באם יפר התחייבות זו.</div></li>
+    <li class="clause" data-id="c5"><div class="clause-body">הלקוח מתחייב לשלם למתווך את דמי התיווך כמפורט להלן, מיד עם חתימת הסכם מחייב או עם התחייבות לביצוע העסקה, המוקדם מביניהם, בנוגע לאחד או יותר מהנכסים המפורטים להלן. דמי התיווך ישולמו במזומן כדלקמן:
+      <ul class="sub-list">
+        <li><b>5.1</b> <span class="fee-inline"><b>בקנייה:</b> 2 אחוז ממחיר הקנייה הכולל של הנכס בתוספת מע"מ. <b>בשכירות:</b> בגובה דמי שכירות של חודש אחד בתוספת מע"מ.</span></li>
+        <li><b>5.2</b> דמי התיווך ישולמו למתווך במזומן מיד עם חתימת הסכם מחייב ו/או עם התחייבות לביצוע העסקה, המוקדם מביניהם.</li>
+        <li><b>5.3</b> האמור לעיל בא בנוסף לזכותו של המתווך לגבות דמי תיווך מהמוכר/המשכיר.</li>
+      </ul>
+    </div></li>
+    <li class="clause" data-id="c6"><div class="clause-body">הלקוח מאשר כי עם מכירת הנכס, המתווך יוכל להודיע לציבור כי הנכס נמכר בכל דרך שהמתווך ימצא לנכון.</div></li>
+    <li class="clause" data-id="c7"><div class="clause-body">הלקוח מאשר שהומלץ לו על ידי המתווך להסתייע בשירותי עורך דין ו/או מומחים אחרים לפי העניין והצורך במהלך העסקה.</div></li>
+    <li class="clause" data-id="c8"><div class="clause-body">שום ויתור, ארכה, הנחה או שינוי בתנאי כלשהו בהסכם זה, לא יהיו בני תוקף, אלא אם ייעשו בכתב. שום איחור בשימוש בזכויותיו של צד כלשהו לא ייחשב כוויתור, והוא יהיה רשאי להשתמש בזכויותיו כולן או בכל אחת מהן לחוד, הן לפי הסכם זה והן לפי כל דין, בכל עת שימצא לנכון.</div></li>
+    <li class="clause" data-id="c9"><div class="clause-body">הלקוח מאשר קבלת תוכן פרסומי כגון דירות למכירה/השכרה.</div></li>
+    <li class="clause" data-id="c10"><div class="clause-body">יחידי הצדדים יהיו אחראים על פי הסכם זה ביחד ולחוד. כל אימת שאחד מיחידי הצדדים יחתום על כל מסמך, כתב, מכתב או אישור מכל סוג שהוא בכל עניין ודבר הקשור בהסכם זה, ביצועו או הנובע הימנו — תחייב חתימתו את יתר יחידי אותו צד.</div></li>
+  </ol>
+
+  <h2 class="sec-title">פרטי הנכסים</h2>
+  <div class="props" data-repeat>
+    <div class="prop-row">
+      <span class="prop-num">נכס 1</span>
+      <button type="button" class="prop-remove no-print">הסר</button>
+      <div class="frow">
+        <label class="f grow"><span>כתובת הנכס:</span><input type="text" name="prop1_addr" placeholder=" "></label>
+      </div>
+      <div class="frow">
+        <label class="f grow"><span>פרטי הנכס:</span><input type="text" name="prop1_details" placeholder=" "></label>
+        <label class="f w-l"><span>מחיר מבוקש:</span><input type="text" name="prop1_price" inputmode="numeric" placeholder=" "></label>
+      </div>
+    </div>
+    <div class="prop-row">
+      <span class="prop-num">נכס 2</span>
+      <button type="button" class="prop-remove no-print">הסר</button>
+      <div class="frow">
+        <label class="f grow"><span>כתובת הנכס:</span><input type="text" name="prop2_addr" placeholder=" "></label>
+      </div>
+      <div class="frow">
+        <label class="f grow"><span>פרטי הנכס:</span><input type="text" name="prop2_details" placeholder=" "></label>
+        <label class="f w-l"><span>מחיר מבוקש:</span><input type="text" name="prop2_price" inputmode="numeric" placeholder=" "></label>
+      </div>
+    </div>
+    <div class="prop-row">
+      <span class="prop-num">נכס 3</span>
+      <button type="button" class="prop-remove no-print">הסר</button>
+      <div class="frow">
+        <label class="f grow"><span>כתובת הנכס:</span><input type="text" name="prop3_addr" placeholder=" "></label>
+      </div>
+      <div class="frow">
+        <label class="f grow"><span>פרטי הנכס:</span><input type="text" name="prop3_details" placeholder=" "></label>
+        <label class="f w-l"><span>מחיר מבוקש:</span><input type="text" name="prop3_price" inputmode="numeric" placeholder=" "></label>
+      </div>
+    </div>
+  </div>
+  <button type="button" id="add-prop-row" class="btn add-row-btn no-print">+ הוספת נכס לרשימה</button>
+
+  <div class="sig-grid">
+    <div class="sig-box" data-sig="client">
+      <div class="sig-canvas-wrap">
+        <canvas></canvas>
+        <span class="sig-placeholder">✍️ חתמו כאן בהחלקת אצבע או עכבר</span>
+      </div>
+      <button type="button" class="sig-clear no-print">נקה חתימה</button>
+      <span class="sig-label">הלקוח</span>
+    </div>
+    <div class="sig-box" data-sig="broker">
+      <div class="sig-canvas-wrap">
+        <canvas></canvas>
+        <span class="sig-placeholder">✍️ חתמו כאן בהחלקת אצבע או עכבר</span>
+      </div>
+      <button type="button" class="sig-clear no-print">נקה חתימה</button>
+      <span class="sig-label">המתווך</span>
+    </div>
+  </div>
+
+  <p class="legal-note">אבי קהתי — יועץ נדל"ן | רישיון תיווך מס' 31924998 | בית אל | 052-8119445 | nadlankehati@gmail.com</p>
+
+</main>
+</div>
+
+<footer class="site-footer no-print">
+  הנתונים נשמרים באופן אוטומטי בדפדפן שלכם בלבד ואינם נשלחים לשום שרת.
+</footer>
+
+<script src="forms.js"></script>
+</body>
+</html>

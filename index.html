@@ -1,1286 +1,460 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZedMall - Shop Global, Pay with Mobile Money</title>
-    <meta name="description" content="ZedMall - Zambia's gateway to global shopping. Browse millions of products and pay easily with MTN Mobile Money, Airtel Money or Zamtel Kwacha.">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#6d28d9">
-    <link rel="icon" type="image/png" href="icon-192.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="ZedMall">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        zed: {
-                            50: '#f5f3ff', 100: '#ede9fe', 500: '#7c3aed',
-                            600: '#6d28d9', 700: '#5b21b6'
-                        },
-                        zam: {
-                            green: '#6d28d9', red: '#e11d48', black: '#0b0710', orange: '#a855f7'
-                        }
-                    },
-                    fontFamily: { sans: ['Sora', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .spinner { border: 3px solid #ede9fe; border-top-color: #7c3aed; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .pulse-ring { animation: pulseRing 1.5s ease-out infinite; }
-        @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); } 100% { box-shadow: 0 0 0 16px rgba(124,58,237,0); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>אבי קהתי — ייעוץ נדל"ן פרטי</title>
+<meta name="description" content="ליווי אישי ודיסקרטי בעסקאות נדל"ן ובהשקעות בישראל. אבי קהתי — יועץ נדל"ן מורשה. ההזדמנויות הטובות באמת עוברות בשקט.">
+<meta property="og:title" content="אבי קהתי — ייעוץ נדל&quot;ן פרטי">
+<meta property="og:description" content="ליווי אישי ודיסקרטי בעסקאות נדל&quot;ן ובהשקעות בישראל.">
+<meta property="og:image" content="https://kehatinadlan.com/assets/og-image.png">
+<meta property="og:url" content="https://kehatinadlan.com/">
+<meta name="theme-color" content="#0B1622">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night: #0B1622;
+  --night-2: #101f2f;
+  --night-3: #15263a;
+  --gold: #C9A45C;
+  --gold-soft: #a8874c;
+  --bone: #EDE3CE;
+  --mist: #8fa0b2;
+  --line: rgba(201, 164, 92, 0.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Heebo", "Segoe UI", Arial, sans-serif;
+  background: var(--night);
+  background-image: radial-gradient(ellipse at 50% -10%, #15263a 0%, var(--night) 55%);
+  color: var(--bone);
+  line-height: 1.7;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+::selection { background: var(--gold); color: var(--night); }
+
+.serif { font-family: "Frank Ruhl Libre", serif; }
+
+a { color: inherit; }
+
+/* ===== nav ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px clamp(16px, 4vw, 48px);
+  background: rgba(11, 22, 34, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(201, 164, 92, 0.15);
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-brand svg { width: 40px; height: 40px; }
+.nav-brand .nb-name { font-family: "Frank Ruhl Libre", serif; font-size: 19px; font-weight: 500; letter-spacing: 0.5px; }
+.nav-brand .nb-sub { display: block; font-size: 11px; color: var(--gold); letter-spacing: 2px; }
+.nav-links { display: flex; align-items: center; gap: clamp(10px, 2.5vw, 28px); list-style: none; }
+.nav-links a { text-decoration: none; font-size: 14.5px; color: var(--bone); opacity: 0.85; transition: color .2s, opacity .2s; }
+.nav-links a:hover { color: var(--gold); opacity: 1; }
+.nav-enter {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 7px 18px !important;
+  font-size: 13.5px !important;
+  color: var(--gold) !important;
+  transition: background .2s, color .2s !important;
+}
+.nav-enter:hover { background: var(--gold); color: var(--night) !important; }
+@media (max-width: 720px) {
+  .nav-links li.hide-m { display: none; }
+}
+
+/* ===== hero ===== */
+.hero {
+  min-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px 80px;
+  position: relative;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 38%, rgba(201, 164, 92, 0.09), transparent 42%);
+  pointer-events: none;
+}
+.hero-emblem { width: clamp(170px, 26vw, 250px); height: auto; margin-bottom: 34px; }
+.hero h1 {
+  font-family: "Frank Ruhl Libre", serif;
+  font-size: clamp(40px, 8vw, 72px);
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--bone);
+}
+.hero .hero-role {
+  color: var(--gold);
+  font-size: clamp(15px, 2.6vw, 20px);
+  letter-spacing: 6px;
+  margin: 10px 0 26px;
+  font-weight: 400;
+}
+.hero .hero-line {
+  max-width: 520px;
+  color: var(--mist);
+  font-size: clamp(15px, 2.4vw, 18px);
+  font-weight: 300;
+}
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 40px; }
+.btn {
+  display: inline-block;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  padding: 13px 34px;
+  border-radius: 999px;
+  transition: all .25s;
+  cursor: pointer;
+  border: 1px solid var(--gold);
+}
+.btn-gold { background: var(--gold); color: var(--night); }
+.btn-gold:hover { background: var(--bone); border-color: var(--bone); }
+.btn-ghost { background: transparent; color: var(--gold); }
+.btn-ghost:hover { background: rgba(201, 164, 92, 0.12); }
+
+.divider {
+  width: min(340px, 60%);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0.8;
+}
+.divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.divider span { color: var(--gold); font-size: 12px; }
+
+/* ===== sections ===== */
+section { padding: clamp(60px, 9vw, 110px) clamp(18px, 5vw, 48px); }
+.inner { max-width: 1060px; margin: 0 auto; }
+.sec-kicker { color: var(--gold); font-size: 13px; letter-spacing: 5px; text-align: center; margin-bottom: 10px; font-weight: 500; }
+.sec-title {
+  font-family: "Frank Ruhl Libre", serif;
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 18px;
+}
+.sec-lead { max-width: 640px; margin: 0 auto 46px; text-align: center; color: var(--mist); font-size: 16px; }
+
+/* principles */
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+.principle {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 36px 28px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(201, 164, 92, 0.04), transparent);
+  transition: border-color .25s, transform .25s;
+}
+.principle:hover { border-color: var(--gold); transform: translateY(-4px); }
+.principle .p-icon { color: var(--gold); font-size: 26px; margin-bottom: 14px; }
+.principle h3 { font-family: "Frank Ruhl Libre", serif; font-size: 20px; font-weight: 500; margin-bottom: 10px; }
+.principle p { color: var(--mist); font-size: 14.5px; }
+
+/* about */
+.about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: clamp(28px, 6vw, 70px); align-items: center; }
+@media (max-width: 800px) { .about-grid { grid-template-columns: 1fr; } }
+.about-emblem { text-align: center; }
+.about-emblem img { width: min(300px, 70%); }
+.about-text p { color: #c5cdd6; margin-bottom: 16px; font-size: 16px; }
+.about-text .accent { color: var(--gold); }
+.about-cred {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 30px;
+  font-size: 13.5px;
+  color: var(--mist);
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.about-cred b { color: var(--bone); font-weight: 500; }
+
+/* invest */
+.invest-bg { background: linear-gradient(180deg, var(--night), var(--night-2) 50%, var(--night)); }
+.invest-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; margin-bottom: 50px; }
+.invest-card {
+  border: 1px solid rgba(201, 164, 92, 0.18);
+  border-radius: 4px;
+  padding: 28px 24px;
+  background: rgba(11, 22, 34, 0.5);
+}
+.invest-card h3 { font-family: "Frank Ruhl Libre", serif; font-size: 19px; font-weight: 500; color: var(--gold); margin-bottom: 10px; }
+.invest-card p { color: var(--mist); font-size: 14.5px; }
+.principles-list { max-width: 720px; margin: 0 auto; }
+.pl-item { display: flex; gap: 18px; padding: 18px 0; border-bottom: 1px solid rgba(201, 164, 92, 0.12); }
+.pl-item:last-child { border-bottom: 0; }
+.pl-num { font-family: "Frank Ruhl Libre", serif; color: var(--gold); font-size: 22px; min-width: 34px; text-align: center; }
+.pl-item h4 { font-weight: 600; font-size: 16px; margin-bottom: 4px; color: var(--bone); }
+.pl-item p { color: var(--mist); font-size: 14.5px; }
+.disclaimer {
+  max-width: 720px;
+  margin: 40px auto 0;
+  font-size: 12.5px;
+  color: #5f6f80;
+  text-align: center;
+  border-top: 1px solid rgba(201, 164, 92, 0.12);
+  padding-top: 16px;
+}
+
+/* club */
+.club { position: relative; text-align: center; }
+.club::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 30%, rgba(201, 164, 92, 0.07), transparent 55%);
+  pointer-events: none;
+}
+.club-inner { max-width: 620px; margin: 0 auto; position: relative; }
+.club-seal { width: 90px; margin-bottom: 20px; }
+.club p.club-copy { color: #c5cdd6; font-size: 16.5px; margin-bottom: 14px; }
+.club p.club-quiet { color: var(--mist); font-size: 14.5px; margin-bottom: 36px; }
+.club-form { display: grid; gap: 14px; text-align: right; }
+.club-form input, .club-form textarea {
+  width: 100%;
+  background: rgba(237, 227, 206, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--bone);
+  font: inherit;
+  font-size: 15px;
+  padding: 13px 16px;
+}
+.club-form input:focus, .club-form textarea:focus { outline: none; border-color: var(--gold); background: rgba(237, 227, 206, 0.07); }
+.club-form ::placeholder { color: #5f6f80; }
+.club-form button { justify-self: center; margin-top: 8px; }
+.club-note { font-size: 12.5px; color: #5f6f80; margin-top: 18px; }
+
+/* contact */
+.contact { text-align: center; }
+.contact-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 34px; }
+.contact-links a {
+  text-decoration: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 12px 26px;
+  font-size: 15px;
+  color: var(--bone);
+  transition: all .25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.contact-links a:hover { border-color: var(--gold); color: var(--gold); }
+.contact-place { color: var(--mist); margin-top: 26px; font-size: 14px; letter-spacing: 1px; }
+
+/* footer */
+footer {
+  border-top: 1px solid rgba(201, 164, 92, 0.15);
+  padding: 30px 20px 36px;
+  text-align: center;
+  color: #5f6f80;
+  font-size: 13px;
+}
+footer .f-brand { font-family: "Frank Ruhl Libre", serif; color: var(--mist); font-size: 15px; margin-bottom: 6px; }
+footer a { color: #5f6f80; text-decoration: none; }
+footer a:hover { color: var(--gold); }
+.f-enter { display: inline-block; margin-top: 10px; font-size: 12px; letter-spacing: 2px; }
+
+/* reveal on scroll */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.in { opacity: 1; transform: none; }
+</style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
+<body>
 
-    <!-- ======================= TOP BAR ======================= -->
-    <div class="bg-zam-green text-white text-xs sm:text-sm py-1.5 px-4 text-center">
-        <i class="fas fa-truck-fast mr-1"></i> Free shipping to Lusaka on orders over K500 &nbsp;•&nbsp; Pay with <b>MTN MoMo</b>, <b>Airtel Money</b> &amp; <b>Zamtel Kwacha</b>
+<nav class="nav">
+  <a class="nav-brand" href="#top">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" stroke="#C9A45C" stroke-width="2"/>
+      <path d="M29 74 V44 A21 21 0 0 1 71 44 V74" stroke="#C9A45C" stroke-width="3.2" stroke-linecap="square"/>
+      <path d="M29 74 H21 M71 74 H79" stroke="#C9A45C" stroke-width="3.2"/>
+      <path d="M38 63 H62 M40 55 H60 M42 47 H58" stroke="#EDE3CE" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M50 15 L53 19 L50 23 L47 19 Z" fill="#C9A45C"/>
+    </svg>
+    <span><span class="nb-name">אבי קהתי</span><span class="nb-sub">ייעוץ נדל"ן פרטי</span></span>
+  </a>
+  <ul class="nav-links">
+    <li class="hide-m"><a href="#about">אודות</a></li>
+    <li class="hide-m"><a href="#invest">השקעות</a></li>
+    <li><a href="#club">המעגל</a></li>
+    <li class="hide-m"><a href="#contact">יצירת קשר</a></li>
+    <li><a class="nav-enter" href="area/">כניסה</a></li>
+  </ul>
+</nav>
+
+<header class="hero" id="top">
+  <img class="hero-emblem" src="assets/emblem-512.png" alt="סמל השער — אבי קהתי">
+  <h1>אבי קהתי</h1>
+  <div class="hero-role">ייעוץ נדל"ן פרטי</div>
+  <p class="hero-line">העסקאות הטובות באמת אינן מתפרסמות.<br>הן נסגרות בשקט, בין אנשים שסומכים זה על זה.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-gold" href="https://wa.me/972528119445?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%91%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%99%D7%97%D7%94%20%D7%93%D7%99%D7%A1%D7%A7%D7%A8%D7%98%D7%99%D7%AA" target="_blank" rel="noopener">בקשת שיחה דיסקרטית</a>
+    <a class="btn btn-ghost" href="#club">על המעגל</a>
+  </div>
+</header>
+
+<div class="divider"><span>◆</span></div>
+
+<section id="principles">
+  <div class="inner">
+    <div class="sec-kicker">הדרך שלנו</div>
+    <h2 class="sec-title">שלושה עקרונות. בלי פשרות.</h2>
+    <div class="principles">
+      <div class="principle reveal">
+        <div class="p-icon">◆</div>
+        <h3>דיסקרטיות מוחלטת</h3>
+        <p>נכסים, מוכרים וקונים אינם מוצגים לעולם באתר או ברשתות. כל פרט נשאר בין הצדדים — וזה בדיוק מה שמאפשר עסקאות שאחרים לא רואים.</p>
+      </div>
+      <div class="principle reveal">
+        <div class="p-icon">◆</div>
+        <h3>ליווי אישי אחד־על־אחד</h3>
+        <p>מספר מצומצם של לקוחות בכל רגע נתון. כל תיק מקבל את מלוא תשומת הלב — מהשיחה הראשונה ועד המפתח ביד.</p>
+      </div>
+      <div class="principle reveal">
+        <div class="p-icon">◆</div>
+        <h3>מעגל סגור של הזדמנויות</h3>
+        <p>ההזדמנויות עוברות קודם כל בתוך המעגל — לפני שהן מגיעות לשוק, אם בכלל. מי שבפנים, שומע ראשון.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="inner about-grid">
+    <div class="about-emblem reveal">
+      <img src="assets/logo-master.png" alt="אבי קהתי — ייעוץ נדל&quot;ן פרטי">
+    </div>
+    <div class="about-text reveal">
+      <div class="sec-kicker" style="text-align:right">אודות</div>
+      <h2 class="sec-title" style="text-align:right">מאחורי השער</h2>
+      <p>יש מתווכים שמפרסמים הכול. יש יועצים שמלווים <span class="accent">אנשים</span>.</p>
+      <p>אבי קהתי הוא יועץ נדל"ן מורשה המלווה משפחות, אנשי עסקים ומשקיעים פרטיים בעסקאות מגורים והשקעה בישראל — בגישה שקטה, מדויקת ולא מתפשרת. חלק מהעסקאות המעניינות ביותר שלו מעולם לא הופיעו בשום לוח.</p>
+      <p>העבודה נעשית במעגל לקוחות מצומצם ובהתאמה אישית מלאה: ניתוח צרכים, איתור שקט של נכסים והזדמנויות, ניהול משא ומתן וליווי צמוד עד לחתימה — לצד אנשי המקצוע הנכונים בכל שלב.</p>
+      <div class="about-cred">
+        <span><b>רישיון תיווך</b> מס' 31924998</span>
+        <span><b>מיקום</b> בית אל והסביבה — פעילות ארצית</span>
+        <span><b>ותק</b> ליווי עסקאות מגורים והשקעה</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="invest" class="invest-bg">
+  <div class="inner">
+    <div class="sec-kicker">ידע לפני הון</div>
+    <h2 class="sec-title">השקעות נדל"ן בישראל</h2>
+    <p class="sec-lead">שוק הנדל"ן הישראלי מתגמל את מי שמגיע מוכן. אלו האפיקים המרכזיים — והעקרונות שמפרידים בין השקעה מחושבת להרפתקה.</p>
+
+    <div class="invest-grid">
+      <div class="invest-card reveal">
+        <h3>דירות מגורים להשקעה</h3>
+        <p>האפיק המוכר ביותר: תשואה שוטפת משכירות לצד עליית ערך לאורך זמן. המפתח — מיקום עם ביקוש עמוק, ולא מחיר נמוך בכל מחיר.</p>
+      </div>
+      <div class="invest-card reveal">
+        <h3>התחדשות עירונית</h3>
+        <p>תמ"א ופינוי־בינוי יוצרים הזדמנויות בנכסים ותיקים עם פוטנציאל השבחה משמעותי — למי שיודע לקרוא את הסטטוס התכנוני באמת.</p>
+      </div>
+      <div class="invest-card reveal">
+        <h3>קרקעות ומגרשים</h3>
+        <p>אפיק ארוך טווח עם פוטנציאל גבוה וסיכון בהתאם. ההבדל בין קרקע מניבה לקרקע תקועה הוא בדיקה תכנונית ומשפטית קפדנית — לפני הכסף.</p>
+      </div>
+      <div class="invest-card reveal">
+        <h3>נדל"ן מסחרי ומניב</h3>
+        <p>משרדים, מסחר ולוגיסטיקה — תשואות שונות ממגורים, חוזים ארוכים ושוכרים אחרים. מתאים למשקיעים שמחפשים תזרים יציב.</p>
+      </div>
     </div>
 
-    <!-- ======================= HEADER ======================= -->
-    <header class="bg-white shadow-sm sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3 sm:gap-6">
-            <a href="#" onclick="goHome(); return false;" class="flex items-center gap-2 shrink-0">
-                <div class="bg-zed-500 text-white w-10 h-10 rounded-xl flex items-center justify-center font-extrabold text-xl">Z</div>
-                <div class="hidden sm:block">
-                    <h1 class="text-xl font-extrabold tracking-tight leading-none">Zed<span class="text-zed-500">Mall</span></h1>
-                    <p class="text-[10px] text-slate-400 leading-none mt-0.5">Shop Global. Pay Local.</p>
-                </div>
-            </a>
-
-            <div class="flex-1 relative">
-                <input id="searchInput" type="text" placeholder="Search millions of products..."
-                    class="w-full border-2 border-zed-500 rounded-full py-2.5 pl-5 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-zed-100"
-                    onkeydown="if(event.key==='Enter') doSearch()">
-                <button onclick="doSearch()" class="absolute right-1 top-1 bottom-1 bg-zed-500 hover:bg-zed-600 text-white rounded-full w-10 flex items-center justify-center transition">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-
-            <button onclick="toggleCart(true)" class="relative shrink-0 text-slate-600 hover:text-zed-600 transition p-2">
-                <i class="fas fa-cart-shopping text-2xl"></i>
-                <span id="cartCount" class="absolute -top-1 -right-1 bg-zam-red text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
-            </button>
-        </div>
-
-        <!-- Categories (horizontal — mobile/tablet only; desktop uses the left sidebar) -->
-        <nav class="lg:hidden max-w-7xl mx-auto px-4 pb-2 flex gap-2 overflow-x-auto no-scrollbar">
-            <button onclick="showUnder25()" class="cat-chip !bg-zam-green !text-white hover:!bg-zed-700">💸 Under K100</button>
-            <button onclick="searchCategory('phone accessories')" class="cat-chip">📱 Phones &amp; Accessories</button>
-            <button onclick="searchCategory('women fashion dress')" class="cat-chip">👗 Fashion</button>
-            <button onclick="searchCategory('home kitchen gadgets')" class="cat-chip">🏠 Home &amp; Kitchen</button>
-            <button onclick="searchCategory('men watches')" class="cat-chip">⌚ Watches</button>
-            <button onclick="searchCategory('kids toys')" class="cat-chip">🧸 Toys</button>
-            <button onclick="searchCategory('hair wigs beauty')" class="cat-chip">💄 Beauty &amp; Hair</button>
-            <button onclick="searchCategory('solar lights electronics')" class="cat-chip">🔆 Solar &amp; Electronics</button>
-            <button onclick="searchCategory('football jersey sports')" class="cat-chip">⚽ Sports</button>
-        </nav>
-    </header>
-
-    <!-- ======================= HERO (slim band — store-first) ======================= -->
-    <section id="heroSection" class="relative overflow-hidden bg-zam-green text-white">
-        <div class="absolute inset-0 bg-gradient-to-r from-zam-green via-zed-600 to-zam-green"></div>
-        <div class="relative max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-            <p class="font-extrabold text-base sm:text-lg leading-tight shrink-0">
-                The whole world's marketplace, in <span class="text-zam-orange">Zambia</span> 🇿🇲
-            </p>
-            <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold overflow-x-auto no-scrollbar">
-                <span class="bg-white/15 px-2.5 py-1 rounded-full border border-white/10 shrink-0"><i class="fas fa-mobile-screen text-yellow-300 mr-1"></i>MTN</span>
-                <span class="bg-white/15 px-2.5 py-1 rounded-full border border-white/10 shrink-0"><i class="fas fa-mobile-screen text-red-300 mr-1"></i>Airtel</span>
-                <span class="bg-white/15 px-2.5 py-1 rounded-full border border-white/10 shrink-0"><i class="fas fa-mobile-screen text-green-200 mr-1"></i>Zamtel</span>
-                <span class="hidden sm:inline-flex bg-white/15 px-2.5 py-1 rounded-full border border-white/10 shrink-0"><i class="fas fa-shield-halved text-zam-orange mr-1"></i>Money-back</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================= MAIN (AliExpress-style: left categories + product grid) ======================= -->
-    <div class="max-w-7xl mx-auto px-4 py-8 w-full flex-1 lg:flex lg:gap-6">
-
-        <!-- Desktop category sidebar -->
-        <aside class="hidden lg:block w-56 shrink-0">
-            <div class="sticky top-24 bg-white rounded-2xl shadow-sm border border-zed-100 p-2">
-                <h3 class="px-3 pt-2 pb-1.5 text-xs font-bold text-slate-400 uppercase tracking-wide">Shop by category</h3>
-                <button onclick="showUnder25()" class="side-cat side-cat-deal"><span class="w-5 text-center">💸</span> Under K100</button>
-                <button onclick="searchCategory('phone accessories')" class="side-cat"><span class="w-5 text-center">📱</span> Phones &amp; Accessories</button>
-                <button onclick="searchCategory('women fashion dress')" class="side-cat"><span class="w-5 text-center">👗</span> Fashion</button>
-                <button onclick="searchCategory('home kitchen gadgets')" class="side-cat"><span class="w-5 text-center">🏠</span> Home &amp; Kitchen</button>
-                <button onclick="searchCategory('men watches')" class="side-cat"><span class="w-5 text-center">⌚</span> Watches</button>
-                <button onclick="searchCategory('kids toys')" class="side-cat"><span class="w-5 text-center">🧸</span> Toys</button>
-                <button onclick="searchCategory('hair wigs beauty')" class="side-cat"><span class="w-5 text-center">💄</span> Beauty &amp; Hair</button>
-                <button onclick="searchCategory('solar lights electronics')" class="side-cat"><span class="w-5 text-center">🔆</span> Solar &amp; Electronics</button>
-                <button onclick="searchCategory('football jersey sports')" class="side-cat"><span class="w-5 text-center">⚽</span> Sports</button>
-            </div>
-        </aside>
-
-        <!-- Product area -->
-        <main class="flex-1 min-w-0">
-        <!-- Under K100 strip (shown on the home page) -->
-        <section id="under25Strip" class="hidden mb-8 bg-gradient-to-r from-zam-green/10 to-emerald-50 rounded-2xl p-4">
-            <div class="flex items-center justify-between mb-3">
-                <h3 class="text-lg sm:text-xl font-bold text-zam-green">💸 Everything under K100</h3>
-                <button onclick="showUnder25()" class="text-sm font-bold text-zam-green hover:underline shrink-0">See all <i class="fas fa-arrow-right text-xs"></i></button>
-            </div>
-            <div id="under25Row" class="flex gap-3 overflow-x-auto no-scrollbar pb-1"></div>
-        </section>
-
-        <div class="flex items-center justify-between mb-4">
-            <h3 id="resultsTitle" class="text-xl font-bold">🔥 Trending in Zambia</h3>
-            <span id="resultsCount" class="text-sm text-slate-400"></span>
-        </div>
-
-        <div id="statusBox" class="hidden text-center py-16">
-            <div class="spinner mx-auto"></div>
-            <p id="statusText" class="mt-4 text-slate-500 text-sm">Loading products...</p>
-        </div>
-
-        <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3"></div>
-
-        <!-- Infinite scroll: sentinel auto-loads the next page; button is a manual fallback -->
-        <div id="loadMoreWrap" class="hidden text-center py-8">
-            <button id="loadMoreBtn" onclick="loadMoreProducts()" class="bg-zed-50 text-zed-700 hover:bg-zed-500 hover:text-white font-bold px-8 py-3.5 rounded-full transition shadow-sm">
-                <i class="fas fa-plus mr-1"></i> Show more products
-            </button>
-        </div>
-        <div id="loadMoreSentinel" class="h-4"></div>
-        </main>
+    <h2 class="sec-title" style="font-size:clamp(22px,4vw,30px)">חמישה עקרונות של השקעה מחושבת</h2>
+    <div class="principles-list">
+      <div class="pl-item reveal"><div class="pl-num">א</div><div><h4>מיקום לפני מחיר</h4><p>נכס בינוני במיקום מצוין ינצח כמעט תמיד נכס מצוין במיקום בינוני. ביקוש עמוק הוא הביטוח האמיתי של המשקיע.</p></div></div>
+      <div class="pl-item reveal"><div class="pl-num">ב</div><div><h4>הון עצמי ומינוף נבון</h4><p>מינוף מגדיל תשואה — וגם סיכון. מסגרת מימון נכונה נבנית לפי כושר ההחזר האמיתי, לא לפי התרחיש האופטימי.</p></div></div>
+      <div class="pl-item reveal"><div class="pl-num">ג</div><div><h4>מיסוי הוא חלק מהעסקה</h4><p>מס רכישה, מס שבח והיטלים משנים את התמונה כולה. את חישוב המס עושים לפני החתימה — יחד עם אנשי מקצוע — לא אחריה.</p></div></div>
+      <div class="pl-item reveal"><div class="pl-num">ד</div><div><h4>בדיקות לפני התלהבות</h4><p>נסח טאבו, מצב תכנוני, חריגות בנייה, זכויות — כל עסקה טובה שורדת בדיקת נאותות. עסקה שלא שורדת אותה, לא הייתה טובה.</p></div></div>
+      <div class="pl-item reveal"><div class="pl-num">ה</div><div><h4>סבלנות היא אסטרטגיה</h4><p>נדל"ן מתגמל את מי שיודע לחכות — להזדמנות הנכונה בכניסה, ולעיתוי הנכון ביציאה. לחץ הוא האויב של תשואה.</p></div></div>
     </div>
 
-    <!-- ======================= HOW IT WORKS ======================= -->
-    <section id="how-it-works" class="bg-white border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 py-14">
-            <h3 class="text-2xl sm:text-3xl font-extrabold text-center">How ZedMall Works</h3>
-            <p class="text-center text-slate-500 mt-2 max-w-xl mx-auto">From your phone to your door in 4 simple steps — no credit card, no stress.</p>
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-10">
-                <div class="text-center p-5 rounded-2xl bg-slate-50">
-                    <div class="text-4xl">🛒</div>
-                    <div class="mt-3 text-xs font-bold text-zed-500">STEP 1</div>
-                    <h4 class="font-bold mt-1">Pick your products</h4>
-                    <p class="text-sm text-slate-500 mt-1">Browse millions of items with prices in Kwacha — everything included, no surprises.</p>
-                </div>
-                <div class="text-center p-5 rounded-2xl bg-slate-50">
-                    <div class="text-4xl">📲</div>
-                    <div class="mt-3 text-xs font-bold text-zed-500">STEP 2</div>
-                    <h4 class="font-bold mt-1">Pay with Mobile Money</h4>
-                    <p class="text-sm text-slate-500 mt-1">Enter your MTN, Airtel or Zamtel number and approve the prompt with your PIN.</p>
-                </div>
-                <div class="text-center p-5 rounded-2xl bg-slate-50">
-                    <div class="text-4xl">📦</div>
-                    <div class="mt-3 text-xs font-bold text-zed-500">STEP 3</div>
-                    <h4 class="font-bold mt-1">We handle the rest</h4>
-                    <p class="text-sm text-slate-500 mt-1">Our team places your order with the supplier and tracks it all the way to Zambia.</p>
-                </div>
-                <div class="text-center p-5 rounded-2xl bg-slate-50">
-                    <div class="text-4xl">🎉</div>
-                    <div class="mt-3 text-xs font-bold text-zed-500">STEP 4</div>
-                    <h4 class="font-bold mt-1">Delivered to you</h4>
-                    <p class="text-sm text-slate-500 mt-1">Your order arrives in 12–25 days. We keep you updated by email.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <p class="disclaimer">האמור באתר זה הוא מידע כללי בלבד ואינו מהווה ייעוץ השקעות, ייעוץ מס או ייעוץ משפטי, ואינו תחליף לייעוץ אישי המותאם לצרכיו ולנתוניו של כל אדם. בכל עסקה מומלץ להסתייע בעורך דין ובאנשי מקצוע מוסמכים.</p>
+  </div>
+</section>
 
-    <!-- ======================= ABOUT ======================= -->
-    <section id="about" class="bg-slate-50 border-t border-slate-100">
-        <div class="max-w-7xl mx-auto px-4 py-14 grid sm:grid-cols-2 gap-10 items-center">
-            <div>
-                <h3 class="text-2xl sm:text-3xl font-extrabold">About Zed<span class="text-zed-500">Mall</span></h3>
-                <p class="mt-4 text-slate-600 leading-relaxed">Millions of Zambians see amazing products online — and can't buy them, because global marketplaces demand a credit card most of us don't have.</p>
-                <p class="mt-3 text-slate-600 leading-relaxed"><b>ZedMall fixes that.</b> We bring the world's biggest catalog to Zambia with prices in Kwacha and payment through the mobile money you already use every day. You shop, you approve a prompt on your phone, and we take care of everything else — ordering, shipping and tracking until it reaches your hands.</p>
-                <p class="mt-3 text-slate-600 leading-relaxed">Proudly built for Zambia. 🇿🇲</p>
-            </div>
-            <div class="grid grid-cols-1 gap-4">
-                <div class="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm">
-                    <div class="text-3xl">🔒</div>
-                    <div><h4 class="font-bold">Safe payments</h4><p class="text-sm text-slate-500">You approve every payment yourself with your Mobile Money PIN. We never see your PIN.</p></div>
-                </div>
-                <div class="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm">
-                    <div class="text-3xl">💚</div>
-                    <div><h4 class="font-bold">Money-back guarantee</h4><p class="text-sm text-slate-500">If your order never arrives, you get a full refund to your mobile money wallet.</p></div>
-                </div>
-                <div class="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm">
-                    <div class="text-3xl">💬</div>
-                    <div><h4 class="font-bold">Real human support</h4><p class="text-sm text-slate-500">Questions? Our Zambian team answers by email, 7 days a week.</p></div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section id="club" class="club">
+  <div class="club-inner">
+    <img class="club-seal" src="assets/emblem-512.png" alt="">
+    <div class="sec-kicker">בהזמנה בלבד</div>
+    <h2 class="sec-title">המעגל</h2>
+    <p class="club-copy">יש הזדמנויות שלא מגיעות לשוק. הן עוברות בשקט, בין מספר קטן של אנשים — לפני כולם.</p>
+    <p class="club-quiet">המעגל הוא קבוצה מצומצמת של לקוחות ומשקיעים המלווים באופן אישי. ההצטרפות בהמלצה אישית, או בפנייה שתיבחן בדיסקרטיות מלאה. לא כל פנייה נענית — וזה בדיוק העניין.</p>
+    <form class="club-form" id="club-form">
+      <input type="text" id="cf-name" placeholder="שם מלא" autocomplete="name" required>
+      <input type="tel" id="cf-phone" placeholder="טלפון נייד" autocomplete="tel" required>
+      <textarea id="cf-about" rows="3" placeholder="כמה מילים — מי אתם ומה מעניין אתכם (לא חובה)"></textarea>
+      <button type="submit" class="btn btn-gold">בקשה להצטרפות</button>
+    </form>
+    <p class="club-note">הפנייה נשלחת ישירות ובאופן אישי. ללא רשימות תפוצה, ללא פרסום.</p>
+  </div>
+</section>
 
-    <!-- ======================= FAQ ======================= -->
-    <section id="faq" class="bg-white border-t border-slate-100">
-        <div class="max-w-3xl mx-auto px-4 py-14">
-            <h3 class="text-2xl sm:text-3xl font-extrabold text-center">Frequently Asked Questions</h3>
-            <div class="mt-8 space-y-3">
-                <details class="faq-item">
-                    <summary>Do I need a credit card or bank account?</summary>
-                    <p>No! That's the whole point of ZedMall. All you need is a Mobile Money wallet — MTN MoMo, Airtel Money or Zamtel Kwacha — with enough balance for your order.</p>
-                </details>
-                <details class="faq-item">
-                    <summary>How long does delivery take?</summary>
-                    <p>Most orders arrive within 12–25 days, depending on the product and your location in Zambia. We email you tracking updates along the way.</p>
-                </details>
-                <details class="faq-item">
-                    <summary>Is the price I see the final price?</summary>
-                    <p>The product price shown includes our service. At checkout a small service fee (5%) is added to cover mobile money charges — the total you see at checkout is exactly what you pay.</p>
-                </details>
-                <details class="faq-item">
-                    <summary>What happens after I pay?</summary>
-                    <p>You get an order number instantly. Our team places your order with the supplier within 24 hours, and you receive tracking updates until it's delivered to you.</p>
-                </details>
-                <details class="faq-item">
-                    <summary>What if my order never arrives or is damaged?</summary>
-                    <p>You're covered by our money-back guarantee: if your order doesn't arrive, or arrives broken, we refund you in full to your mobile money wallet. Just email us at office@orizisgroup.com with your order number.</p>
-                </details>
-                <details class="faq-item">
-                    <summary>How do I talk to a real person?</summary>
-                    <p>Email us at office@orizisgroup.com — our support team replies 7 days a week, 08:00–20:00. Keep your order number handy so we can help faster.</p>
-                </details>
-            </div>
-        </div>
-    </section>
-
-    <!-- ======================= SUPPORT BANNER ======================= -->
-    <section id="support" class="bg-zam-green text-white">
-        <div class="max-w-7xl mx-auto px-4 py-10 text-center">
-            <h3 class="text-2xl font-extrabold">Need help? We're one message away 💬</h3>
-            <p class="mt-2 text-emerald-100">Orders, tracking, refunds or just a question — email our team at office@orizisgroup.com, 7 days a week, 08:00–20:00.</p>
-            <a href="mailto:office@orizisgroup.com?subject=Support%20request" rel="noopener"
-               class="inline-flex items-center gap-2 mt-5 bg-white text-slate-900 font-extrabold px-8 py-3.5 rounded-full hover:bg-slate-100 transition">
-                <i class="fas fa-envelope text-xl"></i> Email our support team
-            </a>
-        </div>
-    </section>
-
-    <!-- ======================= FOOTER ======================= -->
-    <footer class="bg-slate-900 text-slate-300 mt-10">
-        <div class="max-w-7xl mx-auto px-4 py-10 grid sm:grid-cols-3 gap-8 text-sm">
-            <div>
-                <div class="flex items-center gap-2 mb-3">
-                    <div class="bg-zed-500 text-white w-8 h-8 rounded-lg flex items-center justify-center font-extrabold">Z</div>
-                    <span class="font-extrabold text-white text-lg">Zed<span class="text-zed-500">Mall</span></span>
-                </div>
-                <p class="text-slate-400">Zambia's gateway to global online shopping. Shop the world's products and pay with the mobile money you already have.</p>
-            </div>
-            <div>
-                <h4 class="font-bold text-white mb-3">Quick links</h4>
-                <ul class="space-y-2 text-slate-400">
-                    <li><a href="#how-it-works" class="hover:text-white transition">How it works</a></li>
-                    <li><a href="#about" class="hover:text-white transition">About ZedMall</a></li>
-                    <li><a href="#faq" class="hover:text-white transition">FAQ</a></li>
-                    <li><a href="#support" class="hover:text-white transition">Customer support</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold text-white mb-3">We accept</h4>
-                <div class="flex flex-wrap gap-2">
-                    <span class="bg-yellow-400 text-black font-bold px-3 py-1.5 rounded-lg text-xs">MTN MoMo</span>
-                    <span class="bg-red-600 text-white font-bold px-3 py-1.5 rounded-lg text-xs">Airtel Money</span>
-                    <span class="bg-green-700 text-white font-bold px-3 py-1.5 rounded-lg text-xs">Zamtel Kwacha</span>
-                </div>
-                <p class="mt-4 text-slate-500 text-xs">Prices shown in Zambian Kwacha (ZMW), incl. service fee. Exchange rate updated daily.</p>
-            </div>
-        </div>
-        <div class="border-t border-slate-800 text-center py-4 text-xs text-slate-500">© 2026 ZedMall Zambia. All rights reserved.</div>
-    </footer>
-
-    <!-- ======================= CART DRAWER ======================= -->
-    <div id="cartOverlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart(false)"></div>
-    <aside id="cartDrawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="flex items-center justify-between p-4 border-b">
-            <h3 class="font-bold text-lg"><i class="fas fa-cart-shopping text-zed-500 mr-2"></i>Your Cart</h3>
-            <button onclick="toggleCart(false)" class="text-slate-400 hover:text-slate-700 p-2"><i class="fas fa-xmark text-xl"></i></button>
-        </div>
-        <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
-        <div class="border-t p-4 space-y-3 bg-slate-50">
-            <div class="flex justify-between text-sm"><span class="text-slate-500">Subtotal</span><span id="cartSubtotal" class="font-semibold">K0.00</span></div>
-            <div class="flex justify-between text-sm"><span class="text-slate-500">Service &amp; delivery estimate</span><span id="cartFees" class="font-semibold">K0.00</span></div>
-            <div class="flex justify-between text-lg font-extrabold"><span>Total</span><span id="cartTotal" class="text-zam-green">K0.00</span></div>
-            <button id="checkoutBtn" onclick="openCheckout()" class="w-full bg-zam-green hover:bg-green-800 text-white font-bold py-3.5 rounded-xl transition disabled:opacity-40 disabled:cursor-not-allowed">
-                <i class="fas fa-mobile-screen mr-2"></i>Pay with Mobile Money
-            </button>
-        </div>
-    </aside>
-
-    <!-- ======================= CHECKOUT MODAL ======================= -->
-    <div id="checkoutModal" class="fixed inset-0 bg-black/60 z-[60] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden fade-in">
-
-            <!-- Step 1: payment details -->
-            <div id="payStep1">
-                <div class="bg-zam-green text-white p-5">
-                    <h3 class="font-bold text-lg"><i class="fas fa-mobile-screen mr-2"></i>Mobile Money Checkout</h3>
-                    <p class="text-emerald-100 text-sm mt-1">Total to pay: <b id="payTotal" class="text-white">K0.00</b></p>
-                </div>
-                <div class="p-5 space-y-4">
-                    <div>
-                        <label class="text-sm font-semibold text-slate-600 block mb-2">Choose your network</label>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="selectProvider('mtn', this)" class="provider-btn border-2 rounded-xl p-3 text-center transition hover:border-zed-500">
-                                <div class="bg-yellow-400 text-black font-extrabold text-xs rounded-md py-1 mb-1">MTN</div>
-                                <span class="text-[11px] text-slate-500">MoMo</span>
-                            </button>
-                            <button onclick="selectProvider('airtel', this)" class="provider-btn border-2 rounded-xl p-3 text-center transition hover:border-zed-500">
-                                <div class="bg-red-600 text-white font-extrabold text-xs rounded-md py-1 mb-1">Airtel</div>
-                                <span class="text-[11px] text-slate-500">Money</span>
-                            </button>
-                            <button onclick="selectProvider('zamtel', this)" class="provider-btn border-2 rounded-xl p-3 text-center transition hover:border-zed-500">
-                                <div class="bg-green-700 text-white font-extrabold text-xs rounded-md py-1 mb-1">Zamtel</div>
-                                <span class="text-[11px] text-slate-500">Kwacha</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-sm font-semibold text-slate-600 block mb-2">Mobile money number</label>
-                        <div class="flex">
-                            <span class="bg-slate-100 border border-r-0 border-slate-300 rounded-l-xl px-3 flex items-center text-sm font-semibold text-slate-500">🇿🇲 +260</span>
-                            <input id="payPhone" type="tel" maxlength="9" placeholder="97 1234567"
-                                class="flex-1 border border-slate-300 rounded-r-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zam-green"
-                                oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="text-sm font-semibold text-slate-600 block mb-2">Full name (for delivery)</label>
-                        <input id="payName" type="text" placeholder="e.g. Mwamba Banda" class="w-full border border-slate-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zam-green">
-                    </div>
-                    <div>
-                        <label class="text-sm font-semibold text-slate-600 block mb-2">Delivery address / town</label>
-                        <input id="payAddress" type="text" placeholder="e.g. Plot 25, Kabulonga, Lusaka" class="w-full border border-slate-300 rounded-xl px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-zam-green">
-                    </div>
-                    <p id="payError" class="text-zam-red text-sm font-semibold hidden"></p>
-                    <button onclick="submitPayment()" class="w-full bg-zam-green hover:bg-green-800 text-white font-bold py-3.5 rounded-xl transition">
-                        Send payment request <i class="fas fa-arrow-right ml-1"></i>
-                    </button>
-                    <button onclick="closeCheckout()" class="w-full text-slate-400 text-sm py-1 hover:text-slate-600">Cancel</button>
-                </div>
-            </div>
-
-            <!-- Step 2: waiting for approval -->
-            <div id="payStep2" class="hidden p-8 text-center">
-                <div class="w-20 h-20 mx-auto rounded-full bg-zam-green/10 flex items-center justify-center pulse-ring">
-                    <i class="fas fa-mobile-screen-button text-zam-green text-3xl"></i>
-                </div>
-                <h3 class="font-bold text-lg mt-5">Check your phone 📲</h3>
-                <p class="text-slate-500 text-sm mt-2">We sent a payment request of <b id="pay2Total" class="text-zam-green">K0.00</b> to <b id="pay2Phone"></b>.<br>Enter your Mobile Money PIN to approve.</p>
-                <p class="text-xs text-slate-400 mt-4"><span class="spinner inline-block !w-4 !h-4 !border-2 align-middle mr-1"></span> Waiting for confirmation...</p>
-            </div>
-
-            <!-- Step 3: success -->
-            <div id="payStep3" class="hidden p-8 text-center">
-                <div class="w-20 h-20 mx-auto rounded-full bg-zam-green flex items-center justify-center">
-                    <i class="fas fa-check text-white text-3xl"></i>
-                </div>
-                <h3 class="font-bold text-xl mt-5 text-zam-green">Payment received! 🎉</h3>
-                <p class="text-slate-500 text-sm mt-2">Order <b id="orderRef"></b> is confirmed.<br>We're placing your order now — you'll get an SMS with tracking details.</p>
-                <button onclick="finishOrder()" class="mt-6 w-full bg-zed-500 hover:bg-zed-600 text-white font-bold py-3 rounded-xl transition">Continue shopping</button>
-            </div>
-        </div>
+<section id="contact" class="contact">
+  <div class="inner">
+    <div class="sec-kicker">דלת פתוחה — למי שמקיש</div>
+    <h2 class="sec-title">יצירת קשר</h2>
+    <div class="contact-links">
+      <a href="https://wa.me/972528119445" target="_blank" rel="noopener">💬 WhatsApp</a>
+      <a href="tel:0528119445">📞 052-8119445</a>
+      <a href="mailto:nadlankehati@gmail.com">✉️ nadlankehati@gmail.com</a>
     </div>
-
-    <!-- ======================= PRODUCT MODAL ======================= -->
-    <div id="productModal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4" onclick="if(event.target===this) closeProduct()">
-        <div class="bg-white rounded-2xl w-full max-w-2xl overflow-hidden fade-in max-h-[90vh] overflow-y-auto">
-            <div class="grid sm:grid-cols-2">
-                <img id="pmImage" src="" alt="" class="w-full h-64 sm:h-full object-cover bg-slate-100">
-                <div class="p-5 flex flex-col">
-                    <button onclick="closeProduct()" class="self-end text-slate-400 hover:text-slate-700 -mt-1"><i class="fas fa-xmark text-xl"></i></button>
-                    <h3 id="pmTitle" class="font-bold text-lg leading-snug"></h3>
-                    <div id="pmRating" class="text-yellow-500 text-sm mt-2"></div>
-                    <div class="mt-3">
-                        <span id="pmPrice" class="text-2xl font-extrabold text-zam-green"></span>
-                        <span id="pmOldPrice" class="text-sm text-slate-400 line-through ml-2"></span>
-                    </div>
-                    <p id="pmOrders" class="text-xs text-slate-400 mt-1"></p>
-                    <div class="mt-4 flex items-center gap-3">
-                        <div class="flex items-center border rounded-xl">
-                            <button onclick="pmQty(-1)" class="px-3 py-2 text-slate-500 hover:text-zed-600">−</button>
-                            <span id="pmQtyVal" class="px-2 font-bold text-sm">1</span>
-                            <button onclick="pmQty(1)" class="px-3 py-2 text-slate-500 hover:text-zed-600">+</button>
-                        </div>
-                        <button id="pmAddBtn" class="flex-1 bg-zed-500 hover:bg-zed-600 text-white font-bold py-3 rounded-xl transition">
-                            <i class="fas fa-cart-plus mr-1"></i> Add to cart
-                        </button>
-                    </div>
-                    <p class="text-xs text-slate-400 mt-4"><i class="fas fa-truck mr-1"></i> Estimated delivery to Zambia: 12–25 days</p>
-                    <p class="text-xs text-slate-400 mt-1"><i class="fas fa-shield-halved mr-1"></i> Money-back guarantee if the item never arrives</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ======================= TOAST ======================= -->
-    <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-sm font-semibold px-5 py-3 rounded-full shadow-xl z-[70] hidden"></div>
-
-    <!-- Floating WhatsApp support button -->
-    <a id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Chat with ZedMall support on WhatsApp"
-       class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:scale-110 transition">
-        <i class="fab fa-whatsapp text-3xl"></i>
-    </a>
-
-    <!-- ======================= DOWNLOAD APP banner (mobile) ======================= -->
-    <div id="installBanner" class="hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-900 text-white px-4 py-3 flex items-center gap-3 shadow-2xl">
-        <img src="icon-192.png" alt="" class="w-10 h-10 rounded-xl shrink-0">
-        <div class="flex-1 min-w-0">
-            <p class="font-bold text-sm leading-tight">Get the ZedMall App 🇿🇲</p>
-            <p class="text-[11px] text-slate-300 leading-tight">Faster shopping, right from your home screen</p>
-        </div>
-        <button onclick="installApp()" class="shrink-0 bg-zed-500 hover:bg-zed-600 text-white text-xs font-extrabold px-4 py-2.5 rounded-full transition">
-            <i class="fas fa-download mr-1"></i>DOWNLOAD APP
-        </button>
-        <button onclick="dismissInstall()" class="shrink-0 text-slate-400 hover:text-white p-1" aria-label="Dismiss"><i class="fas fa-xmark"></i></button>
-    </div>
-
-    <!-- ======================= INSTALL GUIDE overlays (with pointing arrows) ======================= -->
-    <div id="installGuide" class="hidden fixed inset-0 z-[80] bg-black/80" onclick="closeInstallGuide()">
-        <!-- iPhone guide: Safari share button is at the BOTTOM center -->
-        <div id="guideIos" class="hidden absolute inset-x-0 bottom-0 pb-20 px-6 text-white text-center">
-            <div class="bg-white text-slate-800 rounded-2xl p-5 max-w-sm mx-auto text-left" onclick="event.stopPropagation()">
-                <h4 class="font-extrabold text-lg">📲 Install on iPhone</h4>
-                <ol class="mt-3 space-y-2.5 text-sm">
-                    <li><b>1.</b> Tap the <b>Share</b> button <span class="inline-block border border-slate-300 rounded-md px-1.5 py-0.5 text-blue-500"><i class="fas fa-arrow-up-from-bracket"></i></span> at the <b>bottom of Safari</b> (the arrow below points at it)</li>
-                    <li><b>2.</b> Scroll down and tap <b>"Add to Home Screen"</b> <span class="inline-block border border-slate-300 rounded-md px-1.5 py-0.5">➕</span></li>
-                    <li><b>3.</b> Tap <b>Add</b> — ZedMall appears on your home screen like an app!</li>
-                </ol>
-                <button onclick="closeInstallGuide()" class="mt-4 w-full bg-slate-100 hover:bg-slate-200 font-bold py-2.5 rounded-xl text-sm">Got it</button>
-            </div>
-            <div class="guide-arrow-down mx-auto mt-4 text-5xl">⬇️</div>
-        </div>
-        <!-- Android guide: browser menu is at the TOP-RIGHT -->
-        <div id="guideAndroid" class="hidden absolute inset-x-0 top-0 pt-16 px-6 text-white">
-            <div class="guide-arrow-up ml-auto mr-3 text-5xl w-fit">⬆️</div>
-            <div class="bg-white text-slate-800 rounded-2xl p-5 max-w-sm mx-auto mt-4" onclick="event.stopPropagation()">
-                <h4 class="font-extrabold text-lg">📲 Install on Android</h4>
-                <ol class="mt-3 space-y-2.5 text-sm">
-                    <li><b>1.</b> Tap the <b>⋮ menu</b> at the <b>top-right of Chrome</b> (the arrow above points at it)</li>
-                    <li><b>2.</b> Tap <b>"Add to Home screen"</b> or <b>"Install app"</b></li>
-                    <li><b>3.</b> Confirm — ZedMall appears on your home screen like an app!</li>
-                </ol>
-                <button onclick="closeInstallGuide()" class="mt-4 w-full bg-slate-100 hover:bg-slate-200 font-bold py-2.5 rounded-xl text-sm">Got it</button>
-            </div>
-        </div>
-    </div>
-
-    <style>
-        html { scroll-behavior: smooth; }
-        .cat-chip { flex-shrink: 0; background: #f1f5f9; border-radius: 9999px; padding: 6px 14px; font-size: 12px; font-weight: 600; color: #475569; transition: all .2s; }
-        .cat-chip:hover { background: #ffedd5; color: #c2410c; }
-        .side-cat { display: flex; align-items: center; gap: 9px; width: 100%; text-align: left; padding: 9px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; color: #475569; transition: all .15s; }
-        .side-cat:hover { background: #ffedd5; color: #c2410c; }
-        .side-cat span { font-size: 15px; }
-        .side-cat-deal { color: #ea580c; font-weight: 800; }
-        .provider-btn.selected { border-color: #198a00 !important; background: #f0fdf4; }
-        .faq-item { background: #f8fafc; border-radius: 16px; padding: 16px 20px; }
-        .faq-item summary { font-weight: 700; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
-        .faq-item summary::-webkit-details-marker { display: none; }
-        .faq-item summary::after { content: '+'; font-size: 20px; color: #f97316; font-weight: 800; }
-        .faq-item[open] summary::after { content: '−'; }
-        .faq-item p { margin-top: 10px; color: #64748b; font-size: 14px; line-height: 1.6; }
-        .guide-arrow-down { animation: bounceDown 1s ease-in-out infinite; }
-        .guide-arrow-up { animation: bounceUp 1s ease-in-out infinite; }
-        @keyframes bounceDown { 0%,100% { transform: translateY(0); } 50% { transform: translateY(14px); } }
-        @keyframes bounceUp { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-        body.has-install-banner #waFloat { bottom: 92px; }
-    </style>
-
-    <script>
-    /* ================================================================
-       ZEDMALL CONFIG — edit these values
-       ================================================================ */
-    const CONFIG = {
-        // Your backend API (the Vercel server.js that proxies AliExpress).
-        // Leave empty ("") to run in DEMO mode with sample products.
-        API_BASE_URL: "https://zedmall-site.vercel.app",
-
-        USD_TO_ZMW: 27.5,                 // exchange rate USD → Kwacha
-        MARKUP_PERCENT: 18,               // your margin on top of item price
-        SERVICE_FEE_PERCENT: 5,           // fee shown at checkout (covers MoMo charges)
-        // Cheap AliExpress items (often $0.30–$0.99) carry shipping that can
-        // exceed the item itself, so selling at the raw converted price loses
-        // money. Every item gets this flat buffer added, and no item is ever
-        // shown below the floor. Tune both to protect your margin.
-        SHIPPING_BUFFER_ZMW: 25,          // flat shipping/handling added to every item
-        MIN_PRICE_ZMW: 35,                // minimum price any item can be shown at
-        BUDGET_MAX_ZMW: 100,              // price ceiling for the "Under K100" budget section
-        STORE_ID: "zedmall",                // order records + admin dashboard filter
-        STORE_NAME: "ZedMall",
-        ORDER_EMAIL: "office@orizisgroup.com",   // every order is emailed here (via FormSubmit)
-        FIREBASE: {                        // shared "Zed Zambia" project — orders dashboard
-            apiKey: "AIzaSyAqkEfNwKZzofId0XCGcs17sVFh5NYryrM",
-            authDomain: "zedmall-4301c.firebaseapp.com",
-            projectId: "zedmall-4301c",
-            storageBucket: "zedmall-4301c.firebasestorage.app",
-            messagingSenderId: "24400915808",
-            appId: "1:24400915808:web:cd5675e846250c4e808205"
-        }
-    };
-
-    /* ================================================================
-       BRANDED IMAGE PLACEHOLDER — used for demo items and whenever a real
-       product image fails to load, so customers never see random photos.
-       ================================================================ */
-    function phEmoji(t) {
-        t = (t || '').toLowerCase();
-        const map = [
-            ['earbud','🎧'],['headphone','🎧'],['airpod','🎧'],['watch','⌚'],['phone case','📱'],
-            ['case','📱'],['cable','🔌'],['charg','🔌'],['power bank','🔋'],['blender','🥤'],
-            ['knife','🔪'],['kitchen','🍳'],['handbag','👜'],['bag','👜'],['wig','💇'],['hair','💇'],
-            ['dress','👗'],['fashion','👗'],['jersey','⚽'],['sport','⚽'],['football','⚽'],
-            ['toy','🧸'],['block','🧸'],['kids','🧸'],['ring light','💡'],['light','💡'],['lamp','💡'],
-            ['solar','🔆'],['earring','💍'],['jewel','💍'],['necklace','📿'],['bracelet','📿'],
-            ['nail','💅'],['beauty','💄'],['makeup','💄'],['sticker','✨'],['holder','📲'],
-            ['grip','📲'],['flashlight','🔦'],['shoe','👟'],['sneaker','👟'],['sunglass','🕶️'],
-            ['glass','🕶️'],['speaker','🔊'],['blocks','🧸'],['pen','🖊️']
-        ];
-        for (const [k, e] of map) if (t.includes(k)) return e;
-        return '🛍️';
-    }
-    function phData(title) {
-        const e = phEmoji(title);
-        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'>"
-            + "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>"
-            + "<stop offset='0' stop-color='#fff7ed'/><stop offset='1' stop-color='#ffedd5'/></linearGradient></defs>"
-            + "<rect width='400' height='400' fill='url(#g)'/>"
-            + "<text x='200' y='190' font-size='150' text-anchor='middle' dominant-baseline='central'>" + e + "</text>"
-            + "<text x='200' y='330' font-size='28' font-family='Arial,sans-serif' font-weight='bold' fill='#ea580c' text-anchor='middle'>ZedMall</text>"
-            + "</svg>";
-        return 'data:image/svg+xml,' + encodeURIComponent(svg);
-    }
-
-    /* ================================================================
-       DEMO PRODUCTS (used when API_BASE_URL is empty or unreachable)
-       ================================================================ */
-    const DEMO_PRODUCTS = [
-        { id:"d1", title:"Wireless Bluetooth Earbuds TWS with Charging Case", priceUsd:6.99, oldUsd:13.99, rating:4.6, orders:12483 },
-        { id:"d2", title:"Solar Powered LED Outdoor Light 100W with Remote", priceUsd:11.50, oldUsd:19.99, rating:4.7, orders:8912 },
-        { id:"d3", title:"Smart Watch Fitness Tracker Waterproof - Men & Women", priceUsd:9.20, oldUsd:18.40, rating:4.5, orders:23001 },
-        { id:"d4", title:"Ladies Handbag Set 4-in-1 PU Leather", priceUsd:13.80, oldUsd:24.00, rating:4.8, orders:5320 },
-        { id:"d5", title:"Phone Case for iPhone / Samsung with Card Holder", priceUsd:2.10, oldUsd:4.20, rating:4.4, orders:45210 },
-        { id:"d6", title:"Kitchen Knife Set 6pcs Stainless Steel with Stand", priceUsd:15.99, oldUsd:29.99, rating:4.7, orders:7654 },
-        { id:"d7", title:"Kids Educational Building Blocks 520pcs", priceUsd:8.75, oldUsd:16.00, rating:4.9, orders:11234 },
-        { id:"d8", title:"HD Lace Front Wig Human Hair Blend 26 inch", priceUsd:24.90, oldUsd:45.00, rating:4.6, orders:9876 },
-        { id:"d9", title:"Men's Quartz Watch Luxury Stainless Steel", priceUsd:7.40, oldUsd:14.80, rating:4.5, orders:15678 },
-        { id:"d10", title:"Portable Blender USB Rechargeable 380ml", priceUsd:10.30, oldUsd:20.60, rating:4.3, orders:6543 },
-        { id:"d11", title:"Football Jersey 2026 Season - Breathable Fabric", priceUsd:12.00, oldUsd:22.00, rating:4.6, orders:8210 },
-        { id:"d12", title:"LED Ring Light 26cm with Tripod for TikTok", priceUsd:9.99, oldUsd:17.99, rating:4.7, orders:19876 },
-        { id:"d13", title:"Power Bank 20000mAh Fast Charging Dual USB", priceUsd:13.50, oldUsd:25.00, rating:4.8, orders:31245 },
-        { id:"d14", title:"Women's Summer Dress African Print Style", priceUsd:11.20, oldUsd:19.90, rating:4.5, orders:4321 },
-        { id:"d15", title:"Car Phone Holder Magnetic 360° Rotation", priceUsd:3.40, oldUsd:6.80, rating:4.4, orders:27654 },
-        { id:"d16", title:"USB-C Fast Charging Cable 1m Braided", priceUsd:0.69, oldUsd:1.40, rating:4.5, orders:98230 },
-        { id:"d17", title:"Gold Plated Hoop Earrings Set 6 Pairs", priceUsd:0.55, oldUsd:1.20, rating:4.6, orders:45120 },
-        { id:"d18", title:"Phone Ring Holder Stand 360° Metal", priceUsd:0.45, oldUsd:0.99, rating:4.4, orders:67340 },
-        { id:"d19", title:"Hair Clips Set 10pcs Pearl Style", priceUsd:0.60, oldUsd:1.30, rating:4.7, orders:38900 },
-        { id:"d20", title:"LED Mini Keychain Flashlight", priceUsd:0.52, oldUsd:1.10, rating:4.3, orders:52410 },
-        { id:"d21", title:"Nail Art Stickers 12 Sheets 3D Design", priceUsd:0.39, oldUsd:0.85, rating:4.5, orders:29870 },
-        { id:"d22", title:"Reusable Shopping Bag Foldable Waterproof", priceUsd:0.72, oldUsd:1.50, rating:4.6, orders:41200 },
-        { id:"d23", title:"Silicone Phone Grip Strap Adjustable", priceUsd:0.48, oldUsd:1.00, rating:4.2, orders:33150 }
-    ];
-
-    /* ================================================================
-       STATE
-       ================================================================ */
-    let products = [];
-    let cart = JSON.parse(localStorage.getItem('zedmall_cart') || '[]');
-    let currentProduct = null;
-    let pmQtyCount = 1;
-    let selectedProvider = null;
-
-    /* ================================================================
-       HELPERS
-       ================================================================ */
-    const $ = id => document.getElementById(id);
-    const usdToKwacha = usd => usd * CONFIG.USD_TO_ZMW * (1 + CONFIG.MARKUP_PERCENT / 100);
-    // Final customer price: add the shipping/handling buffer, enforce the
-    // floor, and round to a whole kwacha for clean, realistic prices.
-    const retailZmw = zmw => Math.max(CONFIG.MIN_PRICE_ZMW, Math.round((zmw || 0) + CONFIG.SHIPPING_BUFFER_ZMW));
-    const fmtK = n => 'K' + n.toLocaleString('en-ZM', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-    function showToast(msg) {
-        const t = $('toast');
-        t.textContent = msg;
-        t.classList.remove('hidden');
-        clearTimeout(t._timer);
-        t._timer = setTimeout(() => t.classList.add('hidden'), 2500);
-    }
-
-    function setStatus(loading, text) {
-        $('statusBox').classList.toggle('hidden', !loading);
-        $('productGrid').classList.toggle('hidden', loading);
-        if (text) $('statusText').textContent = text;
-    }
-
-    /* ================================================================
-       PRODUCT LOADING — API with demo fallback
-       ================================================================ */
-    // Normalizes many possible AliExpress-API response shapes into one format.
-    // Prices: if the backend already returns Kwacha (priceZMW) we use it as-is;
-    // otherwise we treat the price as USD and convert with markup.
-    /* ----------------------------------------------------------------
-       CATALOGUE CACHE
-       The upstream product search intermittently answers with a 5005
-       "data gather failed" error and an empty list. Without this the shop
-       would drop to its tiny built-in demo catalogue every time that
-       happens. We keep the last catalogue that did load and show it
-       instead, so a hiccup upstream never empties the shelves.
-       ---------------------------------------------------------------- */
-    const CATALOG_CACHE_KEY = 'catalog_cache_v1';
-    const CATALOG_CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
-
-    function writeCatalogCache(query, list) {
-        if (!list || !list.length) return;
-        try {
-            const all = JSON.parse(localStorage.getItem(CATALOG_CACHE_KEY) || '{}');
-            all[query || '__home__'] = { at: Date.now(), list: list.slice(0, 60) };
-            localStorage.setItem(CATALOG_CACHE_KEY, JSON.stringify(all));
-        } catch (e) { /* quota or private mode - caching is best-effort */ }
-    }
-
-    function readCatalogCache(query) {
-        try {
-            const all = JSON.parse(localStorage.getItem(CATALOG_CACHE_KEY) || '{}');
-            const hit = all[query || '__home__'];
-            if (hit && Date.now() - hit.at < CATALOG_CACHE_MAX_AGE) return hit.list;
-        } catch (e) { /* unreadable cache is the same as no cache */ }
-        return null;
-    }
-    function normalizeApiProduct(p, i) {
-        const title = p.title || p.product_title || p.name || p.subject || 'Product';
-        const rawZmw = p.priceZMW || p.price_zmw || p.priceKwacha || 0;
-        const priceZmwDirect = parseFloat(String(rawZmw).replace(/[^0-9.]/g, '')) || 0;
-        const rawPrice = p.price || p.sale_price || p.app_sale_price || p.target_sale_price ||
-                         (p.prices && (p.prices.sale_price || p.prices.salePrice)) || p.min_price || 0;
-        const priceUsd = parseFloat(String(rawPrice).replace(/[^0-9.]/g, '')) || 0;
-        const rawOld = p.original_price || p.originalPrice || p.old_price || 0;
-        const oldUsd = parseFloat(String(rawOld).replace(/[^0-9.]/g, '')) || 0;
-        const img = p.image || p.product_main_image_url || p.main_image || p.img || p.imageUrl ||
-                    (p.images && p.images[0]) || phData(title);
-        return {
-            id: String(p.product_id || p.productId || p.item_id || p.id || 'api' + i),
-            title,
-            priceZmw: retailZmw(priceZmwDirect || usdToKwacha(priceUsd || 5)),
-            oldZmw: oldUsd ? retailZmw(usdToKwacha(oldUsd)) : 0,
-            rating: parseFloat(p.evaluate_rate || p.rating || p.score) || (4 + Math.round(((i * 37) % 10)) / 10 * 0.9),
-            orders: parseInt(p.orders || p.sale_count || p.volume || p.lastest_volume) || 0,
-            img: String(img).startsWith('//') ? 'https:' + img : img
-        };
-    }
-
-    function extractApiList(data) {
-        if (Array.isArray(data)) return data;
-        const candidates = [
-            data.products, data.items, data.result, data.docs, data.data,
-            data.data && data.data.products, data.data && data.data.items,
-            data.result && data.result.products, data.result && data.result.items,
-            data.result && data.result.resultList
-        ];
-        for (const c of candidates) if (Array.isArray(c) && c.length) return c;
-        return [];
-    }
-
-    const normalizeDemo = p => ({ ...p, priceZmw: retailZmw(usdToKwacha(p.priceUsd)), oldZmw: p.oldUsd ? retailZmw(usdToKwacha(p.oldUsd)) : 0, img: phData(p.title) });
-
-    /* ================================================================
-       STATIC CATALOG — a GitHub Action refreshes catalog.json a couple of
-       times a day so home, categories and the budget strip render with
-       ZERO live API calls. This keeps browsing fast and preserves the
-       RapidAPI quota for real customer searches. Falls through to the live
-       API, then to demo products, if the catalog is empty/missing.
-       ================================================================ */
-    let catalogData = null, catalogTried = false;
-    async function loadCatalog() {
-        if (catalogTried) return catalogData;
-        catalogTried = true;
-        try {
-            const bust = Math.floor(Date.now() / (60 * 60 * 1000)); // refresh hourly on the client
-            const r = await fetch('catalog.json?_=' + bust, { cache: 'no-cache' });
-            if (r.ok) {
-                const j = await r.json();
-                if (j && ((j.home && j.home.length) || (j.categories && Object.keys(j.categories).length))) {
-                    catalogData = j;
-                }
-            }
-        } catch (e) { /* no catalog yet — fall through to live API */ }
-        return catalogData;
-    }
-
-    // Live API fetch with a 6h localStorage cache, so repeat visits and
-    // back-and-forth browsing don't burn extra RapidAPI calls.
-    async function liveFetch(qs) {
-        if (!CONFIG.API_BASE_URL) return [];
-        const key = 'zc_' + qs;
-        try {
-            const c = JSON.parse(localStorage.getItem(key) || 'null');
-            if (c && Date.now() - c.at < 6 * 60 * 60 * 1000 && c.raw && c.raw.length) return c.raw;
-        } catch (e) {}
-        const url = CONFIG.API_BASE_URL.replace(/\/$/, '') + '/api/products?' + qs;
-        const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
-        const raw = extractApiList(await res.json());
-        try { if (raw.length) localStorage.setItem(key, JSON.stringify({ at: Date.now(), raw })); } catch (e) {}
-        return raw;
-    }
-
-    // Budget items need price-ascending results. Prefer the static catalog,
-    // then a live price-sorted search. K3 floor drops junk/placeholder listings.
-    let under25Cache = null;
-    async function fetchUnder25() {
-        if (under25Cache && under25Cache.length) return under25Cache;
-        const cat = await loadCatalog();
-        if (cat && cat.under100 && cat.under100.length) {
-            under25Cache = cat.under100.map(normalizeApiProduct)
-                .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-            if (under25Cache.length) return under25Cache;
-        }
-        try {
-            const raw = await liveFetch('q=' + encodeURIComponent('jewelry accessories stickers gadgets') + '&sort=priceAsc');
-            under25Cache = raw.map((p, i) => normalizeApiProduct(p, i))
-                .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-        } catch (e) {
-            console.warn('Under-K100 fetch failed:', e);
-        }
-        return under25Cache;
-    }
-
-    // --- pagination state (added: "Show more" + infinite scroll for search & deals) ---
-    let currentQuery = '', currentUnder25 = false, currentPage = 1, hasMore = false, loadingMore = false, liveMode = false;
-    const BUDGET_QUERY = 'jewelry accessories stickers gadgets';
-    async function fetchBudgetPage(page) {
-        const raw = await liveFetch('q=' + encodeURIComponent(BUDGET_QUERY) + '&sort=priceAsc&page=' + (page || 1));
-        return raw || [];
-    }
-
-    async function loadProducts(query, under25Only) {
-        currentQuery = query || '';
-        currentUnder25 = !!under25Only;
-        currentPage = 1; hasMore = false; loadingMore = false; liveMode = false;
-        hideLoadMore();
-        setStatus(true, under25Only ? 'Finding deals under K' + CONFIG.BUDGET_MAX_ZMW + '...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
-        let list = null;
-        const cat = await loadCatalog();
-
-        if (under25Only) {
-            // Live price-ascending pages so "Show more" keeps loading cheaper items.
-            if (CONFIG.API_BASE_URL) {
-                const raw = await fetchBudgetPage(1);
-                if (raw && raw.length) {
-                    list = raw.map((p, i) => normalizeApiProduct(p, i))
-                        .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-                    liveMode = true; hasMore = raw.length >= 15;
-                }
-            }
-            if (!list || !list.length) list = await fetchUnder25();          // catalog/demo fallback (finite)
-        } else if (!query && cat && cat.home && cat.home.length) {
-            list = cat.home.map(normalizeApiProduct);                        // home from catalog (0 API calls, curated set)
-        } else if (query && cat && cat.categories && cat.categories[query] && cat.categories[query].length) {
-            list = cat.categories[query].map(normalizeApiProduct);           // category from catalog (0 API calls, curated set)
-        } else if (CONFIG.API_BASE_URL) {
-            try {
-                const raw = await liveFetch('q=' + encodeURIComponent(query || 'best sellers') + '&page=1');
-                if (raw.length) { list = raw.map(normalizeApiProduct); liveMode = true; hasMore = raw.length >= 15; }
-            } catch (e) {
-                console.warn('API unavailable, falling back to demo products:', e);
-            }
-        }
-
-        // A transient upstream error should not empty the shop - reuse the last good catalogue.
-        if (!list || !list.length) {
-            const cached = readCatalogCache(currentQuery);
-            if (cached && cached.length) { list = cached; liveMode = false; hasMore = false; }
-        }
-
-        if (!list || !list.length) {
-            // Demo fallback: branded placeholders, never random photos
-            let demo = query
-                ? DEMO_PRODUCTS.filter(p => p.title.toLowerCase().includes(query.toLowerCase().split(' ')[0]))
-                : DEMO_PRODUCTS;
-            if (!demo.length) demo = DEMO_PRODUCTS;
-            list = demo.map(normalizeDemo);
-            if (under25Only) list = list.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-        }
-
-        writeCatalogCache(currentQuery, list);
-
-        products = list;
-        renderProducts(query, under25Only);
-        setStatus(false);
-        updateLoadMore();
-    }
-
-    function productCardHtml(p) {
-        const price = p.priceZmw;
-        const oldPrice = p.oldZmw || 0;
-        const discount = oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
-        return `
-            <div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition cursor-pointer group fade-in" onclick="openProduct('${p.id}')">
-                <div class="relative">
-                    <img src="${p.img}" alt="" loading="lazy" class="w-full aspect-square object-cover bg-slate-100 group-hover:scale-105 transition duration-300"
-                         onerror="this.onerror=null;this.src='${phData(p.title)}'">
-                    ${discount ? `<span class="absolute top-2 left-2 bg-zam-red text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-${discount}%</span>` : ''}
-                </div>
-                <div class="p-2.5">
-                    <p class="text-[11px] sm:text-xs text-slate-600 leading-snug line-clamp-2 h-8">${p.title}</p>
-                    <div class="mt-2 flex items-baseline gap-1.5 flex-wrap">
-                        <span class="font-extrabold text-zam-green">${fmtK(price)}</span>
-                        ${oldPrice > price ? `<span class="text-[11px] text-slate-400 line-through">${fmtK(oldPrice)}</span>` : ''}
-                    </div>
-                    <div class="mt-1 flex items-center justify-between text-[11px] text-slate-400">
-                        <span><i class="fas fa-star text-yellow-400"></i> ${Number(p.rating).toFixed(1)}</span>
-                        ${p.orders ? `<span>${p.orders.toLocaleString()} sold</span>` : ''}
-                    </div>
-                    <button onclick="event.stopPropagation(); addToCart('${p.id}', 1)"
-                        class="mt-2 w-full bg-zed-50 text-zed-700 hover:bg-zed-500 hover:text-white text-[11px] font-bold py-1.5 rounded-lg transition">
-                        <i class="fas fa-cart-plus mr-1"></i>Add to cart
-                    </button>
-                </div>
-            </div>`;
-    }
-
-    function renderProducts(query, under25Only) {
-        $('resultsTitle').textContent = under25Only ? `💸 Everything under K${CONFIG.BUDGET_MAX_ZMW}`
-            : (query ? `Results for "${query}"` : '🔥 Trending in Zambia');
-        $('resultsCount').textContent = products.length + ' products';
-        renderUnder25Strip(!query && !under25Only);
-        $('productGrid').innerHTML = products.map(productCardHtml).join('');
-        window.scrollTo({ top: (query || under25Only) ? $('heroSection').offsetHeight : 0, behavior: 'smooth' });
-    }
-
-    // Appends the next page without rebuilding the grid (keeps scroll position).
-    function appendProducts(items) {
-        $('resultsCount').textContent = products.length + ' products';
-        $('productGrid').insertAdjacentHTML('beforeend', items.map(productCardHtml).join(''));
-    }
-
-    async function loadMoreProducts() {
-        if (!liveMode || loadingMore || !hasMore) return;
-        loadingMore = true;
-        const btn = $('loadMoreBtn');
-        if (btn) { btn.classList.add('opacity-60'); btn.textContent = 'Loading more…'; }
-        let mapped = [], rawLen = 0;
-        try {
-            if (currentUnder25) {
-                const raw = await fetchBudgetPage(currentPage + 1);
-                rawLen = raw.length;
-                mapped = raw.map((p, i) => normalizeApiProduct(p, i))
-                    .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-            } else {
-                const raw = await liveFetch('q=' + encodeURIComponent(currentQuery || 'best sellers') + '&page=' + (currentPage + 1));
-                rawLen = raw.length;
-                mapped = raw.map(normalizeApiProduct);
-            }
-        } catch (e) { console.warn('Load more failed:', e); rawLen = 0; }
-        const fresh = mapped.filter(p => !products.find(x => x.id === p.id));
-        if (fresh.length) {
-            currentPage += 1;
-            products = products.concat(fresh);
-            appendProducts(fresh);
-            hasMore = rawLen >= 15;
-        } else {
-            hasMore = false;
-        }
-        loadingMore = false;
-        if (btn) { btn.classList.remove('opacity-60'); btn.innerHTML = '<i class="fas fa-plus mr-1"></i> Show more products'; }
-        updateLoadMore();
-    }
-
-    function updateLoadMore() { const w = $('loadMoreWrap'); if (w) w.classList.toggle('hidden', !(liveMode && hasMore)); }
-    function hideLoadMore() { const w = $('loadMoreWrap'); if (w) w.classList.add('hidden'); }
-
-    async function renderUnder25Strip(show) {
-        const strip = $('under25Strip');
-        if (!show) { strip.classList.add('hidden'); return; }
-
-        let cheap = products.filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-        if (cheap.length < 4) {
-            // The home list rarely has enough budget items — fetch the real
-            // price-sorted budget list from the API (demo items as last resort)
-            const fetched = await fetchUnder25();
-            cheap = (fetched && fetched.length)
-                ? fetched
-                : DEMO_PRODUCTS.map(normalizeDemo).filter(p => p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
-            // Register them in `products` so clicks and add-to-cart still work
-            cheap.forEach(p => { if (!products.find(x => x.id === p.id)) products.push(p); });
-        }
-        if (!cheap.length) { strip.classList.add('hidden'); return; }
-
-        $('under25Row').innerHTML = cheap.slice(0, 10).map(p => `
-            <div class="shrink-0 w-32 sm:w-36 bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer" onclick="openProduct('${p.id}')">
-                <img src="${p.img}" alt="" loading="lazy" class="w-full aspect-square object-cover bg-slate-100"
-                     onerror="this.onerror=null;this.src='${phData(p.title)}'">
-                <div class="p-2">
-                    <p class="text-[11px] text-slate-600 leading-snug line-clamp-2 h-7">${p.title}</p>
-                    <p class="font-extrabold text-sm text-zam-green mt-1">${fmtK(p.priceZmw)}</p>
-                </div>
-            </div>`).join('');
-        strip.classList.remove('hidden');
-    }
-
-    /* ================================================================
-       SEARCH
-       ================================================================ */
-    function showUnder25() {
-        $('searchInput').value = '';
-        loadProducts('', true);
-    }
-    function doSearch() {
-        const q = $('searchInput').value.trim();
-        loadProducts(q);
-    }
-    function searchCategory(q) {
-        $('searchInput').value = q;
-        loadProducts(q);
-    }
-    function goHome() {
-        $('searchInput').value = '';
-        loadProducts('');
-    }
-
-    /* ================================================================
-       PRODUCT MODAL
-       ================================================================ */
-    function openProduct(id) {
-        currentProduct = products.find(p => p.id === id);
-        if (!currentProduct) return;
-        pmQtyCount = 1;
-        $('pmQtyVal').textContent = 1;
-        $('pmImage').src = currentProduct.img;
-        $('pmTitle').textContent = currentProduct.title;
-        const stars = Math.round(currentProduct.rating);
-        $('pmRating').innerHTML = '★'.repeat(stars) + '<span class="text-slate-300">' + '★'.repeat(5 - stars) + '</span>' +
-            ` <span class="text-slate-400 text-xs">${Number(currentProduct.rating).toFixed(1)}</span>`;
-        $('pmPrice').textContent = fmtK(currentProduct.priceZmw);
-        $('pmOldPrice').textContent = currentProduct.oldZmw ? fmtK(currentProduct.oldZmw) : '';
-        $('pmOrders').textContent = currentProduct.orders ? currentProduct.orders.toLocaleString() + ' orders shipped' : '';
-        $('pmAddBtn').onclick = () => { addToCart(currentProduct.id, pmQtyCount); closeProduct(); };
-        $('productModal').classList.remove('hidden');
-        $('productModal').classList.add('flex');
-    }
-    function closeProduct() {
-        $('productModal').classList.add('hidden');
-        $('productModal').classList.remove('flex');
-    }
-    function pmQty(d) {
-        pmQtyCount = Math.max(1, Math.min(20, pmQtyCount + d));
-        $('pmQtyVal').textContent = pmQtyCount;
-    }
-
-    /* ================================================================
-       CART
-       ================================================================ */
-    function saveCart() {
-        localStorage.setItem('zedmall_cart', JSON.stringify(cart));
-        renderCart();
-    }
-
-    function addToCart(id, qty) {
-        const p = products.find(x => x.id === id);
-        if (!p) return;
-        const existing = cart.find(x => x.id === id);
-        if (existing) existing.qty += qty;
-        else cart.push({ id: p.id, title: p.title, priceZmw: p.priceZmw, img: p.img, qty });
-        saveCart();
-        showToast('✅ Added to cart');
-    }
-
-    function changeQty(id, d) {
-        const item = cart.find(x => x.id === id);
-        if (!item) return;
-        item.qty += d;
-        if (item.qty <= 0) cart = cart.filter(x => x.id !== id);
-        saveCart();
-    }
-
-    function removeFromCart(id) {
-        cart = cart.filter(x => x.id !== id);
-        saveCart();
-    }
-
-    // Older saved carts stored priceUsd; convert on the fly so they still work
-    const itemZmw = i => i.priceZmw != null ? i.priceZmw : usdToKwacha(i.priceUsd || 0);
-
-    function cartTotals() {
-        const subtotal = cart.reduce((s, i) => s + itemZmw(i) * i.qty, 0);
-        const fees = subtotal * CONFIG.SERVICE_FEE_PERCENT / 100;
-        return { subtotal, fees, total: subtotal + fees };
-    }
-
-    function renderCart() {
-        const count = cart.reduce((s, i) => s + i.qty, 0);
-        $('cartCount').textContent = count;
-        $('cartCount').classList.toggle('hidden', count === 0);
-
-        if (!cart.length) {
-            $('cartItems').innerHTML = `<div class="text-center text-slate-400 py-16">
-                <i class="fas fa-cart-shopping text-4xl mb-3"></i><p class="text-sm">Your cart is empty</p></div>`;
-        } else {
-            $('cartItems').innerHTML = cart.map(i => `
-            <div class="flex gap-3 bg-slate-50 rounded-xl p-3">
-                <img src="${i.img}" class="w-16 h-16 rounded-lg object-cover bg-slate-200" onerror="this.onerror=null;this.src='${phData(i.title)}'">
-                <div class="flex-1 min-w-0">
-                    <p class="text-xs text-slate-600 line-clamp-2">${i.title}</p>
-                    <div class="flex items-center justify-between mt-2">
-                        <span class="font-bold text-sm text-zam-green">${fmtK(itemZmw(i) * i.qty)}</span>
-                        <div class="flex items-center gap-2">
-                            <button onclick="changeQty('${i.id}',-1)" class="w-6 h-6 bg-white border rounded-md text-slate-500 hover:text-zed-600 text-sm">−</button>
-                            <span class="text-sm font-bold w-4 text-center">${i.qty}</span>
-                            <button onclick="changeQty('${i.id}',1)" class="w-6 h-6 bg-white border rounded-md text-slate-500 hover:text-zed-600 text-sm">+</button>
-                            <button onclick="removeFromCart('${i.id}')" class="text-slate-300 hover:text-zam-red ml-1"><i class="fas fa-trash-can text-xs"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>`).join('');
-        }
-
-        const t = cartTotals();
-        $('cartSubtotal').textContent = fmtK(t.subtotal);
-        $('cartFees').textContent = fmtK(t.fees);
-        $('cartTotal').textContent = fmtK(t.total);
-        $('checkoutBtn').disabled = !cart.length;
-    }
-
-    function toggleCart(open) {
-        $('cartOverlay').classList.toggle('hidden', !open);
-        $('cartDrawer').classList.toggle('translate-x-full', !open);
-        if (open) renderCart();
-    }
-
-    /* ================================================================
-       CHECKOUT — Mobile Money flow
-       (simulation for now; wire to MoMo/Airtel APIs or Flutterwave/Lenco
-        collection API in the backend when ready)
-       ================================================================ */
-    function openCheckout() {
-        if (!cart.length) return;
-        toggleCart(false);
-        selectedProvider = null;
-        document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('selected'));
-        $('payError').classList.add('hidden');
-        $('payTotal').textContent = fmtK(cartTotals().total);
-        $('payStep1').classList.remove('hidden');
-        $('payStep2').classList.add('hidden');
-        $('payStep3').classList.add('hidden');
-        $('checkoutModal').classList.remove('hidden');
-        $('checkoutModal').classList.add('flex');
-    }
-
-    function closeCheckout() {
-        $('checkoutModal').classList.add('hidden');
-        $('checkoutModal').classList.remove('flex');
-    }
-
-    function selectProvider(p, btn) {
-        selectedProvider = p;
-        document.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-    }
-
-    // Attempts a real mobile money charge through the backend (Flutterwave).
-    // Returns true on confirmed payment, 'failed' on decline/timeout, or
-    // null when the backend runs in simulated mode / is unreachable.
-    async function tryRealPayment(order) {
-        if (!CONFIG.API_BASE_URL) return null;
-        const base = CONFIG.API_BASE_URL.replace(/\/$/, '');
-        try {
-            const res = await fetch(base + '/api/pay', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    phone: order.phone,
-                    network: order.provider,
-                    amount: Math.round(order.total * 100) / 100,
-                    name: order.name
-                }),
-                signal: AbortSignal.timeout(30000)
-            });
-            const data = await res.json();
-            if (!res.ok || data.simulated || !data.tx_ref) return null;
-
-            // Poll for up to ~2 minutes while the customer approves on their phone
-            for (let i = 0; i < 24; i++) {
-                await new Promise(r => setTimeout(r, 5000));
-                try {
-                    const s = await fetch(base + '/api/pay/status?tx_ref=' + encodeURIComponent(data.tx_ref),
-                        { signal: AbortSignal.timeout(15000) }).then(r => r.json());
-                    if (s.status === 'successful') return true;
-                    if (s.status === 'failed' || s.status === 'cancelled') return 'failed';
-                } catch (e) { /* transient poll error - keep waiting */ }
-            }
-            return 'failed';
-        } catch (e) {
-            console.warn('Real payment unavailable, using simulation:', e);
-            return null;
-        }
-    }
-
-    async function submitPayment() {
-        const phone = $('payPhone').value.trim();
-        const name = $('payName').value.trim();
-        const address = $('payAddress').value.trim();
-        const err = $('payError');
-
-        if (!selectedProvider) { err.textContent = 'Please choose your mobile network.'; err.classList.remove('hidden'); return; }
-        if (!/^(9|7)\d{8}$/.test(phone)) { err.textContent = 'Enter a valid Zambian number, e.g. 971234567.'; err.classList.remove('hidden'); return; }
-        if (name.length < 3) { err.textContent = 'Please enter your full name.'; err.classList.remove('hidden'); return; }
-        if (address.length < 5) { err.textContent = 'Please enter your delivery address.'; err.classList.remove('hidden'); return; }
-        err.classList.add('hidden');
-
-        const t = cartTotals();
-        const order = { provider: selectedProvider, phone, name, address, total: t.total };
-        $('pay2Total').textContent = fmtK(t.total);
-        $('pay2Phone').textContent = '+260 ' + phone;
-        $('payStep1').classList.add('hidden');
-        $('payStep2').classList.remove('hidden');
-
-        const outcome = await tryRealPayment(order);
-
-        if (outcome === 'failed') {
-            $('payStep2').classList.add('hidden');
-            $('payStep1').classList.remove('hidden');
-            err.textContent = 'The payment was not completed. Please check your phone and try again.';
-            err.classList.remove('hidden');
-            return;
-        }
-
-        // Simulated mode keeps a short "check your phone" pause for realism
-        if (outcome !== true) await new Promise(r => setTimeout(r, 4000));
-
-        const ref = 'ZM' + String(Math.floor(100000 + Math.random() * 900000));
-        $('orderRef').textContent = '#' + ref;
-        $('payStep2').classList.add('hidden');
-        $('payStep3').classList.remove('hidden');
-        saveOrder(ref, order);
-    }
-
-    function saveOrder(ref, o) {
-        // Capture every order two ways so nothing is ever lost:
-        //  1) Firestore (shared "Zed Zambia" project) -> admin dashboard
-        //  2) email to ORDER_EMAIL via FormSubmit, with a direct AliExpress link per item
-        const items = cart.map(i => ({
-            id: String(i.id), title: i.title, qty: i.qty,
-            priceZmw: Math.round(itemZmw(i) * i.qty * 100) / 100,
-            aliLink: aliLink(i.id) || ''
-        }));
-        const order = {
-            store: CONFIG.STORE_ID, storeName: CONFIG.STORE_NAME, ref,
-            name: o.name, phone: o.phone ? '260' + o.phone : '', provider: o.provider || o.method || '',
-            address: o.address, items, total: Math.round(o.total * 100) / 100,
-            status: 'new'
-        };
-        // 1) Firestore
-        try {
-            if (CONFIG.FIREBASE && CONFIG.FIREBASE.apiKey && window.firebase) {
-                if (!firebase.apps.length) firebase.initializeApp(CONFIG.FIREBASE);
-                firebase.firestore().collection('orders').add(
-                    Object.assign({}, order, { createdAt: firebase.firestore.FieldValue.serverTimestamp() })
-                ).catch(e => console.warn('Order save failed:', e));
-            }
-        } catch (e) { console.warn('Firestore unavailable:', e); }
-        // 2) Email via FormSubmit (no backend credentials needed)
-        if (CONFIG.ORDER_EMAIL) {
-            const itemText = items.map(it => `${it.qty}x ${it.title} — ${fmtK(it.priceZmw)}${it.aliLink ? '  ' + it.aliLink : ''}`).join('\n');
-            fetch('https://formsubmit.co/ajax/' + encodeURIComponent(CONFIG.ORDER_EMAIL), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                body: JSON.stringify({
-                    _subject: `New ${CONFIG.STORE_NAME} order ${ref}`,
-                    _template: 'table',
-                    Store: CONFIG.STORE_NAME, Order: ref, Customer: o.name,
-                    Phone: o.phone ? '260' + o.phone : '', Network: (o.provider || o.method || '').toUpperCase(),
-                    Address: o.address, Total: fmtK(o.total), Items: itemText
-                })
-            }).catch(e => console.warn('Email failed:', e));
-        }
-    }
-
-    function finishOrder() {
-        cart = [];
-        saveCart();
-        closeCheckout();
-        showToast('🎉 Thank you for shopping with ZedMall!');
-    }
-
-    /* ================================================================
-       DOWNLOAD APP (PWA install) — Android gets the native prompt when
-       available; otherwise arrow-guided instructions per platform.
-       ================================================================ */
-    let deferredInstallPrompt = null;
-    const IS_IOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-    const IS_MOBILE = /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-    const IS_INSTALLED = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-    const INSTALL_SNOOZE_MS = 3 * 24 * 60 * 60 * 1000;
-
-    if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
-
-    window.addEventListener('beforeinstallprompt', e => {
-        e.preventDefault();
-        deferredInstallPrompt = e;
-        showInstallBanner();
-    });
-
-    function showInstallBanner() {
-        if (IS_INSTALLED || !IS_MOBILE) return;
-        const snoozedAt = parseInt(localStorage.getItem('zedmall_install_snooze') || '0');
-        if (Date.now() - snoozedAt < INSTALL_SNOOZE_MS) return;
-        $('installBanner').classList.remove('hidden');
-        document.body.classList.add('has-install-banner');
-    }
-
-    function hideInstallBanner() {
-        $('installBanner').classList.add('hidden');
-        document.body.classList.remove('has-install-banner');
-    }
-
-    function dismissInstall() {
-        localStorage.setItem('zedmall_install_snooze', String(Date.now()));
-        hideInstallBanner();
-    }
-
-    async function installApp() {
-        if (deferredInstallPrompt) {
-            deferredInstallPrompt.prompt();
-            await deferredInstallPrompt.userChoice;
-            deferredInstallPrompt = null;
-            hideInstallBanner();
-            return;
-        }
-        // No native prompt (iPhone always, some Android browsers) — show
-        // the arrow-guided instructions for this platform
-        $('guideIos').classList.toggle('hidden', !IS_IOS);
-        $('guideAndroid').classList.toggle('hidden', IS_IOS);
-        $('installGuide').classList.remove('hidden');
-    }
-
-    function closeInstallGuide() {
-        $('installGuide').classList.add('hidden');
-    }
-
-    // iPhone never fires beforeinstallprompt — offer the banner directly
-    if (IS_MOBILE && !IS_INSTALLED) setTimeout(showInstallBanner, 3000);
-
-    /* ================================================================
-       INIT
-       ================================================================ */
-    renderCart();
-    // Infinite scroll: auto-load the next page when the sentinel nears the viewport
-    if ('IntersectionObserver' in window && $('loadMoreSentinel')) {
-        new IntersectionObserver((entries) => {
-            if (entries.some(e => e.isIntersecting)) loadMoreProducts();
-        }, { rootMargin: '600px' }).observe($('loadMoreSentinel'));
-    }
-    loadProducts('');
-    </script>
-<!--reljob-legal-injected-->
-<div style="font-family:system-ui,sans-serif;font-size:12.5px;color:#8a8f99;text-align:center;padding:16px 12px;background:#0f1116;border-top:1px solid #23262e"><a href="terms.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Terms</a><a href="privacy.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Privacy</a><a href="refunds.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Refunds</a><a href="accessibility.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Accessibility</a><a href="mailto:office@orizisgroup.com" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Contact</a><div style="margin-top:6px;color:#5c616b">ORIZIS TECHNOLOGIES LIMITED &middot; TPIN 2002580846 &middot; office@orizisgroup.com</div></div>
+    <div class="contact-place">בית אל, ישראל · פעילות בכל הארץ</div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-brand">אבי קהתי — ייעוץ נדל"ן פרטי</div>
+  <div>רישיון תיווך מס' 31924998 · © <span id="year"></span> כל הזכויות שמורות · KEHATINADLAN.COM</div>
+  <a class="f-enter" href="area/">· כניסה למערכת ·</a>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.getElementById("club-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  var name = document.getElementById("cf-name").value.trim();
+  var phone = document.getElementById("cf-phone").value.trim();
+  var about = document.getElementById("cf-about").value.trim();
+  var msg = "שלום אבי, אבקש להצטרף למעגל.\nשם: " + name + "\nטלפון: " + phone + (about ? "\nעליי: " + about : "");
+  window.open("https://wa.me/972528119445?text=" + encodeURIComponent(msg), "_blank");
+});
+
+var io = new IntersectionObserver(function (entries) {
+  entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+}, { threshold: 0.15 });
+document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+</script>
 </body>
 </html>
