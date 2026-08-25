@@ -5,18 +5,19 @@ var KehatiAuth = (function () {
   var USER = "YONI";
   var PASS = "1234";
 
+  /* ההתחברות נשמרת במכשיר (localStorage) כדי שלא תידרש כניסה מחדש בכל טאב */
   function isAuthed() {
-    try { return sessionStorage.getItem(KEY) === "1"; } catch (e) { return false; }
+    try { return localStorage.getItem(KEY) === "1" || sessionStorage.getItem(KEY) === "1"; } catch (e) { return false; }
   }
   function login(user, pass) {
     if (String(user).trim().toUpperCase() === USER && String(pass) === PASS) {
-      try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+      try { localStorage.setItem(KEY, "1"); } catch (e) {}
       return true;
     }
     return false;
   }
   function logout() {
-    try { sessionStorage.removeItem(KEY); } catch (e) {}
+    try { localStorage.removeItem(KEY); sessionStorage.removeItem(KEY); } catch (e) {}
   }
   /* הפניה לעמוד הכניסה אם אין הרשאה. loginPath יחסי לעמוד הנוכחי */
   function guard(loginPath) {

@@ -14,7 +14,7 @@
 </head>
 <body data-form="buy-rent">
 <script src="../area/auth.js"></script>
-<script>KehatiAuth.guard("../area/");</script>
+<script>if (!/^#(env|signed)=/.test(location.hash)) KehatiAuth.guard("../area/");</script>
 
 <header class="site-header no-print">
   <a class="brand" href="../area/">
@@ -27,6 +27,7 @@
 <div class="toolbar no-print">
   <button type="button" id="print-btn" class="btn btn-primary">🖨️ הדפסה / שמירה כ-PDF</button>
   <button type="button" id="edit-toggle" class="btn">✏️ <span class="btn-label">עריכת סעיפים</span></button>
+  <button type="button" id="send-btn" class="btn">📨 שליחה ללקוח לחתימה</button>
   <button type="button" id="share-btn" class="btn">🔗 שיתוף</button>
   <button type="button" id="clear-btn" class="btn btn-danger-text">🗑️ ניקוי טופס</button>
   <span class="toolbar-spacer"></span>

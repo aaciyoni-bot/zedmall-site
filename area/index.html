@@ -108,6 +108,27 @@ body.mode-dash .dash { display: block; }
 .upload-card { border-style: dashed; border-color: var(--gold); background: rgba(201,164,92,.06); }
 
 .dash-note { margin-top: 44px; font-size: 12.5px; color: #5f6f80; border-top: 1px solid rgba(201,164,92,.12); padding-top: 16px; }
+
+.env-list { display: grid; gap: 8px; }
+.env-item {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border: 1px solid rgba(201,164,92,.18); border-radius: 6px; padding: 10px 16px;
+  font-size: 14px;
+}
+.env-item.received-item { border-right: 4px solid #7fc7a5; }
+.env-item .ei-name { font-weight: 500; }
+.env-item .ei-title { color: var(--mist); font-size: 13px; flex: 1; min-width: 120px; }
+.env-item .ei-date { color: var(--mist); font-size: 12.5px; white-space: nowrap; }
+.env-item a.ei-open {
+  border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px;
+  font-size: 12.5px; text-decoration: none; color: var(--bone); transition: all .2s;
+}
+.env-item a.ei-open:hover { border-color: var(--gold); color: var(--gold); }
+.env-item button.ei-del {
+  border: 0; background: none; color: #5f6f80; font-size: 12.5px; cursor: pointer; text-decoration: underline;
+}
+.env-item button.ei-del:hover { color: #e08d7a; }
+.env-empty { color: #5f6f80; font-size: 13px; }
 </style>
 </head>
 <body class="mode-login">
@@ -189,6 +210,12 @@ body.mode-dash .dash { display: block; }
       </a>
     </div>
 
+    <div class="dash-sec-title">📥 מסמכים חתומים שהתקבלו מלקוחות</div>
+    <div class="env-list" id="inbox-list"><span class="env-empty">כשלקוח יחתום וישלח חזרה — המסמך יופיע כאן אוטומטית ברגע שתפתחו את הקישור שלו.</span></div>
+
+    <div class="dash-sec-title">📨 מסמכים שנשלחו ללקוחות לחתימה</div>
+    <div class="env-list" id="sent-list"><span class="env-empty">עדיין לא נשלחו מסמכים. פתחו טופס, מלאו את הפרטים ולחצו "שליחה ללקוח לחתימה".</span></div>
+
     <p class="dash-note">
       שימו לב: האזור האישי והטפסים פועלים כולם בדפדפן בלבד. שום מידע — פרטי לקוחות, חתימות או מסמכים — אינו נשלח או נשמר בשרת.
       מומלץ להדפיס או לשמור PDF של כל מסמך חתום מיד עם סיומו.
@@ -225,6 +252,54 @@ body.mode-dash .dash { display: block; }
     });
   }
   markDrafts();
+
+  /* רשימות מסמכים שנשלחו / התקבלו (נשמרות בדפדפן זה) */
+  function fmtDate(ts) {
+    var d = new Date(ts), p = function (n) { return (n < 10 ? "0" : "") + n; };
+    return p(d.getDate()) + "/" + p(d.getMonth() + 1) + "/" + d.getFullYear() + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+  function renderEnvList(storageKey, elId, receivedStyle) {
+    var el = document.getElementById(elId);
+    var list;
+    try { list = JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch (e) { list = []; }
+    if (!list.length) {
+      if (el.querySelector(".env-item")) el.innerHTML = '<span class="env-empty">הרשימה ריקה.</span>';
+      return;
+    }
+    el.innerHTML = "";
+    list.forEach(function (rec, i) {
+      var row = document.createElement("div");
+      row.className = "env-item" + (receivedStyle ? " received-item" : "");
+      var name = document.createElement("span");
+      name.className = "ei-name";
+      name.textContent = (receivedStyle ? "✅ " : "✉️ ") + rec.name;
+      var title = document.createElement("span");
+      title.className = "ei-title";
+      title.textContent = rec.title;
+      var date = document.createElement("span");
+      date.className = "ei-date";
+      date.textContent = fmtDate(rec.at);
+      var open = document.createElement("a");
+      open.className = "ei-open";
+      open.href = rec.url;
+      open.textContent = receivedStyle ? "פתיחת המסמך החתום" : "פתיחת עותק";
+      var del = document.createElement("button");
+      del.className = "ei-del";
+      del.type = "button";
+      del.textContent = "הסרה";
+      del.addEventListener("click", function () {
+        if (!confirm("להסיר את הרשומה מהרשימה? (המסמך עצמו לא יימחק אם הקישור שמור אצלכם)")) return;
+        list.splice(i, 1);
+        try { localStorage.setItem(storageKey, JSON.stringify(list)); } catch (e) {}
+        renderEnvList(storageKey, elId, receivedStyle);
+      });
+      row.appendChild(name); row.appendChild(title); row.appendChild(date);
+      row.appendChild(open); row.appendChild(del);
+      el.appendChild(row);
+    });
+  }
+  renderEnvList("kehati-inbox", "inbox-list", true);
+  renderEnvList("kehati-sent", "sent-list", false);
 })();
 </script>
 </body>

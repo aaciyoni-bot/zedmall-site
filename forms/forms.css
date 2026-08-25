@@ -522,6 +522,64 @@ body.editing .clause.clause-hidden .clause-toggle { color: var(--ok); border-col
   padding-top: 10px;
 }
 
+/* ===== חתימה מרחוק (מעטפה) ===== */
+.env-banner {
+  max-width: 860px;
+  margin: 18px auto -8px;
+  background: #f7efdd;
+  border: 1px solid #e5d5ae;
+  border-right: 5px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14.5px;
+  color: var(--accent-dark);
+}
+.env-banner.received {
+  background: #e9f4ee;
+  border-color: #bfe0cd;
+  border-right-color: var(--ok);
+  color: #24634a;
+}
+
+body.env-client #edit-toggle,
+body.env-client #clear-btn,
+body.env-client #share-btn,
+body.env-client #send-btn,
+body.env-client .clause-toggle,
+body.env-client .back-link,
+body.env-client .prop-remove,
+body.env-client .add-row-btn { display: none !important; }
+body.env-client .brand { pointer-events: none; }
+
+.approve-btn {
+  background: var(--ok) !important;
+  border-color: var(--ok) !important;
+  font-size: 15px !important;
+}
+.approve-btn:hover { filter: brightness(1.08); }
+
+.env-done {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(28, 39, 51, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.env-done-card {
+  background: #fff;
+  border-radius: 14px;
+  border-top: 5px solid var(--ok);
+  max-width: 440px;
+  padding: 34px 30px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.env-done-card h2 { font-family: "Frank Ruhl Libre", serif; color: var(--navy-dark); margin: 6px 0 10px; }
+.env-done-card p { color: var(--muted); font-size: 14.5px; margin-bottom: 20px; }
+
 /* ===== טוסט ===== */
 .toast {
   position: fixed;
