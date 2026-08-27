@@ -485,6 +485,9 @@ footer{background:var(--surface);border-top:1px solid var(--line);padding:44px 0
   .state-kpis div{text-align:left}
   .footer-in{grid-template-columns:1fr}
   .hosp-list,.state-grid{grid-template-columns:1fr}
+  .filters{padding:12px}
+  .filters select,.switch{flex:1 1 44%;min-width:0}
+  .filters input[type=search]{flex:1 1 100%;min-width:0}
   .drawer-box{width:100%}
   .section{padding:52px 0}
 }

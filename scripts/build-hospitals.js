@@ -15,7 +15,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const OUT_DIR = path.join(__dirname, '..', 'byoutoyou', 'data');
+const OUT_DIR = process.env.HOSPITALS_OUT || path.join(__dirname, '..', 'byoutoyou', 'public', 'data');
 const STATES_DIR = path.join(OUT_DIR, 'states');
 const MIN_EXPECTED = 4000; // fail loudly rather than publish a half dataset
 

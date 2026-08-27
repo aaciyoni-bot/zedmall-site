@@ -1,0 +1,13 @@
+{
+  "name": "byoutoyou",
+  "private": true,
+  "version": "1.0.0",
+  "description": "byoutoyou — bedside beauty and grooming visits for hospital patients across the United States.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "dependencies": {
+    "zipcodes": "^8.0.0"
+  }
+}
