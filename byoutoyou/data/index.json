@@ -1,0 +1,1933 @@
+{
+ "generated": "2026-08-27",
+ "source": "Centers for Medicare & Medicaid Services — Hospital General Information",
+ "sourceUrl": "https://data.cms.gov/provider-data/dataset/xubh-q36u",
+ "total": 5419,
+ "stateCount": 51,
+ "states": [
+  {
+   "code": "AL",
+   "name": "Alabama",
+   "slug": "alabama",
+   "count": 99,
+   "cities": 70,
+   "emergency": 90,
+   "topRated": 11,
+   "topCities": [
+    {
+     "city": "Birmingham",
+     "n": 9
+    },
+    {
+     "city": "Mobile",
+     "n": 6
+    },
+    {
+     "city": "Montgomery",
+     "n": 4
+    },
+    {
+     "city": "Tuscaloosa",
+     "n": 4
+    },
+    {
+     "city": "Gadsden",
+     "n": 3
+    },
+    {
+     "city": "Huntsville",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "AK",
+   "name": "Alaska",
+   "slug": "alaska",
+   "count": 25,
+   "cities": 21,
+   "emergency": 24,
+   "topRated": 3,
+   "topCities": [
+    {
+     "city": "Anchorage",
+     "n": 5
+    },
+    {
+     "city": "Barrow",
+     "n": 1
+    },
+    {
+     "city": "Bethel",
+     "n": 1
+    },
+    {
+     "city": "Cordova",
+     "n": 1
+    },
+    {
+     "city": "Dillingham",
+     "n": 1
+    },
+    {
+     "city": "Fairbanks",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "AS",
+   "name": "American Samoa",
+   "slug": "american-samoa",
+   "count": 1,
+   "cities": 1,
+   "emergency": 1,
+   "topRated": 0,
+   "topCities": [
+    {
+     "city": "Pago Pago",
+     "n": 1
+    }
+   ],
+   "territory": true
+  },
+  {
+   "code": "AZ",
+   "name": "Arizona",
+   "slug": "arizona",
+   "count": 108,
+   "cities": 53,
+   "emergency": 75,
+   "topRated": 18,
+   "topCities": [
+    {
+     "city": "Phoenix",
+     "n": 22
+    },
+    {
+     "city": "Tucson",
+     "n": 10
+    },
+    {
+     "city": "Mesa",
+     "n": 7
+    },
+    {
+     "city": "Scottsdale",
+     "n": 5
+    },
+    {
+     "city": "Prescott",
+     "n": 4
+    },
+    {
+     "city": "Chandler",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "AR",
+   "name": "Arkansas",
+   "slug": "arkansas",
+   "count": 90,
+   "cities": 70,
+   "emergency": 81,
+   "topRated": 11,
+   "topCities": [
+    {
+     "city": "Little Rock",
+     "n": 7
+    },
+    {
+     "city": "Fayetteville",
+     "n": 4
+    },
+    {
+     "city": "Conway",
+     "n": 3
+    },
+    {
+     "city": "Hot Springs",
+     "n": 3
+    },
+    {
+     "city": "Benton",
+     "n": 2
+    },
+    {
+     "city": "Fort Smith",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "CA",
+   "name": "California",
+   "slug": "california",
+   "count": 377,
+   "cities": 234,
+   "emergency": 284,
+   "topRated": 116,
+   "topCities": [
+    {
+     "city": "Los Angeles",
+     "n": 19
+    },
+    {
+     "city": "San Francisco",
+     "n": 13
+    },
+    {
+     "city": "Sacramento",
+     "n": 10
+    },
+    {
+     "city": "San Diego",
+     "n": 9
+    },
+    {
+     "city": "Bakersfield",
+     "n": 6
+    },
+    {
+     "city": "Long Beach",
+     "n": 6
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "CO",
+   "name": "Colorado",
+   "slug": "colorado",
+   "count": 96,
+   "cities": 67,
+   "emergency": 88,
+   "topRated": 36,
+   "topCities": [
+    {
+     "city": "Colorado Springs",
+     "n": 7
+    },
+    {
+     "city": "Denver",
+     "n": 7
+    },
+    {
+     "city": "Aurora",
+     "n": 4
+    },
+    {
+     "city": "Grand Junction",
+     "n": 3
+    },
+    {
+     "city": "Pueblo",
+     "n": 3
+    },
+    {
+     "city": "Durango",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "CT",
+   "name": "Connecticut",
+   "slug": "connecticut",
+   "count": 36,
+   "cities": 28,
+   "emergency": 27,
+   "topRated": 12,
+   "topCities": [
+    {
+     "city": "Bridgeport",
+     "n": 3
+    },
+    {
+     "city": "Hartford",
+     "n": 3
+    },
+    {
+     "city": "Middletown",
+     "n": 3
+    },
+    {
+     "city": "New Haven",
+     "n": 2
+    },
+    {
+     "city": "Waterbury",
+     "n": 2
+    },
+    {
+     "city": "Branford",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "DE",
+   "name": "Delaware",
+   "slug": "delaware",
+   "count": 13,
+   "cities": 8,
+   "emergency": 9,
+   "topRated": 2,
+   "topCities": [
+    {
+     "city": "Wilmington",
+     "n": 3
+    },
+    {
+     "city": "Dover",
+     "n": 2
+    },
+    {
+     "city": "New Castle",
+     "n": 2
+    },
+    {
+     "city": "Newark",
+     "n": 2
+    },
+    {
+     "city": "Georgetown",
+     "n": 1
+    },
+    {
+     "city": "Lewes",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "DC",
+   "name": "District of Columbia",
+   "slug": "district-of-columbia",
+   "count": 10,
+   "cities": 1,
+   "emergency": 7,
+   "topRated": 1,
+   "topCities": [
+    {
+     "city": "Washington",
+     "n": 10
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "FL",
+   "name": "Florida",
+   "slug": "florida",
+   "count": 221,
+   "cities": 134,
+   "emergency": 184,
+   "topRated": 61,
+   "topCities": [
+    {
+     "city": "Miami",
+     "n": 10
+    },
+    {
+     "city": "Jacksonville",
+     "n": 9
+    },
+    {
+     "city": "Orlando",
+     "n": 8
+    },
+    {
+     "city": "Saint Petersburg",
+     "n": 6
+    },
+    {
+     "city": "Tampa",
+     "n": 6
+    },
+    {
+     "city": "Bradenton",
+     "n": 5
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "GA",
+   "name": "Georgia",
+   "slug": "georgia",
+   "count": 149,
+   "cities": 116,
+   "emergency": 103,
+   "topRated": 27,
+   "topCities": [
+    {
+     "city": "Atlanta",
+     "n": 9
+    },
+    {
+     "city": "Augusta",
+     "n": 5
+    },
+    {
+     "city": "Savannah",
+     "n": 5
+    },
+    {
+     "city": "Columbus",
+     "n": 4
+    },
+    {
+     "city": "Decatur",
+     "n": 3
+    },
+    {
+     "city": "Macon",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "GU",
+   "name": "Guam",
+   "slug": "guam",
+   "count": 2,
+   "cities": 2,
+   "emergency": 2,
+   "topRated": 0,
+   "topCities": [
+    {
+     "city": "Dededo",
+     "n": 1
+    },
+    {
+     "city": "Tamuning",
+     "n": 1
+    }
+   ],
+   "territory": true
+  },
+  {
+   "code": "HI",
+   "name": "Hawaii",
+   "slug": "hawaii",
+   "count": 23,
+   "cities": 17,
+   "emergency": 21,
+   "topRated": 5,
+   "topCities": [
+    {
+     "city": "Honolulu",
+     "n": 7
+    },
+    {
+     "city": "Aiea",
+     "n": 1
+    },
+    {
+     "city": "Hilo",
+     "n": 1
+    },
+    {
+     "city": "Honokaa",
+     "n": 1
+    },
+    {
+     "city": "Kahuku",
+     "n": 1
+    },
+    {
+     "city": "Kailua",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "ID",
+   "name": "Idaho",
+   "slug": "idaho",
+   "count": 48,
+   "cities": 38,
+   "emergency": 40,
+   "topRated": 10,
+   "topCities": [
+    {
+     "city": "Boise",
+     "n": 6
+    },
+    {
+     "city": "Blackfoot",
+     "n": 3
+    },
+    {
+     "city": "Idaho Falls",
+     "n": 3
+    },
+    {
+     "city": "Nampa",
+     "n": 2
+    },
+    {
+     "city": "American Falls",
+     "n": 1
+    },
+    {
+     "city": "Arco",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "IL",
+   "name": "Illinois",
+   "slug": "illinois",
+   "count": 193,
+   "cities": 136,
+   "emergency": 175,
+   "topRated": 49,
+   "topCities": [
+    {
+     "city": "Chicago",
+     "n": 33
+    },
+    {
+     "city": "Alton",
+     "n": 3
+    },
+    {
+     "city": "Elgin",
+     "n": 3
+    },
+    {
+     "city": "Peoria",
+     "n": 3
+    },
+    {
+     "city": "Rockford",
+     "n": 3
+    },
+    {
+     "city": "Springfield",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "IN",
+   "name": "Indiana",
+   "slug": "indiana",
+   "count": 148,
+   "cities": 96,
+   "emergency": 117,
+   "topRated": 40,
+   "topCities": [
+    {
+     "city": "Indianapolis",
+     "n": 14
+    },
+    {
+     "city": "Fort Wayne",
+     "n": 7
+    },
+    {
+     "city": "Carmel",
+     "n": 4
+    },
+    {
+     "city": "Crown Point",
+     "n": 4
+    },
+    {
+     "city": "Terre Haute",
+     "n": 4
+    },
+    {
+     "city": "Bloomington",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "IA",
+   "name": "Iowa",
+   "slug": "iowa",
+   "count": 118,
+   "cities": 105,
+   "emergency": 114,
+   "topRated": 28,
+   "topCities": [
+    {
+     "city": "Des Moines",
+     "n": 4
+    },
+    {
+     "city": "Iowa City",
+     "n": 3
+    },
+    {
+     "city": "Bettendorf",
+     "n": 2
+    },
+    {
+     "city": "Cedar Rapids",
+     "n": 2
+    },
+    {
+     "city": "Cherokee",
+     "n": 2
+    },
+    {
+     "city": "Council Bluffs",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "KS",
+   "name": "Kansas",
+   "slug": "kansas",
+   "count": 139,
+   "cities": 119,
+   "emergency": 118,
+   "topRated": 23,
+   "topCities": [
+    {
+     "city": "Wichita",
+     "n": 8
+    },
+    {
+     "city": "Overland Park",
+     "n": 5
+    },
+    {
+     "city": "Topeka",
+     "n": 3
+    },
+    {
+     "city": "Hutchinson",
+     "n": 2
+    },
+    {
+     "city": "Kansas City",
+     "n": 2
+    },
+    {
+     "city": "Larned",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "KY",
+   "name": "Kentucky",
+   "slug": "kentucky",
+   "count": 103,
+   "cities": 85,
+   "emergency": 94,
+   "topRated": 16,
+   "topCities": [
+    {
+     "city": "Louisville",
+     "n": 8
+    },
+    {
+     "city": "Lexington",
+     "n": 7
+    },
+    {
+     "city": "Bowling Green",
+     "n": 3
+    },
+    {
+     "city": "Hopkinsville",
+     "n": 3
+    },
+    {
+     "city": "Paducah",
+     "n": 2
+    },
+    {
+     "city": "Albany",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "LA",
+   "name": "Louisiana",
+   "slug": "louisiana",
+   "count": 161,
+   "cities": 89,
+   "emergency": 98,
+   "topRated": 13,
+   "topCities": [
+    {
+     "city": "Baton Rouge",
+     "n": 12
+    },
+    {
+     "city": "New Orleans",
+     "n": 10
+    },
+    {
+     "city": "Shreveport",
+     "n": 10
+    },
+    {
+     "city": "Alexandria",
+     "n": 7
+    },
+    {
+     "city": "Lafayette",
+     "n": 7
+    },
+    {
+     "city": "Lake Charles",
+     "n": 5
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "ME",
+   "name": "Maine",
+   "slug": "maine",
+   "count": 36,
+   "cities": 29,
+   "emergency": 32,
+   "topRated": 10,
+   "topCities": [
+    {
+     "city": "Bangor",
+     "n": 4
+    },
+    {
+     "city": "Augusta",
+     "n": 3
+    },
+    {
+     "city": "Lewiston",
+     "n": 2
+    },
+    {
+     "city": "Portland",
+     "n": 2
+    },
+    {
+     "city": "Bar Harbor",
+     "n": 1
+    },
+    {
+     "city": "Belfast",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MD",
+   "name": "Maryland",
+   "slug": "maryland",
+   "count": 56,
+   "cities": 35,
+   "emergency": 43,
+   "topRated": 16,
+   "topCities": [
+    {
+     "city": "Baltimore",
+     "n": 17
+    },
+    {
+     "city": "Annapolis",
+     "n": 2
+    },
+    {
+     "city": "Bethesda",
+     "n": 2
+    },
+    {
+     "city": "Cumberland",
+     "n": 2
+    },
+    {
+     "city": "Hagerstown",
+     "n": 2
+    },
+    {
+     "city": "Silver Spring",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MA",
+   "name": "Massachusetts",
+   "slug": "massachusetts",
+   "count": 84,
+   "cities": 58,
+   "emergency": 60,
+   "topRated": 21,
+   "topCities": [
+    {
+     "city": "Boston",
+     "n": 12
+    },
+    {
+     "city": "Worcester",
+     "n": 5
+    },
+    {
+     "city": "Fall River",
+     "n": 3
+    },
+    {
+     "city": "Holyoke",
+     "n": 3
+    },
+    {
+     "city": "Brighton",
+     "n": 2
+    },
+    {
+     "city": "Brockton",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MI",
+   "name": "Michigan",
+   "slug": "michigan",
+   "count": 149,
+   "cities": 115,
+   "emergency": 119,
+   "topRated": 36,
+   "topCities": [
+    {
+     "city": "Detroit",
+     "n": 10
+    },
+    {
+     "city": "Grand Rapids",
+     "n": 4
+    },
+    {
+     "city": "Kalamazoo",
+     "n": 4
+    },
+    {
+     "city": "Ann Arbor",
+     "n": 3
+    },
+    {
+     "city": "Battle Creek",
+     "n": 3
+    },
+    {
+     "city": "Pontiac",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MN",
+   "name": "Minnesota",
+   "slug": "minnesota",
+   "count": 136,
+   "cities": 121,
+   "emergency": 116,
+   "topRated": 35,
+   "topCities": [
+    {
+     "city": "Minneapolis",
+     "n": 5
+    },
+    {
+     "city": "Saint Paul",
+     "n": 4
+    },
+    {
+     "city": "Duluth",
+     "n": 3
+    },
+    {
+     "city": "Rochester",
+     "n": 3
+    },
+    {
+     "city": "Alexandria",
+     "n": 2
+    },
+    {
+     "city": "Bemidji",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MS",
+   "name": "Mississippi",
+   "slug": "mississippi",
+   "count": 109,
+   "cities": 85,
+   "emergency": 92,
+   "topRated": 7,
+   "topCities": [
+    {
+     "city": "Jackson",
+     "n": 7
+    },
+    {
+     "city": "Biloxi",
+     "n": 4
+    },
+    {
+     "city": "Meridian",
+     "n": 4
+    },
+    {
+     "city": "Flowood",
+     "n": 3
+    },
+    {
+     "city": "Philadelphia",
+     "n": 3
+    },
+    {
+     "city": "Tupelo",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MO",
+   "name": "Missouri",
+   "slug": "missouri",
+   "count": 120,
+   "cities": 87,
+   "emergency": 105,
+   "topRated": 33,
+   "topCities": [
+    {
+     "city": "Saint Louis",
+     "n": 10
+    },
+    {
+     "city": "Kansas City",
+     "n": 9
+    },
+    {
+     "city": "Columbia",
+     "n": 4
+    },
+    {
+     "city": "Springfield",
+     "n": 4
+    },
+    {
+     "city": "Cape Girardeau",
+     "n": 3
+    },
+    {
+     "city": "Farmington",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MT",
+   "name": "Montana",
+   "slug": "montana",
+   "count": 63,
+   "cities": 59,
+   "emergency": 60,
+   "topRated": 8,
+   "topCities": [
+    {
+     "city": "Billings",
+     "n": 2
+    },
+    {
+     "city": "Great Falls",
+     "n": 2
+    },
+    {
+     "city": "Helena",
+     "n": 2
+    },
+    {
+     "city": "Missoula",
+     "n": 2
+    },
+    {
+     "city": "Anaconda",
+     "n": 1
+    },
+    {
+     "city": "Baker",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NE",
+   "name": "Nebraska",
+   "slug": "nebraska",
+   "count": 93,
+   "cities": 77,
+   "emergency": 84,
+   "topRated": 23,
+   "topCities": [
+    {
+     "city": "Omaha",
+     "n": 11
+    },
+    {
+     "city": "Lincoln",
+     "n": 5
+    },
+    {
+     "city": "Grand Island",
+     "n": 2
+    },
+    {
+     "city": "Kearney",
+     "n": 2
+    },
+    {
+     "city": "Ainsworth",
+     "n": 1
+    },
+    {
+     "city": "Albion",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NV",
+   "name": "Nevada",
+   "slug": "nevada",
+   "count": 46,
+   "cities": 22,
+   "emergency": 37,
+   "topRated": 7,
+   "topCities": [
+    {
+     "city": "Las Vegas",
+     "n": 15
+    },
+    {
+     "city": "Henderson",
+     "n": 5
+    },
+    {
+     "city": "Reno",
+     "n": 5
+    },
+    {
+     "city": "North Las Vegas",
+     "n": 2
+    },
+    {
+     "city": "Sparks",
+     "n": 2
+    },
+    {
+     "city": "Batte Mtn",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NH",
+   "name": "New Hampshire",
+   "slug": "new-hampshire",
+   "count": 27,
+   "cities": 23,
+   "emergency": 26,
+   "topRated": 10,
+   "topCities": [
+    {
+     "city": "Concord",
+     "n": 2
+    },
+    {
+     "city": "Lebanon",
+     "n": 2
+    },
+    {
+     "city": "Manchester",
+     "n": 2
+    },
+    {
+     "city": "Nashua",
+     "n": 2
+    },
+    {
+     "city": "Berlin",
+     "n": 1
+    },
+    {
+     "city": "Claremont",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NJ",
+   "name": "New Jersey",
+   "slug": "new-jersey",
+   "count": 78,
+   "cities": 65,
+   "emergency": 57,
+   "topRated": 24,
+   "topCities": [
+    {
+     "city": "Newark",
+     "n": 4
+    },
+    {
+     "city": "New Brunswick",
+     "n": 3
+    },
+    {
+     "city": "Camden",
+     "n": 2
+    },
+    {
+     "city": "East Orange",
+     "n": 2
+    },
+    {
+     "city": "Jersey City",
+     "n": 2
+    },
+    {
+     "city": "Paramus",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NM",
+   "name": "New Mexico",
+   "slug": "new-mexico",
+   "count": 45,
+   "cities": 31,
+   "emergency": 38,
+   "topRated": 4,
+   "topCities": [
+    {
+     "city": "Albuquerque",
+     "n": 8
+    },
+    {
+     "city": "Las Cruces",
+     "n": 4
+    },
+    {
+     "city": "Santa Fe",
+     "n": 3
+    },
+    {
+     "city": "Gallup",
+     "n": 2
+    },
+    {
+     "city": "Roswell",
+     "n": 2
+    },
+    {
+     "city": "Alamogordo",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NY",
+   "name": "New York",
+   "slug": "new-york",
+   "count": 192,
+   "cities": 124,
+   "emergency": 160,
+   "topRated": 36,
+   "topCities": [
+    {
+     "city": "New York",
+     "n": 16
+    },
+    {
+     "city": "Brooklyn",
+     "n": 11
+    },
+    {
+     "city": "Bronx",
+     "n": 7
+    },
+    {
+     "city": "Buffalo",
+     "n": 7
+    },
+    {
+     "city": "Rochester",
+     "n": 6
+    },
+    {
+     "city": "Syracuse",
+     "n": 5
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "NC",
+   "name": "North Carolina",
+   "slug": "north-carolina",
+   "count": 120,
+   "cities": 95,
+   "emergency": 105,
+   "topRated": 40,
+   "topCities": [
+    {
+     "city": "Charlotte",
+     "n": 6
+    },
+    {
+     "city": "Durham",
+     "n": 4
+    },
+    {
+     "city": "Raleigh",
+     "n": 4
+    },
+    {
+     "city": "Winston-salem",
+     "n": 3
+    },
+    {
+     "city": "Asheville",
+     "n": 2
+    },
+    {
+     "city": "Fayetteville",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "ND",
+   "name": "North Dakota",
+   "slug": "north-dakota",
+   "count": 47,
+   "cities": 42,
+   "emergency": 45,
+   "topRated": 7,
+   "topCities": [
+    {
+     "city": "Fargo",
+     "n": 4
+    },
+    {
+     "city": "Bismarck",
+     "n": 2
+    },
+    {
+     "city": "Jamestown",
+     "n": 2
+    },
+    {
+     "city": "Ashley",
+     "n": 1
+    },
+    {
+     "city": "Belcourt",
+     "n": 1
+    },
+    {
+     "city": "Bottineau",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "MP",
+   "name": "Northern Mariana Islands",
+   "slug": "northern-mariana-islands",
+   "count": 1,
+   "cities": 1,
+   "emergency": 1,
+   "topRated": 0,
+   "topCities": [
+    {
+     "city": "Garapan",
+     "n": 1
+    }
+   ],
+   "territory": true
+  },
+  {
+   "code": "OH",
+   "name": "Ohio",
+   "slug": "ohio",
+   "count": 193,
+   "cities": 128,
+   "emergency": 139,
+   "topRated": 68,
+   "topCities": [
+    {
+     "city": "Cincinnati",
+     "n": 13
+    },
+    {
+     "city": "Columbus",
+     "n": 11
+    },
+    {
+     "city": "Cleveland",
+     "n": 8
+    },
+    {
+     "city": "Dayton",
+     "n": 6
+    },
+    {
+     "city": "Toledo",
+     "n": 5
+    },
+    {
+     "city": "Akron",
+     "n": 4
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "OK",
+   "name": "Oklahoma",
+   "slug": "oklahoma",
+   "count": 136,
+   "cities": 89,
+   "emergency": 121,
+   "topRated": 28,
+   "topCities": [
+    {
+     "city": "Oklahoma City",
+     "n": 19
+    },
+    {
+     "city": "Tulsa",
+     "n": 13
+    },
+    {
+     "city": "Lawton",
+     "n": 4
+    },
+    {
+     "city": "Norman",
+     "n": 4
+    },
+    {
+     "city": "Ada",
+     "n": 3
+    },
+    {
+     "city": "Ardmore",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "OR",
+   "name": "Oregon",
+   "slug": "oregon",
+   "count": 62,
+   "cities": 49,
+   "emergency": 58,
+   "topRated": 20,
+   "topCities": [
+    {
+     "city": "Portland",
+     "n": 9
+    },
+    {
+     "city": "Hillsboro",
+     "n": 2
+    },
+    {
+     "city": "Medford",
+     "n": 2
+    },
+    {
+     "city": "Roseburg",
+     "n": 2
+    },
+    {
+     "city": "Salem",
+     "n": 2
+    },
+    {
+     "city": "Springfield",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "PA",
+   "name": "Pennsylvania",
+   "slug": "pennsylvania",
+   "count": 186,
+   "cities": 131,
+   "emergency": 148,
+   "topRated": 73,
+   "topCities": [
+    {
+     "city": "Philadelphia",
+     "n": 21
+    },
+    {
+     "city": "Pittsburgh",
+     "n": 11
+    },
+    {
+     "city": "Erie",
+     "n": 4
+    },
+    {
+     "city": "Norristown",
+     "n": 4
+    },
+    {
+     "city": "York",
+     "n": 4
+    },
+    {
+     "city": "Danville",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "PR",
+   "name": "Puerto Rico",
+   "slug": "puerto-rico",
+   "count": 59,
+   "cities": 27,
+   "emergency": 54,
+   "topRated": 1,
+   "topCities": [
+    {
+     "city": "San Juan",
+     "n": 14
+    },
+    {
+     "city": "Bayamon",
+     "n": 5
+    },
+    {
+     "city": "Ponce",
+     "n": 4
+    },
+    {
+     "city": "Humacao",
+     "n": 3
+    },
+    {
+     "city": "Mayaguez",
+     "n": 3
+    },
+    {
+     "city": "Rio Piedras",
+     "n": 3
+    }
+   ],
+   "territory": true
+  },
+  {
+   "code": "RI",
+   "name": "Rhode Island",
+   "slug": "rhode-island",
+   "count": 13,
+   "cities": 8,
+   "emergency": 12,
+   "topRated": 7,
+   "topCities": [
+    {
+     "city": "Providence",
+     "n": 6
+    },
+    {
+     "city": "East Providence",
+     "n": 1
+    },
+    {
+     "city": "Newport",
+     "n": 1
+    },
+    {
+     "city": "North Providence",
+     "n": 1
+    },
+    {
+     "city": "Wakefield",
+     "n": 1
+    },
+    {
+     "city": "Warwick",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "SC",
+   "name": "South Carolina",
+   "slug": "south-carolina",
+   "count": 66,
+   "cities": 44,
+   "emergency": 55,
+   "topRated": 24,
+   "topCities": [
+    {
+     "city": "Charleston",
+     "n": 6
+    },
+    {
+     "city": "Columbia",
+     "n": 6
+    },
+    {
+     "city": "Greenville",
+     "n": 4
+    },
+    {
+     "city": "Anderson",
+     "n": 2
+    },
+    {
+     "city": "Beaufort",
+     "n": 2
+    },
+    {
+     "city": "Conway",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "SD",
+   "name": "South Dakota",
+   "slug": "south-dakota",
+   "count": 61,
+   "cities": 52,
+   "emergency": 54,
+   "topRated": 13,
+   "topCities": [
+    {
+     "city": "Sioux Falls",
+     "n": 6
+    },
+    {
+     "city": "Rapid City",
+     "n": 3
+    },
+    {
+     "city": "Aberdeen",
+     "n": 2
+    },
+    {
+     "city": "Yankton",
+     "n": 2
+    },
+    {
+     "city": "Armour",
+     "n": 1
+    },
+    {
+     "city": "Bowdle",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "TN",
+   "name": "Tennessee",
+   "slug": "tennessee",
+   "count": 121,
+   "cities": 79,
+   "emergency": 98,
+   "topRated": 26,
+   "topCities": [
+    {
+     "city": "Memphis",
+     "n": 11
+    },
+    {
+     "city": "Nashville",
+     "n": 10
+    },
+    {
+     "city": "Knoxville",
+     "n": 6
+    },
+    {
+     "city": "Chattanooga",
+     "n": 5
+    },
+    {
+     "city": "Columbia",
+     "n": 3
+    },
+    {
+     "city": "Jackson",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "TX",
+   "name": "Texas",
+   "slug": "texas",
+   "count": 467,
+   "cities": 262,
+   "emergency": 390,
+   "topRated": 103,
+   "topCities": [
+    {
+     "city": "Houston",
+     "n": 28
+    },
+    {
+     "city": "Dallas",
+     "n": 19
+    },
+    {
+     "city": "San Antonio",
+     "n": 19
+    },
+    {
+     "city": "Austin",
+     "n": 15
+    },
+    {
+     "city": "Fort Worth",
+     "n": 13
+    },
+    {
+     "city": "El Paso",
+     "n": 11
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "VI",
+   "name": "U.S. Virgin Islands",
+   "slug": "u-s-virgin-islands",
+   "count": 2,
+   "cities": 2,
+   "emergency": 2,
+   "topRated": 0,
+   "topCities": [
+    {
+     "city": "St Croix",
+     "n": 1
+    },
+    {
+     "city": "St Thomas",
+     "n": 1
+    }
+   ],
+   "territory": true
+  },
+  {
+   "code": "UT",
+   "name": "Utah",
+   "slug": "utah",
+   "count": 52,
+   "cities": 39,
+   "emergency": 48,
+   "topRated": 23,
+   "topCities": [
+    {
+     "city": "Salt Lake City",
+     "n": 8
+    },
+    {
+     "city": "Orem",
+     "n": 3
+    },
+    {
+     "city": "Bountiful",
+     "n": 2
+    },
+    {
+     "city": "Layton",
+     "n": 2
+    },
+    {
+     "city": "Ogden",
+     "n": 2
+    },
+    {
+     "city": "Provo",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "VT",
+   "name": "Vermont",
+   "slug": "vermont",
+   "count": 17,
+   "cities": 16,
+   "emergency": 15,
+   "topRated": 4,
+   "topCities": [
+    {
+     "city": "Brattleboro",
+     "n": 2
+    },
+    {
+     "city": "Barre",
+     "n": 1
+    },
+    {
+     "city": "Bennington",
+     "n": 1
+    },
+    {
+     "city": "Berlin",
+     "n": 1
+    },
+    {
+     "city": "Burlington",
+     "n": 1
+    },
+    {
+     "city": "Middlebury",
+     "n": 1
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "VA",
+   "name": "Virginia",
+   "slug": "virginia",
+   "count": 96,
+   "cities": 71,
+   "emergency": 84,
+   "topRated": 46,
+   "topCities": [
+    {
+     "city": "Richmond",
+     "n": 6
+    },
+    {
+     "city": "Falls Church",
+     "n": 3
+    },
+    {
+     "city": "Norfolk",
+     "n": 3
+    },
+    {
+     "city": "Petersburg",
+     "n": 3
+    },
+    {
+     "city": "Virginia Beach",
+     "n": 3
+    },
+    {
+     "city": "Williamsburg",
+     "n": 3
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "WA",
+   "name": "Washington",
+   "slug": "washington",
+   "count": 100,
+   "cities": 79,
+   "emergency": 85,
+   "topRated": 24,
+   "topCities": [
+    {
+     "city": "Seattle",
+     "n": 9
+    },
+    {
+     "city": "Spokane",
+     "n": 6
+    },
+    {
+     "city": "Tacoma",
+     "n": 4
+    },
+    {
+     "city": "Vancouver",
+     "n": 3
+    },
+    {
+     "city": "Kirkland",
+     "n": 2
+    },
+    {
+     "city": "Olympia",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "WV",
+   "name": "West Virginia",
+   "slug": "west-virginia",
+   "count": 55,
+   "cities": 43,
+   "emergency": 49,
+   "topRated": 9,
+   "topCities": [
+    {
+     "city": "Huntington",
+     "n": 5
+    },
+    {
+     "city": "Beckley",
+     "n": 3
+    },
+    {
+     "city": "Charleston",
+     "n": 3
+    },
+    {
+     "city": "Clarksburg",
+     "n": 2
+    },
+    {
+     "city": "Martinsburg",
+     "n": 2
+    },
+    {
+     "city": "Morgantown",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "WI",
+   "name": "Wisconsin",
+   "slug": "wisconsin",
+   "count": 140,
+   "cities": 109,
+   "emergency": 125,
+   "topRated": 55,
+   "topCities": [
+    {
+     "city": "Milwaukee",
+     "n": 8
+    },
+    {
+     "city": "Green Bay",
+     "n": 6
+    },
+    {
+     "city": "Madison",
+     "n": 5
+    },
+    {
+     "city": "Appleton",
+     "n": 2
+    },
+    {
+     "city": "Eau Claire",
+     "n": 2
+    },
+    {
+     "city": "Fond Du Lac",
+     "n": 2
+    }
+   ],
+   "territory": false
+  },
+  {
+   "code": "WY",
+   "name": "Wyoming",
+   "slug": "wyoming",
+   "count": 31,
+   "cities": 27,
+   "emergency": 26,
+   "topRated": 7,
+   "topCities": [
+    {
+     "city": "Casper",
+     "n": 3
+    },
+    {
+     "city": "Cheyenne",
+     "n": 2
+    },
+    {
+     "city": "Sheridan",
+     "n": 2
+    },
+    {
+     "city": "Afton",
+     "n": 1
+    },
+    {
+     "city": "Basin",
+     "n": 1
+    },
+    {
+     "city": "Buffalo",
+     "n": 1
+    }
+   ],
+   "territory": false
+  }
+ ]
+}
