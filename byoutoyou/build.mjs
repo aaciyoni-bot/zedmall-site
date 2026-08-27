@@ -76,3 +76,93 @@ try {
     console.warn(`Could not pull the committed directory (${err.message}) — rebuilding from CMS.`);
     rebuildFromCms();
 }
+
+/* The app itself is hash-routed, which search engines do not crawl. These
+   static per-state pages give every state a real URL with its hospitals in
+   the HTML, and hand the visitor over to the app from there. */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const SITE = process.env.SITE_URL || 'https://byoutoyou.com';
+
+function statePage(state, hospitals, allStates) {
+    const rows = hospitals.map(h => `<tr>
+      <td><a href="/#/state/${state.code}">${esc(h.name)}</a></td>
+      <td>${esc(h.city)}</td>
+      <td>${h.emergency ? 'Yes' : '—'}</td>
+      <td>${h.rating ? '★'.repeat(h.rating) : '—'}</td>
+      <td>${esc(h.type || '')}</td></tr>`).join('\n');
+
+    const others = allStates.filter(s => s.code !== state.code)
+        .map(s => `<a href="/state/${s.slug}">${esc(s.name)}</a>`).join(' · ');
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospitals in ${esc(state.name)} — all ${state.count} of them | byoutoyou</title>
+<meta name="description" content="Every hospital in ${esc(state.name)}: ${state.count} facilities across ${state.cities} cities, with emergency services and CMS star ratings. Request a bedside beauty or grooming visit for a patient.">
+<link rel="canonical" href="${SITE}/state/${state.slug}">
+<link rel="stylesheet" href="/assets/styles.css">
+<script type="application/ld+json">
+${JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: `Hospitals in ${state.name}`,
+        numberOfItems: state.count,
+        itemListElement: hospitals.slice(0, 100).map((h, i) => ({
+            '@type': 'ListItem', position: i + 1,
+            item: {
+                '@type': 'Hospital', name: h.name,
+                address: { '@type': 'PostalAddress', streetAddress: h.address, addressLocality: h.city, addressRegion: state.code, postalCode: h.zip, addressCountry: 'US' }
+            }
+        }))
+    })}
+</script>
+</head>
+<body>
+<header id="site-header"><div class="container header-in">
+  <a class="logo" href="/"><span class="wordmark">by<b>ou</b>to<i>you</i></span><small>bedside beauty care</small></a>
+  <div class="header-actions"><a class="btn btn-primary btn-sm" href="/#/state/${state.code}">Open the directory</a></div>
+</div></header>
+<main class="container">
+  <nav class="crumbs"><a href="/">Home</a><span>/</span><a href="/#/states">States</a><span>/</span><b>${esc(state.name)}</b></nav>
+  <header class="section-head left">
+    <h1>Hospitals in ${esc(state.name)}</h1>
+    <p>${state.count} Medicare-certified hospitals across ${state.cities} cities — ${state.emergency} with 24/7 emergency services.
+       byoutoyou sends vetted beauty and grooming professionals to patients at any of them.</p>
+  </header>
+  <p><a class="btn btn-primary" href="/#/state/${state.code}">Search and filter these hospitals</a></p>
+  <div class="table-scroll"><table class="compare-table">
+    <thead><tr><th>Hospital</th><th>City</th><th>ER</th><th>CMS rating</th><th>Type</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table></div>
+  <section class="section">
+    <h2>Other states</h2>
+    <p class="cities">${others}</p>
+  </section>
+</main>
+<footer><div class="container footer-note">
+  <p>Hospital records: U.S. Centers for Medicare &amp; Medicaid Services, Hospital General Information (${esc(state.generated || '')}).
+     Listing a hospital does not imply affiliation with, or endorsement by, that hospital.</p>
+</div></footer>
+</body>
+</html>`;
+}
+
+const index = JSON.parse(fs.readFileSync(path.join(DATA, 'index.json'), 'utf8'));
+const outDir = path.join(PUBLIC, 'state');
+fs.mkdirSync(outDir, { recursive: true });
+for (const state of index.states) {
+    const file = path.join(DATA, 'states', `${state.code.toLowerCase()}.json`);
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+    fs.writeFileSync(path.join(outDir, `${state.slug}.html`),
+        statePage({ ...state, generated: data.generated }, data.hospitals, index.states));
+}
+
+const urls = [`${SITE}/`, ...index.states.map(s => `${SITE}/state/${s.slug}`)];
+fs.writeFileSync(path.join(PUBLIC, 'sitemap.xml'),
+    `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`
+    + urls.map(u => `  <url><loc>${u}</loc><lastmod>${index.generated}</lastmod></url>`).join('\n')
+    + `\n</urlset>\n`);
+
+console.log(`Rendered ${index.states.length} crawlable state pages and a sitemap.`);
