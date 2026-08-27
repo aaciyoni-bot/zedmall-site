@@ -62,35 +62,103 @@ async function getJSON(url) {
     return res.json();
 }
 
-/* The provider-data API addresses a dataset by its distribution UUID, and that
-   UUID changes with every quarterly refresh — so look it up by title. */
-async function findDistributionId() {
+/* The dataset and distribution UUIDs change with every quarterly refresh, so
+   resolve them by title instead of hard-coding an id that will rot. */
+async function findDataset() {
     const items = await getJSON(
-        'https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items?show-reference-ids=true'
+        'https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items?show-reference-ids=false'
     );
     const match = items.find(it => (it.title || '').trim().toLowerCase() === 'hospital general information');
     if (!match) throw new Error('Dataset "Hospital General Information" not found in the CMS metastore');
-    const dist = (match.distribution || [])[0];
-    const id = typeof dist === 'string' ? dist : dist && (dist.identifier || dist.data?.identifier);
-    if (!id) throw new Error('No distribution id on the Hospital General Information dataset');
-    return id;
+
+    const dist = (match.distribution || [])[0] || {};
+    const inner = dist.data || dist;
+    return {
+        datasetId: match.identifier,
+        distributionId: dist.identifier || inner.identifier || null,
+        downloadURL: inner.downloadURL || inner.accessURL || null
+    };
 }
 
-async function fetchAllRows(distributionId) {
-    const rows = [];
-    const limit = 500;
-    for (let offset = 0; ; offset += limit) {
-        const url = `https://data.cms.gov/provider-data/api/1/datastore/query/${distributionId}/0`
-            + `?limit=${limit}&offset=${offset}`;
-        const page = await getJSON(url);
-        const results = page.results || [];
-        rows.push(...results);
-        process.stdout.write(`\rfetched ${rows.length} rows`);
-        if (results.length < limit) break;
-        if (rows.length > 20000) break; // guard against a paging loop
+/* DKAN exposes the same table under two shapes depending on which id you hold,
+   and CMS has moved between them before — try both before falling back to CSV. */
+function queryUrls(ds) {
+    const base = 'https://data.cms.gov/provider-data/api/1/datastore/query';
+    const urls = [];
+    if (ds.distributionId) urls.push(`${base}/${ds.distributionId}`);
+    if (ds.datasetId) urls.push(`${base}/${ds.datasetId}/0`);
+    return urls;
+}
+
+async function fetchViaApi(ds) {
+    let lastErr = null;
+    for (const url of queryUrls(ds)) {
+        try {
+            const rows = [];
+            const limit = 500;
+            for (let offset = 0; ; offset += limit) {
+                const page = await getJSON(`${url}?limit=${limit}&offset=${offset}`);
+                const results = page.results || [];
+                rows.push(...results);
+                process.stdout.write(`\rfetched ${rows.length} rows`);
+                if (results.length < limit) break;
+                if (rows.length > 20000) break; // guard against a paging loop
+            }
+            process.stdout.write('\n');
+            if (rows.length) return rows;
+        } catch (err) {
+            lastErr = err;
+            console.warn(`\n${url} did not work (${err.message}) — trying the next source.`);
+        }
     }
-    process.stdout.write('\n');
-    return rows;
+    if (lastErr) throw lastErr;
+    return [];
+}
+
+/* Minimal RFC-4180 parser: the CSV export is the most stable source CMS
+   publishes, so it is worth not depending on a CSV library here. */
+function parseCsv(text) {
+    const rows = [];
+    let row = [], field = '', quoted = false;
+    for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (quoted) {
+            if (c === '"') {
+                if (text[i + 1] === '"') { field += '"'; i++; }
+                else quoted = false;
+            } else field += c;
+            continue;
+        }
+        if (c === '"') quoted = true;
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+        else if (c !== '\r') field += c;
+    }
+    if (field || row.length) { row.push(field); rows.push(row); }
+    if (!rows.length) return [];
+    const header = rows.shift().map(h => h.trim());
+    return rows
+        .filter(r => r.length >= header.length - 2 && r.some(v => v !== ''))
+        .map(r => Object.fromEntries(header.map((h, i) => [h, (r[i] ?? '').trim()])));
+}
+
+async function fetchViaCsv(url) {
+    console.log('Falling back to the CSV export:', url);
+    const res = await fetch(url, { headers: { 'user-agent': 'byoutoyou-directory/1.0' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+    return parseCsv(await res.text());
+}
+
+async function fetchAllRows(ds) {
+    try {
+        const rows = await fetchViaApi(ds);
+        if (rows.length >= MIN_EXPECTED) return rows;
+        console.warn(`API returned only ${rows.length} rows.`);
+    } catch (err) {
+        console.warn('Datastore API unavailable:', err.message);
+    }
+    if (!ds.downloadURL) throw new Error('No CSV download URL to fall back to');
+    return fetchViaCsv(ds.downloadURL);
 }
 
 /* Column names drift between refreshes (city vs citytown, phone_number vs
@@ -159,10 +227,11 @@ function slugify(s) {
 }
 
 async function main() {
-    const distributionId = await findDistributionId();
-    console.log('CMS distribution:', distributionId);
+    const ds = await findDataset();
+    console.log('CMS dataset:', ds.datasetId, '| distribution:', ds.distributionId);
 
-    const raw = await fetchAllRows(distributionId);
+    const raw = await fetchAllRows(ds);
+    console.log(`Parsed ${raw.length} raw rows.`);
     const hospitals = raw
         .map(normalise)
         .filter(h => h.name && h.state && STATE_NAMES[h.state])
