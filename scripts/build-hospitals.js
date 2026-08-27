@@ -195,7 +195,8 @@ const ACRONYMS = new Set(['VA', 'US', 'USA', 'LLC', 'LP', 'LLP', 'INC', 'PC', 'H
     'UCSD', 'UCI', 'UPMC', 'NYU', 'MUSC', 'LSU', 'OSU', 'OSF', 'IU', 'SIU', 'UAB', 'UAMS', 'UF', 'USC',
     'UT', 'UVA', 'WVU', 'KU', 'MU', 'ECU', 'ECMC', 'SSM', 'CHI', 'CHRISTUS', 'AMITA', 'HSHS', 'BJC',
     'ICU', 'ER', 'ENT', 'LTAC', 'LTACH', 'MRI', 'PHS', 'IHS', 'DCH', 'NCH', 'JPS', 'TMC', 'AMG', 'RML',
-    'II', 'III', 'IV', 'NW', 'NE', 'SW', 'SE', 'DBA']);
+    'II', 'III', 'IV', 'NW', 'NE', 'SW', 'SE', 'DBA', 'LBJ', 'UMC', 'UC', 'UHS', 'CHS', 'PIH',
+    'VAMC', 'DVA', 'MCH', 'MHS', 'HHS', 'CMS']);
 
 function titleCase(s) {
     return s.replace(/[\w'’-]+/g, w => {
