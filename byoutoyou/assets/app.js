@@ -127,7 +127,15 @@ function showView(name) {
   $('[data-toggle-nav]').setAttribute('aria-expanded', 'false');
 }
 
+/* Any overlay left open across a route change would trap scrolling and cover
+   the new view, so every navigation starts from a clean slate. */
+function closeOverlays() {
+  ['#palette', '#drawer', '#booking', '#compare-modal'].forEach(sel => { $(sel).hidden = true; });
+  document.body.style.overflow = '';
+}
+
 async function route() {
+  closeOverlays();
   const { view, param, anchor } = parseHash();
 
   if (view === 'states') {

@@ -46,6 +46,8 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
+/* Overlays set display in a class rule, which would otherwise beat [hidden]. */
+[hidden]{display:none!important}
 html{scroll-behavior:smooth;scroll-padding-top:88px}
 body{
   font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
@@ -274,11 +276,11 @@ h1{font-size:clamp(2.1rem,4.6vw,3.35rem);line-height:1.1;letter-spacing:-1.6px;f
 .crumbs{display:flex;gap:8px;align-items:center;font-size:.82rem;color:var(--ink-3);padding:26px 0 6px}
 .crumbs a:hover{color:var(--brand)}
 .states-toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
-#state-filter,.filters input,.filters select{
+#state-filter,.filters input[type="search"],.filters select{
   background:var(--surface);border:1.5px solid var(--line-2);border-radius:12px;padding:11px 14px;min-width:180px;
   transition:border-color var(--dur)
 }
-#state-filter:focus,.filters input:focus,.filters select:focus{border-color:var(--brand);outline:none}
+#state-filter:focus,.filters input[type="search"]:focus,.filters select:focus{border-color:var(--brand);outline:none}
 .seg{display:flex;background:var(--surface);border:1.5px solid var(--line-2);border-radius:12px;overflow:hidden}
 .seg button{padding:11px 16px;font-size:.86rem;font-weight:600;color:var(--ink-2)}
 .seg button.active{background:var(--brand);color:#fff}

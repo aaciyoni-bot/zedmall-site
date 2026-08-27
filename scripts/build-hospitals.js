@@ -189,20 +189,26 @@ function normalise(row) {
     };
 }
 
+/* CMS ships names in caps. Title-casing them reads far better, but a pile of
+   initialisms would come out as "Va Medical Center" without this list. */
+const ACRONYMS = new Set(['VA', 'US', 'USA', 'LLC', 'LP', 'LLP', 'INC', 'PC', 'HCA', 'UNC', 'UCSF', 'UCLA',
+    'UCSD', 'UCI', 'UPMC', 'NYU', 'MUSC', 'LSU', 'OSU', 'OSF', 'IU', 'SIU', 'UAB', 'UAMS', 'UF', 'USC',
+    'UT', 'UVA', 'WVU', 'KU', 'MU', 'ECU', 'ECMC', 'SSM', 'CHI', 'CHRISTUS', 'AMITA', 'HSHS', 'BJC',
+    'ICU', 'ER', 'ENT', 'LTAC', 'LTACH', 'MRI', 'PHS', 'IHS', 'DCH', 'NCH', 'JPS', 'TMC', 'AMG', 'RML',
+    'II', 'III', 'IV', 'NW', 'NE', 'SW', 'SE', 'DBA']);
+
 function titleCase(s) {
-    return s.replace(/\w[\w'’-]*/g, w => {
+    return s.replace(/[\w'’-]+/g, w => {
+        const upper = w.toUpperCase();
+        if (ACRONYMS.has(upper)) return upper === 'DBA' ? 'dba' : upper;
         const lower = w.toLowerCase();
         if (['of', 'the', 'and', 'at', 'for', 'in', 'on'].includes(lower)) return lower;
         return lower.charAt(0).toUpperCase() + lower.slice(1);
-    }).replace(/\b(Llc|Lp|Inc)\b/g, m => m.toUpperCase());
+    });
 }
 
 function clean(h) {
-    const name = titleCase(h.name)
-        .replace(/^\s+|\s+$/g, '')
-        .replace(/\bDba\b/gi, 'dba')
-        .replace(/\bSt\b\.?/g, 'St.')
-        .replace(/\bUniversity of\b/gi, 'University of');
+    const name = titleCase(h.name).trim().replace(/\bSt\b\.?/g, 'St.');
     const rating = /^[1-5]$/.test(h.rating) ? Number(h.rating) : null;
     const loc = coordsForZip(h.zip);
     return {
