@@ -1,0 +1,15 @@
+# The Quiet Threshold — מפתן שקט
+
+## Manifesto
+
+There is a kind of luxury that never raises its voice. It does not glitter; it glows. "The Quiet Threshold" is a visual movement devoted to that glow — to the poised instant before a door opens, when everything of value is still held in reserve. Its artifacts are gates, seals, and thresholds: forms that promise an interior without ever exposing it. The work must read as if a master engraver spent countless nights over a single curve, adjusting it by the width of a breath, because in this movement restraint is not the absence of effort — it is the evidence of it.
+
+Space is the first material. Compositions breathe inside deep, night-toned fields — midnight blue that approaches black, the color of a city seen from a rooftop after the parties end. Within that darkness, a single architecture of thin champagne-gold lines stands perfectly centered, symmetrical as a law. Negative space is not empty; it is the interior the gate protects. Margins are generous to the point of ceremony. Nothing touches an edge. Every distance is deliberate, measured, and re-measured — the painstaking geometry of someone at the absolute top of their craft.
+
+Form is archetypal: the arch, the pillar, the keystone, the ascending rung. Lines are hairline-thin yet unbroken, drawn with the confidence of a compass and straightedge handled for decades. Curves are true arcs; verticals are plumb. Where two lines almost meet, the gap is intentional — a threshold, never a flaw. Repetition appears as quiet rhythm: concentric rings like the walls of a private court, rungs climbing like a ladder remembered from a dream. The eye ascends; the composition rewards patience.
+
+Color is a covenant of three: deep night (ground), champagne gold (line and light), and bone-white (whisper). Gold is never flooded; it is rationed — a thin wire of light against the dark, the way a well-cut suit shows only a centimeter of cuff. Texture, if present, is barely perceptible: the grain of laid paper, the faintest radial glow at the center, as though a lamp burns behind the gate. Everything else is calm, matte, and absolute.
+
+Typography enters the room last and speaks softly. A serif of old authority carries the name, set with meticulous letterspacing; a small geometric sans carries coordinates — a discipline, a domain — in widely tracked capitals, like an address engraved on a brass plate beside an unmarked door. Text never explains. It anchors. One name, one quiet line beneath it, nothing more. The hierarchy is felt before it is read.
+
+The finished artifact should feel like the emblem of an institution that does not advertise — a seal pressed into wax, a plate polished daily for years. Museum-grade execution is the only acceptable standard: flawless alignment, optically corrected spacing, master-level balance between darkness and line. Whoever stands before it should sense, without being told, that behind this threshold something rare is kept — and that the door opens only from within.

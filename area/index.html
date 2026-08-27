@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>האזור האישי — אבי קהתי</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --night: #0B1622; --night-2: #101f2f; --gold: #C9A45C; --bone: #EDE3CE;
+  --mist: #8fa0b2; --line: rgba(201,164,92,.25); --paper: #f4f1ea; --ink: #1c2733;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Heebo", "Segoe UI", Arial, sans-serif;
+  background: var(--night);
+  background-image: radial-gradient(ellipse at 50% -10%, #15263a 0%, var(--night) 55%);
+  color: var(--bone); line-height: 1.7; min-height: 100vh;
+}
+a { color: inherit; }
+
+/* ===== login ===== */
+.login-wrap { min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 24px; }
+body.mode-login .login-wrap { display: flex; }
+.login-card {
+  width: min(400px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 44px 36px;
+  text-align: center;
+  background: rgba(11,22,34,.6);
+  box-shadow: 0 30px 80px rgba(0,0,0,.4);
+}
+.login-card img { width: 88px; margin-bottom: 14px; }
+.login-card h1 { font-family: "Frank Ruhl Libre", serif; font-size: 26px; font-weight: 500; }
+.login-card .sub { color: var(--gold); font-size: 12.5px; letter-spacing: 4px; margin: 4px 0 30px; }
+.login-card input {
+  width: 100%; margin-bottom: 14px; padding: 13px 16px;
+  background: rgba(237,227,206,.05); border: 1px solid var(--line); border-radius: 4px;
+  color: var(--bone); font: inherit; font-size: 15px; text-align: center;
+}
+.login-card input:focus { outline: none; border-color: var(--gold); }
+.login-card ::placeholder { color: #5f6f80; }
+.login-card button {
+  width: 100%; padding: 13px; margin-top: 6px;
+  background: var(--gold); color: var(--night); border: 0; border-radius: 999px;
+  font: inherit; font-size: 15px; font-weight: 600; letter-spacing: 1px; cursor: pointer;
+  transition: background .2s;
+}
+.login-card button:hover { background: var(--bone); }
+.login-err { color: #e08d7a; font-size: 13.5px; min-height: 22px; margin-top: 12px; }
+.login-back { display: inline-block; margin-top: 16px; font-size: 13px; color: var(--mist); text-decoration: none; }
+.login-back:hover { color: var(--gold); }
+
+/* ===== dashboard ===== */
+.dash { display: none; }
+body.mode-dash .dash { display: block; }
+.dash-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding: 14px clamp(16px, 4vw, 44px);
+  border-bottom: 1px solid rgba(201,164,92,.15);
+  background: rgba(11,22,34,.85);
+  position: sticky; top: 0; z-index: 40;
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.dh-brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.dh-brand img { width: 40px; }
+.dh-brand b { font-family: "Frank Ruhl Libre", serif; font-size: 18px; font-weight: 500; display: block; line-height: 1.2; }
+.dh-brand span.s { font-size: 11px; color: var(--gold); letter-spacing: 2px; }
+.dh-actions { display: flex; gap: 10px; }
+.dh-actions a, .dh-actions button {
+  border: 1px solid var(--line); background: transparent; color: var(--bone);
+  font: inherit; font-size: 13px; border-radius: 999px; padding: 7px 16px;
+  cursor: pointer; text-decoration: none; transition: all .2s;
+}
+.dh-actions a:hover, .dh-actions button:hover { border-color: var(--gold); color: var(--gold); }
+
+.dash-main { max-width: 1000px; margin: 0 auto; padding: clamp(30px, 6vw, 60px) 18px 80px; }
+.dash-hello h1 { font-family: "Frank Ruhl Libre", serif; font-size: clamp(24px, 5vw, 34px); font-weight: 500; }
+.dash-hello p { color: var(--mist); margin: 6px 0 36px; font-size: 15px; }
+
+.dash-sec-title { color: var(--gold); font-size: 13px; letter-spacing: 4px; margin: 34px 0 14px; font-weight: 500; }
+
+.doc-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.doc-card {
+  border: 1px solid var(--line); border-radius: 6px; padding: 24px 20px;
+  text-decoration: none; color: var(--bone);
+  background: linear-gradient(180deg, rgba(201,164,92,.05), transparent);
+  transition: border-color .2s, transform .2s;
+  display: flex; flex-direction: column; gap: 8px; position: relative;
+}
+.doc-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+.doc-card .ic { font-size: 26px; }
+.doc-card h3 { font-family: "Frank Ruhl Libre", serif; font-size: 17.5px; font-weight: 500; line-height: 1.35; }
+.doc-card p { color: var(--mist); font-size: 13px; flex: 1; }
+.doc-card .go { color: var(--gold); font-size: 13.5px; font-weight: 500; }
+.doc-card .badge {
+  position: absolute; top: 12px; left: 12px;
+  background: rgba(46,125,91,.2); color: #7fc7a5; border: 1px solid rgba(127,199,165,.35);
+  font-size: 11px; border-radius: 999px; padding: 1px 10px; display: none;
+}
+.doc-card.has-draft .badge { display: block; }
+
+.upload-card { border-style: dashed; border-color: var(--gold); background: rgba(201,164,92,.06); }
+
+.dash-note { margin-top: 44px; font-size: 12.5px; color: #5f6f80; border-top: 1px solid rgba(201,164,92,.12); padding-top: 16px; }
+
+.env-list { display: grid; gap: 8px; }
+.env-item {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border: 1px solid rgba(201,164,92,.18); border-radius: 6px; padding: 10px 16px;
+  font-size: 14px;
+}
+.env-item.received-item { border-right: 4px solid #7fc7a5; }
+.env-item .ei-name { font-weight: 500; }
+.env-item .ei-title { color: var(--mist); font-size: 13px; flex: 1; min-width: 120px; }
+.env-item .ei-date { color: var(--mist); font-size: 12.5px; white-space: nowrap; }
+.env-item a.ei-open {
+  border: 1px solid var(--line); border-radius: 999px; padding: 5px 14px;
+  font-size: 12.5px; text-decoration: none; color: var(--bone); transition: all .2s;
+}
+.env-item a.ei-open:hover { border-color: var(--gold); color: var(--gold); }
+.env-item button.ei-del {
+  border: 0; background: none; color: #5f6f80; font-size: 12.5px; cursor: pointer; text-decoration: underline;
+}
+.env-item button.ei-del:hover { color: #e08d7a; }
+.env-empty { color: #5f6f80; font-size: 13px; }
+.ei-status { font-size: 12.5px; color: var(--mist); white-space: nowrap; }
+.ei-status.st-signed { color: #7fc7a5; font-weight: 600; }
+.st-signed-open { border-color: #7fc7a5 !important; color: #7fc7a5 !important; }
+</style>
+</head>
+<body class="mode-login">
+
+<!-- ===== מסך כניסה ===== -->
+<div class="login-wrap">
+  <div class="login-card">
+    <img src="../assets/emblem-512.png" alt="">
+    <h1>האזור האישי</h1>
+    <div class="sub">כניסה מורשית בלבד</div>
+    <form id="login-form">
+      <input type="text" id="lg-user" placeholder="שם משתמש" autocomplete="username" required>
+      <input type="password" id="lg-pass" placeholder="סיסמה" autocomplete="current-password" required>
+      <button type="submit">כניסה</button>
+    </form>
+    <div class="login-err" id="login-err"></div>
+    <a class="login-back" href="../">→ חזרה לאתר</a>
+  </div>
+</div>
+
+<!-- ===== לוח בקרה ===== -->
+<div class="dash">
+  <header class="dash-header">
+    <a class="dh-brand" href="../">
+      <img src="../assets/emblem-512.png" alt="">
+      <span><b>אבי קהתי</b><span class="s">האזור האישי</span></span>
+    </a>
+    <div class="dh-actions">
+      <a href="../">האתר</a>
+      <button type="button" id="logout-btn">יציאה</button>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <div class="dash-hello">
+      <h1>שלום, אבי 👋</h1>
+      <p>כל המסמכים, הטפסים והחתימות — במקום אחד. הנתונים נשמרים בדפדפן זה בלבד.</p>
+    </div>
+
+    <div class="dash-sec-title">חתימה על מסמך חיצוני</div>
+    <div class="doc-cards">
+      <a class="doc-card upload-card" href="sign.html">
+        <span class="ic">📤</span>
+        <h3>העלאת מסמך לחתימה</h3>
+        <p>העלו PDF או צילום מסמך, מקמו חתימה בהחלקה בכל מקום במסמך, הדפיסו או שמרו כקובץ.</p>
+        <span class="go">לחתימה ←</span>
+      </a>
+    </div>
+
+    <div class="dash-sec-title">טפסי תיווך לחתימה</div>
+    <div class="doc-cards">
+      <a class="doc-card" href="../forms/exclusive-sale.html" data-draft="kehati-forms:exclusive-sale">
+        <span class="badge">טיוטה שמורה</span>
+        <span class="ic">🤝</span>
+        <h3>הזמנת תיווך בלעדי<br>מכירה / השכרה</h3>
+        <p>הסכם בלעדיות מלא עם תקופת בלעדיות, דמי תיווך וחתימות שני הצדדים.</p>
+        <span class="go">למילוי הטופס ←</span>
+      </a>
+      <a class="doc-card" href="../forms/sale-rent.html" data-draft="kehati-forms:sale-rent">
+        <span class="badge">טיוטה שמורה</span>
+        <span class="ic">🏠</span>
+        <h3>הזמנת תיווך<br>מכירה / השכרה</h3>
+        <p>הזמנת שירותי תיווך רגילה כולל פירוט מלא של הנכס: גוש, חלקה, חדרים ועוד.</p>
+        <span class="go">למילוי הטופס ←</span>
+      </a>
+      <a class="doc-card" href="../forms/buy-rent.html" data-draft="kehati-forms:buy-rent">
+        <span class="badge">טיוטה שמורה</span>
+        <span class="ic">🔑</span>
+        <h3>הזמנת תיווך<br>קנייה / שכירות</h3>
+        <p>טופס לקוח קונה/שוכר עם רשימת נכסים שהוצגו — כולל הוספת נכסים דינמית.</p>
+        <span class="go">למילוי הטופס ←</span>
+      </a>
+      <a class="doc-card" href="../forms/power-of-attorney.html" data-draft="kehati-forms:power-of-attorney">
+        <span class="badge">טיוטה שמורה</span>
+        <span class="ic">📜</span>
+        <h3>ייפוי כוח<br>לקבלת מסמכים</h3>
+        <p>ייפוי כוח מבעל הנכס להוצאת אישור זכויות, תשריט ותוכניות ואישור תב"ע.</p>
+        <span class="go">למילוי הטופס ←</span>
+      </a>
+    </div>
+
+    <div class="dash-sec-title">📥 מסמכים חתומים שהתקבלו מלקוחות</div>
+    <div class="env-list" id="inbox-list"><span class="env-empty">כשלקוח יחתום וישלח חזרה — המסמך יופיע כאן אוטומטית ברגע שתפתחו את הקישור שלו.</span></div>
+
+    <div class="dash-sec-title">📨 מסמכים שנשלחו ללקוחות לחתימה</div>
+    <div class="env-list" id="sent-list"><span class="env-empty">עדיין לא נשלחו מסמכים. פתחו טופס, מלאו את הפרטים ולחצו "שליחה ללקוח לחתימה".</span></div>
+
+    <p class="dash-note">
+      שימו לב: האזור האישי והטפסים פועלים כולם בדפדפן בלבד. שום מידע — פרטי לקוחות, חתימות או מסמכים — אינו נשלח או נשמר בשרת.
+      מומלץ להדפיס או לשמור PDF של כל מסמך חתום מיד עם סיומו.
+    </p>
+  </main>
+</div>
+
+<script src="auth.js"></script>
+<script>
+(function () {
+  function show(mode) { document.body.className = "mode-" + mode; }
+  if (KehatiAuth.isAuthed()) show("dash");
+
+  document.getElementById("login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var ok = KehatiAuth.login(
+      document.getElementById("lg-user").value,
+      document.getElementById("lg-pass").value
+    );
+    if (ok) { show("dash"); markDrafts(); }
+    else document.getElementById("login-err").textContent = "פרטי הכניסה שגויים. נסו שוב.";
+  });
+
+  document.getElementById("logout-btn").addEventListener("click", function () {
+    KehatiAuth.logout();
+    show("login");
+  });
+
+  function markDrafts() {
+    document.querySelectorAll(".doc-card[data-draft]").forEach(function (card) {
+      try {
+        if (localStorage.getItem(card.getAttribute("data-draft"))) card.classList.add("has-draft");
+      } catch (e) {}
+    });
+  }
+  markDrafts();
+
+  /* רשימות מסמכים שנשלחו / התקבלו (נשמרות בדפדפן זה) */
+  function fmtDate(ts) {
+    var d = new Date(ts), p = function (n) { return (n < 10 ? "0" : "") + n; };
+    return p(d.getDate()) + "/" + p(d.getMonth() + 1) + "/" + d.getFullYear() + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+  }
+  function renderEnvList(storageKey, elId, receivedStyle) {
+    var el = document.getElementById(elId);
+    var list;
+    try { list = JSON.parse(localStorage.getItem(storageKey) || "[]"); } catch (e) { list = []; }
+    if (!list.length) {
+      if (el.querySelector(".env-item")) el.innerHTML = '<span class="env-empty">הרשימה ריקה.</span>';
+      return;
+    }
+    el.innerHTML = "";
+    list.forEach(function (rec, i) {
+      var row = document.createElement("div");
+      row.className = "env-item" + (receivedStyle ? " received-item" : "");
+      var name = document.createElement("span");
+      name.className = "ei-name";
+      name.textContent = (receivedStyle ? "✅ " : "✉️ ") + rec.name;
+      var title = document.createElement("span");
+      title.className = "ei-title";
+      title.textContent = rec.title;
+      var date = document.createElement("span");
+      date.className = "ei-date";
+      date.textContent = fmtDate(rec.at);
+      var status = null;
+      if (!receivedStyle && rec.docId) {
+        status = document.createElement("span");
+        status.className = "ei-status";
+        status.textContent = "⏳ בודק…";
+        checkEnvelopeStatus(rec, status);
+      }
+      var open = document.createElement("a");
+      open.className = "ei-open";
+      open.href = rec.url;
+      open.textContent = receivedStyle ? "פתיחת המסמך החתום" : "פתיחת עותק";
+      var del = document.createElement("button");
+      del.className = "ei-del";
+      del.type = "button";
+      del.textContent = "הסרה";
+      del.addEventListener("click", function () {
+        if (!confirm("להסיר את הרשומה מהרשימה? (המסמך עצמו לא יימחק אם הקישור שמור אצלכם)")) return;
+        list.splice(i, 1);
+        try { localStorage.setItem(storageKey, JSON.stringify(list)); } catch (e) {}
+        renderEnvList(storageKey, elId, receivedStyle);
+      });
+      row.appendChild(name); row.appendChild(title); row.appendChild(date);
+      if (status) row.appendChild(status);
+      row.appendChild(open); row.appendChild(del);
+      el.appendChild(row);
+    });
+  }
+
+  /* בדיקת סטטוס חתימה מול הענן — כשלקוח חותם, זה מופיע כאן ישירות */
+  var FS_KEY = "AIzaSyAqkEfNwKZzofId0XCGcs17sVFh5NYryrM";
+  var FS_PID = "zedmall-4301c";
+  function checkEnvelopeStatus(rec, statusEl) {
+    fetch("https://firestore.googleapis.com/v1/projects/" + FS_PID +
+          "/databases/(default)/documents/kehati_envelopes/" + rec.docId + "?key=" + FS_KEY)
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function (j) {
+        var f = j.fields || {};
+        var signed = f.status && f.status.stringValue === "signed";
+        if (signed) {
+          statusEl.textContent = "✅ נחתם!";
+          statusEl.classList.add("st-signed");
+          var openSigned = document.createElement("a");
+          openSigned.className = "ei-open st-signed-open";
+          openSigned.href = rec.url.split("#")[0] + "#sid=" + rec.docId;
+          openSigned.textContent = "צפייה במסמך החתום";
+          statusEl.parentNode.insertBefore(openSigned, statusEl.nextSibling);
+        } else {
+          statusEl.textContent = "⏳ ממתין לחתימה";
+        }
+      })
+      .catch(function () { statusEl.textContent = ""; });
+  }
+
+  renderEnvList("kehati-inbox", "inbox-list", true);
+  renderEnvList("kehati-sent", "sent-list", false);
+})();
+</script>
+</body>
+</html>
