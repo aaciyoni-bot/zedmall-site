@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ZedMall - Shop Global, Pay with Mobile Money</title>
     <meta name="description" content="ZedMall - Zambia's gateway to global shopping. Browse millions of products and pay easily with MTN Mobile Money, Airtel Money or Zamtel Kwacha.">
     <link rel="manifest" href="manifest.json">
@@ -44,6 +44,16 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .pulse-ring { animation: pulseRing 1.5s ease-out infinite; }
         @keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(124,58,237,0.4); } 100% { box-shadow: 0 0 0 16px rgba(124,58,237,0); } }
+        /* --- Cart drawer: fit the visible viewport on mobile + clear PWA safe areas (fixes X/close and top/bottom cutoff) --- */
+        #cartDrawer {
+            height: 100vh;            /* fallback for browsers without dvh */
+            height: 100dvh;           /* fit the visible viewport (mobile browser chrome) */
+            max-height: 100vh;
+            max-height: 100dvh;
+        }
+        #cartDrawer > div:first-child { padding-top: calc(1rem + env(safe-area-inset-top)); }        /* keep the close (X) below the status bar/notch */
+        #cartDrawer > div:last-child  { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); }  /* keep checkout above the home indicator */
+        #cartItems { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     </style>
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
