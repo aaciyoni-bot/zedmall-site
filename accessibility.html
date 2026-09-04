@@ -1,45 +1,82 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Accessibility Statement &mdash; ZedMall</title>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הצהרת נגישות — אבי קהתי ייעוץ נדל"ן פרטי</title>
+<meta name="description" content="הצהרת הנגישות של אתר kehatinadlan.com">
+<meta name="theme-color" content="#0B1622">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=Heebo:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#f7f8fa;--surface:#fff;--line:#e6e8ec;--ink:#12141a;--ink2:#41454f;--muted:#767b86;--brand:#1f2a44;--brand2:#3457d5;--accent:#e8830c}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;line-height:1.7;font-size:16px}
-  a{color:var(--brand2);text-decoration:none}a:hover{text-decoration:underline}
-  .top{position:sticky;top:0;background:rgba(247,248,250,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .top .in{max-width:820px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:12px}
-  .logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;letter-spacing:-.01em}
-  .logo .m{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--brand2),var(--brand));display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px}
-  .top .back{margin-inline-start:auto;font-size:14px;font-weight:600}
-  main{max-width:820px;margin:0 auto;padding:36px 20px 80px}
-  h1{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-.02em;margin:0 0 6px}
-  .upd{color:var(--muted);font-size:14px;margin-bottom:8px}
-  .lead{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0;color:var(--ink2);font-size:15.5px}
-  h2{font-size:20px;font-weight:700;margin:30px 0 8px}
-  p,li{color:var(--ink2)}
-  ul{padding-inline-start:20px}li{margin:6px 0}
-  .note{border-inline-start:3px solid var(--accent);background:#fff6ea;padding:12px 15px;border-radius:8px;margin:14px 0;font-size:14.5px;color:#6a4711}
-  .ph{background:#eef1fb;color:#2c3e8f;padding:1px 6px;border-radius:5px;font-size:13px;font-weight:600}
-  footer{border-top:1px solid var(--line);margin-top:48px;padding-top:22px;color:var(--muted);font-size:13px;text-align:center}
-  footer .links{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
-  footer .pw{margin-top:10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#9aa0ab}
-  footer .pw b{color:var(--accent)}
-</style></head><body>
-<div class="top"><div class="in">
-  <a class="logo" href="index.html"><span class="m">&#9679;</span>ZedMall</a>
-  <a class="back" href="index.html">&larr; Back to site</a>
-</div></div>
-<main>
-  <h1>Accessibility Statement</h1><div class="upd">Last updated: 29 July 2026</div>
-  <div class="lead">ZedMall (operated by ORIZIS&nbsp;TECHNOLOGIES&nbsp;LIMITED) aims to be usable by as many people as possible and targets <strong>WCAG 2.1 Level AA</strong>.</div>
-  <h2>Measures we take</h2><ul><li>Semantic HTML, headings and labelled form fields.</li><li>Keyboard navigation with visible focus.</li><li>Readable colour contrast; meaning not by colour alone.</li><li>Text alternatives for meaningful images.</li><li>Responsive layout for phone, tablet and desktop.</li></ul>
-  <h2>Known limitations</h2><p>Some third-party widgets (payment, fonts) may not fully meet our standards; we improve them over time.</p>
-  <h2>Feedback</h2><p>Tell us about any accessibility problem: <a href="mailto:office@orizisgroup.com">office@orizisgroup.com</a>.</p>
+:root { --night:#0B1622; --gold:#C9A45C; --bone:#EDE3CE; --mist:#8fa0b2; --line:rgba(201,164,92,.25); }
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:"Heebo","Segoe UI",Arial,sans-serif;
+  background:var(--night);
+  background-image:radial-gradient(ellipse at 50% -10%, #15263a 0%, var(--night) 55%);
+  color:var(--bone); line-height:1.8; font-weight:300; min-height:100vh;
+}
+.nav { display:flex; align-items:center; justify-content:space-between; padding:14px clamp(16px,4vw,48px); border-bottom:1px solid rgba(201,164,92,.15); }
+.nav a { color:var(--bone); text-decoration:none; }
+.nav .brand { font-family:"Frank Ruhl Libre",serif; font-size:18px; }
+.nav .brand span { display:block; font-size:11px; color:var(--gold); letter-spacing:2px; }
+.nav .back { border:1px solid var(--line); border-radius:999px; padding:7px 18px; font-size:13.5px; color:var(--gold); }
+.nav .back:hover { background:var(--gold); color:var(--night); }
+main { max-width:760px; margin:0 auto; padding:clamp(40px,7vw,70px) 20px 80px; }
+h1 { font-family:"Frank Ruhl Libre",serif; font-size:clamp(28px,5vw,40px); font-weight:500; margin-bottom:8px; }
+.updated { color:var(--mist); font-size:13.5px; margin-bottom:36px; }
+h2 { font-family:"Frank Ruhl Libre",serif; font-size:20px; font-weight:500; color:var(--gold); margin:34px 0 10px; }
+p, li { color:#c5cdd6; font-size:15.5px; margin-bottom:12px; }
+ul { padding-right:22px; }
+li { margin-bottom:6px; }
+a { color:var(--gold); }
+.contact-box { border:1px solid var(--line); border-radius:6px; padding:20px 24px; margin-top:14px; background:rgba(201,164,92,.04); }
+.contact-box p { margin-bottom:6px; }
+footer { border-top:1px solid rgba(201,164,92,.15); padding:26px 20px; text-align:center; color:#5f6f80; font-size:13px; }
+</style>
+</head>
+<body>
 
-  <footer>
-    <div class="links"><a href="index.html">Home</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="refunds.html">Refunds</a></div>
-    &copy; 2026 ZedMall &middot; ORIZIS TECHNOLOGIES LIMITED
-    <div class="pw">Powered by <b>ORIZIS TECHNOLOGY</b></div>
-  </footer>
-</main></body></html>
+<nav class="nav">
+  <a class="brand" href="./">אבי קהתי<span>ייעוץ נדל"ן פרטי</span></a>
+  <a class="back" href="./">→ חזרה לאתר</a>
+</nav>
+
+<main>
+  <h1>הצהרת נגישות</h1>
+  <p class="updated">עודכן לאחרונה: ספטמבר 2026</p>
+
+  <p>אנו רואים חשיבות רבה במתן שירות שוויוני לכלל הגולשים ובשיפור נגישות האתר לאנשים עם מוגבלות, ופועלים ברוח חוק שוויון זכויות לאנשים עם מוגבלות, התשנ"ח–1998, ותקנות שוויון זכויות לאנשים עם מוגבלות (התאמות נגישות לשירות), התשע"ג–2013.</p>
+
+  <h2>מה בוצע באתר</h2>
+  <ul>
+    <li>האתר שואף לעמידה בהנחיות הנגישות WCAG 2.1 ברמה AA.</li>
+    <li>מבנה כותרות תקין, טקסט חלופי לתמונות, וניווט מלא באמצעות מקלדת.</li>
+    <li>רכיב נגישות זמין בכל עמוד (הכפתור העגול בפינה) המאפשר: הגדלת והקטנת טקסט, ניגודיות גבוהה, גווני אפור, הדגשת קישורים, החלפה לגופן קריא ועצירת אנימציות.</li>
+    <li>ההעדפות נשמרות בדפדפן וחלות בביקורים הבאים.</li>
+    <li>האתר מותאם לגלישה מהנייד ומהמחשב.</li>
+  </ul>
+
+  <h2>סייגים</h2>
+  <p>למרות מאמצינו להנגיש את כלל הדפים, ייתכן שיתגלו חלקים שטרם הונגשו במלואם. אנו ממשיכים לשפר את נגישות האתר באופן שוטף.</p>
+
+  <h2>נתקלתם בבעיה? ספרו לנו</h2>
+  <p>אם נתקלתם בקושי בגלישה באתר או שיש לכם הצעה לשיפור, נשמח שתפנו אלינו ונטפל בכך בהקדם:</p>
+  <div class="contact-box">
+    <p><b>אבי קהתי</b> — יועץ נדל"ן</p>
+    <p>טלפון: <a href="tel:0528119445">052-8119445</a></p>
+    <p>וואטסאפ: <a href="https://wa.me/972528119445" target="_blank" rel="noopener">052-8119445</a></p>
+    <p>דוא"ל: <a href="mailto:nadlankehati@gmail.com">nadlankehati@gmail.com</a></p>
+  </div>
+</main>
+
+<footer>
+  אבי קהתי — ייעוץ נדל"ן פרטי · רישיון תיווך מס' 31924998 · KEHATINADLAN.COM
+</footer>
+
+<script src="assets/a11y.js" defer></script>
+</body>
+</html>

@@ -438,6 +438,7 @@ footer a:hover { color: var(--gold); }
 <footer>
   <div class="f-brand">אבי קהתי — ייעוץ נדל"ן פרטי</div>
   <div>רישיון תיווך מס' 31924998 · © <span id="year"></span> כל הזכויות שמורות · KEHATINADLAN.COM</div>
+  <a class="f-enter" href="accessibility.html">· הצהרת נגישות ·</a>
   <a class="f-enter" href="area/">· כניסה למערכת ·</a>
 </footer>
 
@@ -458,5 +459,6 @@ var io = new IntersectionObserver(function (entries) {
 }, { threshold: 0.15 });
 document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
 </script>
+<script src="assets/a11y.js" defer></script>
 </body>
 </html>
