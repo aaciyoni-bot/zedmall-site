@@ -195,19 +195,20 @@ function normalizeReviews(data, id, page) {
     const raw = candidates.find(Array.isArray);
     if (!raw) return null;
     const reviews = raw.slice(0, 100).map((entry, index) => {
-        const review = object(first(entry.review, entry));
-        const ratingValue = number(first(review.rating, review.star, review.starRating, review.buyerEval));
-        const content = text(first(review.content, review.text, review.feedback, review.buyerFeedback, review.reviewText), 8000);
-        const reviewImages = images(review.images, review.photos, review.imageList, review.buyerImages);
+        const review = entry.review && typeof entry.review === 'object' ? object(entry.review) : object(entry);
+        const buyer = object(entry.buyer);
+        const ratingValue = number(first(review.reviewStarts, review.rating, review.star, review.starRating, review.buyerEval));
+        const content = text(first(review.reviewContent, review.content, review.text, review.feedback, review.buyerFeedback, review.reviewText, typeof review.review === 'string' ? review.review : undefined), 8000);
+        const reviewImages = images(review.reviewImages, review.images, review.photos, review.imageList, review.buyerImages);
         return {
             id: text(first(review.id, review.reviewId, review.feedbackId), 100) || id + ':' + page + ':' + index,
-            author: text(first(review.author, review.buyerName, review.userName, review.name), 150),
+            author: text(first(buyer.buyerTitle, review.author, review.buyerName, review.userName, review.name), 150),
             rating: ratingValue !== undefined && ratingValue <= 5 ? ratingValue : undefined,
             content, text: content,
             date: text(first(review.date, review.reviewDate, review.evalDate, review.createdAt), 80) || undefined,
             images: reviewImages,
-            country: text(first(review.country, review.buyerCountry), 80) || undefined,
-            variant: text(first(review.variant, review.skuInfo, review.sku), 500) || undefined,
+            country: text(first(buyer.buyerCountry, review.country, review.buyerCountry), 80) || undefined,
+            variant: text(first(review.itemSpecInfo, review.variant, review.skuInfo, review.sku), 500) || undefined,
             source: 'AliExpress'
         };
     }).filter(review => review.content || review.images.length || review.rating !== undefined);
@@ -223,9 +224,13 @@ function normalizeReviews(data, id, page) {
         console.warn('product-content: unsupported review entries', JSON.stringify({ resultKeys: schemaKeys(result), firstEntryKeys: schemaKeys(firstEntry), nestedKeys }));
         return null;
     }
-    const total = number(first(result.total, result.totalCount, result.reviewCount, wrapper.total));
-    const pageSize = number(first(result.pageSize, result.page_size, wrapper.pageSize));
-    const totalPages = number(first(result.totalPages, result.totalPage, wrapper.totalPages));
+    const base = object(result.base);
+    const total = number(first(result.total, result.totalCount, result.reviewCount, wrapper.total, base.total, base.totalCount, base.reviewCount));
+    const pageSize = number(first(result.pageSize, result.page_size, wrapper.pageSize, base.pageSize));
+    const totalPages = number(first(result.totalPages, result.totalPage, wrapper.totalPages, base.totalPages, base.totalPage));
+    if (schemaKeys(base).length && total === undefined && totalPages === undefined) {
+        console.warn('product-content: review pagination schema', JSON.stringify({ baseKeys: schemaKeys(base) }));
+    }
     let hasMore = raw.length > 0;
     if (typeof result.hasMore === 'boolean') hasMore = result.hasMore;
     else if (totalPages !== undefined) hasMore = page < totalPages;
