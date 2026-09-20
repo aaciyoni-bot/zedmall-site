@@ -75,6 +75,9 @@ function currency(...values) {
     return undefined;
 }
 function source(id) { return { name: 'AliExpress', url: 'https://www.aliexpress.com/item/' + id + '.html' }; }
+function schemaKeys(value) {
+    return Object.keys(object(value)).filter(key => /^[A-Za-z_][A-Za-z0-9_]{0,60}$/.test(key)).slice(0, 25);
+}
 function unwrap(data) {
     const root = object(data);
     return object(first(root.result, root.data, root));
@@ -208,6 +211,18 @@ function normalizeReviews(data, id, page) {
             source: 'AliExpress'
         };
     }).filter(review => review.content || review.images.length || review.rating !== undefined);
+    if (raw.length && !reviews.length) {
+        // A changed supplier schema is not evidence that a product has no
+        // reviews. Diagnose field names only, and let the UI offer a retry.
+        const firstEntry = object(raw[0]);
+        const nestedKeys = {};
+        for (const key of schemaKeys(firstEntry).slice(0, 12)) {
+            const nested = schemaKeys(firstEntry[key]);
+            if (nested.length) nestedKeys[key] = nested;
+        }
+        console.warn('product-content: unsupported review entries', JSON.stringify({ resultKeys: schemaKeys(result), firstEntryKeys: schemaKeys(firstEntry), nestedKeys }));
+        return null;
+    }
     const total = number(first(result.total, result.totalCount, result.reviewCount, wrapper.total));
     const pageSize = number(first(result.pageSize, result.page_size, wrapper.pageSize));
     const totalPages = number(first(result.totalPages, result.totalPage, wrapper.totalPages));
@@ -268,8 +283,7 @@ function mountProductDetails(app, { axios, apiHost, apiKey }) {
                         // Log schema keys only: never supplier credentials,
                         // request headers, raw payloads or customer review text.
                         const result = unwrap(response.data);
-                        const keys = value => Object.keys(object(value)).filter(key => /^[A-Za-z_][A-Za-z0-9_]{0,60}$/.test(key)).slice(0, 25);
-                        console.warn('product-content: unrecognized supplier schema', JSON.stringify({ type, resultKeys: keys(result), reviewKeys: keys(result.reviews) }));
+                        console.warn('product-content: unrecognized supplier schema', JSON.stringify({ type, resultKeys: schemaKeys(result), reviewKeys: schemaKeys(result.reviews) }));
                         throw new Error('UNRECOGNIZED_DETAILS');
                     }
                     cache.set(key, { expires: Date.now() + (type === 'reviews' ? 5 : 15) * 60000, body });
