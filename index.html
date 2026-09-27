@@ -6,7 +6,7 @@
     <title>ZedMall - Shop Global, Pay with Mobile Money</title>
     <meta name="description" content="ZedMall - Zambia's gateway to global shopping. Browse millions of products and pay easily with MTN Mobile Money, Airtel Money or Zamtel Kwacha.">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#06231a">
+    <meta name="theme-color" content="#c4490b">
     <link rel="icon" type="image/png" href="icon-192.png">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -56,7 +56,8 @@
         #cartItems { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
     </style>
     <link rel="stylesheet" href="product-details.css?v=20260920">
-    <link rel="stylesheet" href="storefront-v2.css?v=20260921">
+    <link rel="stylesheet" href="storefront-v2.css?v=20260927">
+    <link rel="stylesheet" href="brand-theme.css?v=20260927">
 </head>
 <body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col">
 
@@ -717,7 +718,7 @@
         catalogTried = true;
         try {
             const bust = Math.floor(Date.now() / (60 * 60 * 1000)); // refresh hourly on the client
-            const r = await fetch('catalog.json?_=' + bust, { cache: 'no-cache' });
+            const r = await fetch('catalog.json?_=' + bust, { cache: 'no-cache', signal: AbortSignal.timeout(10000) });
             if (r.ok) {
                 const j = await r.json();
                 if (j && ((j.home && j.home.length) || (j.categories && Object.keys(j.categories).length))) {
@@ -773,19 +774,30 @@
         return raw || [];
     }
 
+    let catalogRequestId = 0;
     async function loadProducts(query, under25Only) {
+        const requestId = ++catalogRequestId;
         currentQuery = query || '';
         currentUnder25 = !!under25Only;
         currentPage = 1; hasMore = false; loadingMore = false; liveMode = false;
         hideLoadMore();
         setStatus(true, under25Only ? 'Finding deals under K' + CONFIG.BUDGET_MAX_ZMW + '...' : (query ? `Searching for "${query}"...` : 'Loading trending products...'));
+        // Show the last successful catalogue immediately while refreshing in place.
+        const cachedPreview = !under25Only && readCatalogCache(query);
+        if (cachedPreview && cachedPreview.length && cachedPreview.some(p => /^\d{6,}$/.test(String(p.id)))) {
+            products = cachedPreview.slice();
+            renderProducts(query, under25Only, false);
+            setStatus(false);
+        }
         let list = null;
         const cat = await loadCatalog();
+        if (requestId !== catalogRequestId) return;
 
         if (under25Only) {
             // Live price-ascending pages so "Show more" keeps loading cheaper items.
             if (CONFIG.API_BASE_URL) {
                 const raw = await fetchBudgetPage(1);
+                if (requestId !== catalogRequestId) return;
                 if (raw && raw.length) {
                     list = raw.map((p, i) => normalizeApiProduct(p, i))
                         .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
@@ -793,6 +805,7 @@
                 }
             }
             if (!list || !list.length) list = await fetchUnder25();          // catalog/demo fallback (finite)
+            if (requestId !== catalogRequestId) return;
         } else if (!query && cat && cat.home && cat.home.length) {
             list = cat.home.map(normalizeApiProduct);                        // home from catalog (0 API calls, curated set)
         } else if (query && cat && cat.categories && cat.categories[query] && cat.categories[query].length) {
@@ -800,12 +813,14 @@
         } else if (CONFIG.API_BASE_URL) {
             try {
                 const raw = await liveFetch('q=' + encodeURIComponent(query || 'best sellers') + '&page=1');
+                if (requestId !== catalogRequestId) return;
                 if (raw.length) { list = raw.map(normalizeApiProduct); liveMode = true; hasMore = raw.length >= 15; }
             } catch (e) {
                 console.warn('API unavailable, falling back to demo products:', e);
             }
         }
 
+        if (requestId !== catalogRequestId) return;
         // A transient upstream error should not empty the shop - reuse the last good catalogue.
         if (!list || !list.length) {
             const cached = readCatalogCache(currentQuery);
@@ -863,9 +878,8 @@
         $('resultsTitle').textContent = under25Only ? `💸 Everything under K${CONFIG.BUDGET_MAX_ZMW}`
             : (query ? `Results for "${query}"` : '🔥 Trending in Zambia');
         $('resultsCount').textContent = products.length + ' products';
-        renderUnder25Strip(!query && !under25Only);
+
         $('productGrid').innerHTML = products.map(productCardHtml).join('');
-        window.scrollTo({ top: (query || under25Only) ? $('heroSection').offsetHeight : 0, behavior: 'smooth' });
     }
 
     // Appends the next page without rebuilding the grid (keeps scroll position).
@@ -876,6 +890,7 @@
 
     async function loadMoreProducts() {
         if (!liveMode || loadingMore || !hasMore) return;
+        const requestId = catalogRequestId;
         loadingMore = true;
         const btn = $('loadMoreBtn');
         if (btn) { btn.classList.add('opacity-60'); btn.textContent = 'Loading more…'; }
@@ -883,15 +898,18 @@
         try {
             if (currentUnder25) {
                 const raw = await fetchBudgetPage(currentPage + 1);
+                if (requestId !== catalogRequestId) return;
                 rawLen = raw.length;
                 mapped = raw.map((p, i) => normalizeApiProduct(p, i))
                     .filter(p => p.priceZmw >= 3 && p.priceZmw <= CONFIG.BUDGET_MAX_ZMW);
             } else {
                 const raw = await liveFetch('q=' + encodeURIComponent(currentQuery || 'best sellers') + '&page=' + (currentPage + 1));
+                if (requestId !== catalogRequestId) return;
                 rawLen = raw.length;
                 mapped = raw.map(normalizeApiProduct);
             }
         } catch (e) { console.warn('Load more failed:', e); rawLen = 0; }
+        if (requestId !== catalogRequestId) return;
         const fresh = mapped.filter(p => !products.find(x => x.id === p.id));
         if (fresh.length) {
             currentPage += 1;
@@ -1302,7 +1320,7 @@
 <!--reljob-legal-injected-->
 <div style="font-family:system-ui,sans-serif;font-size:12.5px;color:#8a8f99;text-align:center;padding:16px 12px;background:#0f1116;border-top:1px solid #23262e"><a href="terms.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Terms</a><a href="privacy.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Privacy</a><a href="refunds.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Refunds</a><a href="accessibility.html" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Accessibility</a><a href="mailto:office@orizisgroup.com" style="color:#aeb4bf;margin:0 8px;text-decoration:none">Contact</a><div style="margin-top:6px;color:#5c616b">ORIZIS TECHNOLOGIES LIMITED &middot; TPIN 2002580846 &middot; office@orizisgroup.com</div></div>
     <script src="product-details.js?v=20260920"></script>
-    <script src="storefront-v2.js?v=20260921"></script>
+    <script src="storefront-v2.js?v=20260927"></script>
 </body>
 </html>
 
