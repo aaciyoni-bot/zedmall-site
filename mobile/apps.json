@@ -11,7 +11,9 @@
       "privacyUrl": "https://zedmall.co.zm/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedmall",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828629963",
+      "appleBundleResourceId": "KG9Y4L8BCB"
     },
     {
       "key": "zedglow",
@@ -23,7 +25,9 @@
       "privacyUrl": "https://zedglow.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedglow",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828630997",
+      "appleBundleResourceId": "BH2M26359N"
     },
     {
       "key": "mwanako",
@@ -35,7 +39,9 @@
       "privacyUrl": "https://mwanako.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.mwanako",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828631828",
+      "appleBundleResourceId": "WW635W9UB2"
     },
     {
       "key": "chipazi",
@@ -47,7 +53,9 @@
       "privacyUrl": "https://chipazi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.chipazi",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828632864",
+      "appleBundleResourceId": "4BC6P9TTWT"
     },
     {
       "key": "kayachi",
@@ -59,7 +67,9 @@
       "privacyUrl": "https://kayachi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.kayachi",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828632983",
+      "appleBundleResourceId": "ZHM7HC9QMK"
     },
     {
       "key": "zuwango",
@@ -71,7 +81,9 @@
       "privacyUrl": "https://zuwango.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zuwango",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828633148",
+      "appleBundleResourceId": "AJ9939S56P"
     },
     {
       "key": "agromall",
@@ -83,7 +95,9 @@
       "privacyUrl": "https://agromall.co/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.agromall",
       "buildLane": "physical-shopping",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828633188",
+      "appleBundleResourceId": "SFCNQ2SDV5"
     },
     {
       "key": "vochira",
@@ -95,7 +109,9 @@
       "privacyUrl": "https://vochira.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.vochira",
       "buildLane": "digital-vouchers-review",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828633488",
+      "appleBundleResourceId": "RUGYF73ZM7"
     },
     {
       "key": "chibwenzi",
@@ -107,7 +123,9 @@
       "privacyUrl": "https://chibwenzi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.chibwenzi",
       "buildLane": "dating-auth-review",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828633820",
+      "appleBundleResourceId": "3K35ZYR4A2"
     },
     {
       "key": "lernoto",
@@ -119,7 +137,9 @@
       "privacyUrl": "https://lernoto.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.lernoto",
       "buildLane": "digital-learning-review",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828633918",
+      "appleBundleResourceId": "YFACDRVUAP"
     },
     {
       "key": "reljob",
@@ -131,7 +151,9 @@
       "privacyUrl": "https://reljob.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.reljob",
       "buildLane": "jobs-review",
-      "appleStatus": "not-submitted"
+      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleAppId": "6828634066",
+      "appleBundleResourceId": "59UR9TPQ47"
     }
   ]
 }
