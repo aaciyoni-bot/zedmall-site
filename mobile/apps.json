@@ -11,9 +11,10 @@
       "privacyUrl": "https://zedmall.co.zm/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedmall",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828629963",
-      "appleBundleResourceId": "KG9Y4L8BCB"
+      "appleBundleResourceId": "KG9Y4L8BCB",
+      "appleProfileId": "RM7X5MQ683"
     },
     {
       "key": "zedglow",
@@ -25,9 +26,10 @@
       "privacyUrl": "https://zedglow.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedglow",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828630997",
-      "appleBundleResourceId": "BH2M26359N"
+      "appleBundleResourceId": "BH2M26359N",
+      "appleProfileId": "M6R228CCPB"
     },
     {
       "key": "mwanako",
@@ -39,9 +41,10 @@
       "privacyUrl": "https://mwanako.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.mwanako",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828631828",
-      "appleBundleResourceId": "WW635W9UB2"
+      "appleBundleResourceId": "WW635W9UB2",
+      "appleProfileId": "B455MM6W92"
     },
     {
       "key": "chipazi",
@@ -53,9 +56,10 @@
       "privacyUrl": "https://chipazi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.chipazi",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828632864",
-      "appleBundleResourceId": "4BC6P9TTWT"
+      "appleBundleResourceId": "4BC6P9TTWT",
+      "appleProfileId": "8TAZWABSBS"
     },
     {
       "key": "kayachi",
@@ -67,9 +71,10 @@
       "privacyUrl": "https://kayachi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.kayachi",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828632983",
-      "appleBundleResourceId": "ZHM7HC9QMK"
+      "appleBundleResourceId": "ZHM7HC9QMK",
+      "appleProfileId": "649VPX46P8"
     },
     {
       "key": "zuwango",
@@ -81,9 +86,10 @@
       "privacyUrl": "https://zuwango.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zuwango",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828633148",
-      "appleBundleResourceId": "AJ9939S56P"
+      "appleBundleResourceId": "AJ9939S56P",
+      "appleProfileId": "C5DR3CXJF3"
     },
     {
       "key": "agromall",
@@ -95,9 +101,10 @@
       "privacyUrl": "https://agromall.co/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.agromall",
       "buildLane": "physical-shopping",
-      "appleStatus": "app-record-created-no-build-uploaded",
+      "appleStatus": "distribution-profile-ready-no-build-uploaded",
       "appleAppId": "6828633188",
-      "appleBundleResourceId": "SFCNQ2SDV5"
+      "appleBundleResourceId": "SFCNQ2SDV5",
+      "appleProfileId": "46YLDS7P84"
     },
     {
       "key": "vochira",
