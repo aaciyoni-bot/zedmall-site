@@ -1,0 +1,137 @@
+{
+  "verifiedDate": "2026-10-30",
+  "apps": [
+    {
+      "key": "zedmall",
+      "name": "ZedMall",
+      "repository": "aaciyoni-bot/zedmall-site",
+      "sourceCommit": "623f3954406e0b8d66d89c6e7e4d364fa11623c9",
+      "bundleId": "com.orizis.zedmall",
+      "website": "https://zedmall.co.zm",
+      "privacyUrl": "https://zedmall.co.zm/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedmall",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "zedglow",
+      "name": "ZedGlow",
+      "repository": "aaciyoni-bot/zedglow-site",
+      "sourceCommit": "a65a13f7b1a32419232a00d345652c6572216cc8",
+      "bundleId": "com.orizis.zedglow",
+      "website": "https://zedglow.com",
+      "privacyUrl": "https://zedglow.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedglow",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "mwanako",
+      "name": "Mwanako",
+      "repository": "aaciyoni-bot/zedbaby-site",
+      "sourceCommit": "190595d7501219a7f8963f15f823a6f32d3c8cd9",
+      "bundleId": "com.orizis.mwanako",
+      "website": "https://mwanako.com",
+      "privacyUrl": "https://mwanako.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.mwanako",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "chipazi",
+      "name": "Chipazi",
+      "repository": "aaciyoni-bot/zedtech-site",
+      "sourceCommit": "e038dd22f2602fcbd5e340c19d5400207c540bee",
+      "bundleId": "com.orizis.chipazi",
+      "website": "https://chipazi.com",
+      "privacyUrl": "https://chipazi.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.chipazi",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "kayachi",
+      "name": "Kayachi",
+      "repository": "aaciyoni-bot/zedhome-site",
+      "sourceCommit": "b4b466b94f7a5b13eb0762bde8a1ec3631591af7",
+      "bundleId": "com.orizis.kayachi",
+      "website": "https://kayachi.com",
+      "privacyUrl": "https://kayachi.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.kayachi",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "zuwango",
+      "name": "Zuwango",
+      "repository": "aaciyoni-bot/zedsolar-site",
+      "sourceCommit": "b546c5f7350429cf6bfc24f600823731c4753baa",
+      "bundleId": "com.orizis.zuwango",
+      "website": "https://zuwango.com",
+      "privacyUrl": "https://zuwango.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zuwango",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "agromall",
+      "name": "AgroMall",
+      "repository": "aaciyoni-bot/agromall-site",
+      "sourceCommit": "8f4c1d74a5b7b52d55b491406b9cd6b44245832e",
+      "bundleId": "com.orizis.agromall",
+      "website": "https://agromall.co",
+      "privacyUrl": "https://agromall.co/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.agromall",
+      "buildLane": "physical-shopping",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "vochira",
+      "name": "Vochira",
+      "repository": "aaciyoni-bot/zedcards-site",
+      "sourceCommit": "dbe7e7eaeae99fabcfcbd6766c1b48250e7c84b7",
+      "bundleId": "com.orizis.vochira",
+      "website": "https://vochira.com",
+      "privacyUrl": "https://vochira.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.vochira",
+      "buildLane": "digital-vouchers-review",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "chibwenzi",
+      "name": "Chibwenzi",
+      "repository": "aaciyoni-bot/zedmatch-site",
+      "sourceCommit": "f38dd5d5b8efd9af1ef34eda2d8062612d89b65e",
+      "bundleId": "com.orizis.chibwenzi",
+      "website": "https://chibwenzi.com",
+      "privacyUrl": "https://chibwenzi.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.chibwenzi",
+      "buildLane": "dating-auth-review",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "lernoto",
+      "name": "Lernoto",
+      "repository": "aaciyoni-bot/orizis-academy",
+      "sourceCommit": "3ef18ca4fe8e5187a2365e7c9e99861adac078ee",
+      "bundleId": "com.orizis.lernoto",
+      "website": "https://lernoto.com",
+      "privacyUrl": "https://lernoto.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.lernoto",
+      "buildLane": "digital-learning-review",
+      "appleStatus": "not-submitted"
+    },
+    {
+      "key": "reljob",
+      "name": "RELJOB",
+      "repository": "aaciyoni-bot/SWIPEJOB",
+      "sourceCommit": "6309536d66b5cc6070ef8b6c8ba1e69aa951688d",
+      "bundleId": "com.orizis.reljob",
+      "website": "https://reljob.com",
+      "privacyUrl": "https://reljob.com/privacy.html",
+      "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.reljob",
+      "buildLane": "jobs-review",
+      "appleStatus": "not-submitted"
+    }
+  ]
+}
