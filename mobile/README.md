@@ -1,18 +1,18 @@
 # Zambia iPhone preparation
 
-This directory prepares existing Zambia storefronts for iPhone. It does not change the live sites or their Android releases. The catalog in `apps.json` records all 11 existing apps and pins the source commit for each one. All 11 explicit bundle IDs and App Store Connect app records have now been created and independently verified through Apple's API. Their Apple resource IDs are recorded in the catalog. No Zambia build has been uploaded or submitted for review.
+This directory prepares existing Zambia storefronts for iPhone. It does not change the live sites or their Android releases. The catalog in `apps.json` records all 11 existing apps and pins the source commit for each one. All 11 explicit bundle IDs and App Store Connect app records have been created and independently verified through Apple's API. Signed version 1.0 (build 1) of all seven physical-goods apps has been uploaded successfully. No Zambia app has been submitted for beta review or public App Store review.
 
 ## Build coverage
 
 | App | Source repository | Current lane |
 | --- | --- | --- |
-| ZedMall | zedmall-site | Physical-goods iPhone compile validation |
-| ZedGlow | zedglow-site | Physical-goods iPhone compile validation |
-| Mwanako | zedbaby-site | Physical-goods iPhone compile validation |
-| Chipazi | zedtech-site | Physical-goods iPhone compile validation |
-| Kayachi | zedhome-site | Physical-goods iPhone compile validation |
-| Zuwango | zedsolar-site | Physical-goods iPhone compile validation |
-| AgroMall | agromall-site | Physical-goods iPhone compile validation |
+| ZedMall | zedmall-site | Signed iPhone build uploaded |
+| ZedGlow | zedglow-site | Signed iPhone build uploaded |
+| Mwanako | zedbaby-site | Signed iPhone build uploaded |
+| Chipazi | zedtech-site | Signed iPhone build uploaded |
+| Kayachi | zedhome-site | Signed iPhone build uploaded |
+| Zuwango | zedsolar-site | Signed iPhone build uploaded |
+| AgroMall | agromall-site | Signed iPhone build uploaded |
 | Vochira | zedcards-site | Digital vouchers: product/payment eligibility review |
 | Chibwenzi | zedmatch-site | Dating: native authentication, purchases and moderation verification |
 | Lernoto | orizis-academy | Learning: native authentication, digital purchases and account deletion |
@@ -34,23 +34,27 @@ SOURCE_DIR=/absolute/path/to/source APP_KEY=zedglow npm run build --prefix mobil
 
 The CI workflow runs those checks for all seven shopping apps on macOS with Xcode, syncs Capacitor and creates unsigned device archives. It verifies each archive's bundle identifier, display name and packaged assets. All seven passed in [run 40966962639](https://github.com/aaciyoni-bot/zedmall-site/actions/runs/40966962639). Artifacts explicitly say `UNSIGNED`; they cannot be installed through TestFlight and have not been submitted to Apple. The validation workflow requires no signing secrets and does not upload to Apple.
 
-## Prepared signing workflow (not run)
+## Signed TestFlight workflow
 
-`zambia-testflight.yml` is manual-only and selects one physical-goods app or all seven. It uses the same pinned source/template, repeats checkout tests and packages assets, validates the app-specific distribution profile, signs and verifies the archive and exported IPA, then uploads to App Store Connect for processing. Upload does not submit the app for either beta review or public App Store review.
+`zambia-testflight.yml` selects one physical-goods app or all seven when manually dispatched. Changes to that workflow file on the restricted `codex/apple-zambia-20261030` branch also run the seven-app batch; other file changes do not trigger an upload. It uses the same pinned source/template, repeats checkout tests and packages assets, validates the app-specific distribution profile, signs and verifies the archive and exported IPA, then uploads to App Store Connect for processing. Upload does not submit the app for either beta review or public App Store review.
 
 All seven App Store distribution profiles have been created with the existing distribution certificate. Their active status, CMS signatures, team IDs, bundle IDs, certificate and expiry were verified. Profile resource IDs are recorded in `apps.json`. An isolated `zambia-ios` GitHub environment has been created and restricted to branch `codex/apple-zambia-20261030`.
 
 The environment requires `APPLE_DISTRIBUTION_P12_BASE64`, `APPLE_DISTRIBUTION_P12_PASSWORD`, `APP_STORE_CONNECT_API_KEY`, and `APPLE_PROVISIONING_PROFILES_GZIP_BASE64`. The last value is a base64-encoded gzip containing a JSON map from bundle ID to base64 profile. The seven profiles exceed GitHub's 48 KB per-secret limit as raw JSON; the validated compressed value is 29,260 bytes. The workflow decodes only the selected app's profile to a private runner file and never prints the map or profile content. No secret values belong in this repository, the app, or build artifacts. The current Apple API key can read app/identifier state and upload builds, but registration requests returned 403, so identifiers and profiles were registered through the account UI.
 
-Transfer of the existing signing material to the restricted Zambia environment is approved, but credential installation remains pending. Existing signing secrets remain scoped to the POKERTEN repository. No Zambia signing secrets have been installed and this workflow has not run. The runner deletes its temporary keychain, provisioning files and API key after use.
+The approved existing distribution certificate, its password, Apple upload API key and seven app-specific profiles are now installed in the restricted Zambia environment. Only their names were verified in the settings UI; no secret values are included in this repository. The runner deletes its temporary keychain, provisioning files and API key after use.
+
+The initial signed upload is [run 41007937094](https://github.com/aaciyoni-bot/zedmall-site/actions/runs/41007937094), version 1.0, build 1. All seven jobs succeeded, including checkout tests, archive/export signature checks and Apple validation/upload. Each job produced a signed IPA artifact, retained for 14 days. As of 2026-10-30 05:45 UTC, Apple's API reports `VALID` for ZedMall, ZedGlow, Mwanako, Chipazi, Kayachi and Zuwango; all six have `MISSING_EXPORT_COMPLIANCE`. AgroMall's upload succeeded at 05:36 UTC, but its build record has not yet appeared, so processing is not yet confirmed. Delivery IDs and verified status are recorded in `apps.json`.
+
+The export-compliance update was blocked pending the account owner's explicit authorization. No exemption declaration has been saved. The proposed update is `usesNonExemptEncryption: false` for these seven builds, based on the inspected bundled storefronts and native dependencies using operating-system HTTPS rather than bundled encryption implementations. Confirm that declaration with the owner before applying it; do not infer approval from authorization to sign or upload. This is separate from completing device QA, external beta review and App Store review.
 
 ## Release work still required
 
 1. **Production payments and order fulfillment.** Read-only health checks found `paymentsEnv: sandbox` on zedmall-site, zedglow-site, zedbaby-site, zedtech-site, zedhome-site and zedsolar-site Vercel backends. AgroMall's configured payment URL uses the same ZedGlow backend. A configured gateway is not evidence of a working production payment. Confirm the merchant's live account and test payment, transaction reference, order persistence, fulfillment and refunds before public release. No payment or order was initiated during these checks.
 2. **Device QA.** Compile success alone does not verify native-origin CORS, live catalog requests, checkout, deep links, safe-area layout, keyboard behavior, or accessibility. Test these on an iOS simulator and a device; obtain genuine iPhone screenshots.
 3. **Four distinct app flows.** Vochira's catalog includes third-party digital gift cards, game credits and crypto vouchers; determine the eligible iOS offering and payment route before porting it unchanged. Chibwenzi requires native sign-in and verification of reporting, blocking, deletion and digital entitlements while preserving its existing free limits. Lernoto sells digital courses. RELJOB uses Google popup login and sells relocation memberships; verify the actual service classification and deletion flow. Do not silently remove functionality or change prices/quotas to force a submission.
-4. **Apple setup.** All 11 app identifiers and App Store Connect records, plus distribution profiles for the seven shopping apps, are complete. Install the approved secrets in the restricted environment, create signed IPAs and complete privacy/age-rating/support metadata and review access; then upload and test with TestFlight before App Store review. Existing Android approval does not establish Apple approval. Separate storefronts need a clear, distinct customer purpose under Apple's minimum-functionality and duplicate-app rules.
+4. **Apple setup.** All 11 app identifiers and App Store Connect records, plus distribution profiles and signing secrets for the seven shopping apps, are complete. Finish export compliance, privacy/age-rating/support metadata and review access; test with TestFlight before App Store review. Existing Android approval does not establish Apple approval. Separate storefronts need a clear, distinct customer purpose under Apple's minimum-functionality and duplicate-app rules.
 
 Apple references: [Review Guidelines](https://developer.apple.com/app-store/review/guidelines/) (sections 1.2, 3.1, 4.2, 4.3, 4.8 and 5.1.1), [register an App ID](https://developer.apple.com/help/account/identifiers/register-an-app-id/). Native tooling: [Capacitor iOS](https://capacitorjs.com/docs/ios).
 
-No Zambia app has been submitted to Apple by this change. Do not merge this draft preparation as a claim of commercial release readiness.
+No Zambia app has been submitted for beta review or public App Store review. Signed build uploads do not establish commercial release readiness.
