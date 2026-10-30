@@ -11,7 +11,7 @@
       "privacyUrl": "https://zedmall.co.zm/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedmall",
       "buildLane": "physical-shopping",
-      "appleStatus": "testflight-processed-missing-export-compliance",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828629963",
       "appleBundleResourceId": "KG9Y4L8BCB",
       "appleProfileId": "RM7X5MQ683",
@@ -21,8 +21,11 @@
         "deliveryId": "63426f69-1b0f-45b3-8db2-184be1d9b535",
         "workflowRunId": 41007937094,
         "processingState": "VALID",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
       },
       "appleBuildId": "63426f69-1b0f-45b3-8db2-184be1d9b535"
     },
@@ -36,7 +39,7 @@
       "privacyUrl": "https://zedglow.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zedglow",
       "buildLane": "physical-shopping",
-      "appleStatus": "testflight-processed-missing-export-compliance",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828630997",
       "appleBundleResourceId": "BH2M26359N",
       "appleProfileId": "M6R228CCPB",
@@ -46,8 +49,11 @@
         "deliveryId": "2f08bbd6-d307-4879-9551-bfa825131d45",
         "workflowRunId": 41007937094,
         "processingState": "VALID",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
       },
       "appleBuildId": "2f08bbd6-d307-4879-9551-bfa825131d45"
     },
@@ -61,7 +67,7 @@
       "privacyUrl": "https://mwanako.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.mwanako",
       "buildLane": "physical-shopping",
-      "appleStatus": "testflight-processed-missing-export-compliance",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828631828",
       "appleBundleResourceId": "WW635W9UB2",
       "appleProfileId": "B455MM6W92",
@@ -71,8 +77,11 @@
         "deliveryId": "ff1847d5-6161-498f-97d8-5676362609ab",
         "workflowRunId": 41007937094,
         "processingState": "VALID",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
       },
       "appleBuildId": "ff1847d5-6161-498f-97d8-5676362609ab"
     },
@@ -86,7 +95,7 @@
       "privacyUrl": "https://chipazi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.chipazi",
       "buildLane": "physical-shopping",
-      "appleStatus": "testflight-processed-missing-export-compliance",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828632864",
       "appleBundleResourceId": "4BC6P9TTWT",
       "appleProfileId": "8TAZWABSBS",
@@ -96,8 +105,11 @@
         "deliveryId": "b4ed220e-9440-4757-b2f6-bbc6dde8ab26",
         "workflowRunId": 41007937094,
         "processingState": "VALID",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
       },
       "appleBuildId": "b4ed220e-9440-4757-b2f6-bbc6dde8ab26"
     },
@@ -111,7 +123,7 @@
       "privacyUrl": "https://kayachi.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.kayachi",
       "buildLane": "physical-shopping",
-      "appleStatus": "testflight-processed-missing-export-compliance",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828632983",
       "appleBundleResourceId": "ZHM7HC9QMK",
       "appleProfileId": "649VPX46P8",
@@ -121,8 +133,11 @@
         "deliveryId": "2ce15ebe-3d6f-4bd3-8eda-453091a89096",
         "workflowRunId": 41007937094,
         "processingState": "VALID",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
       },
       "appleBuildId": "2ce15ebe-3d6f-4bd3-8eda-453091a89096"
     },
@@ -136,7 +151,7 @@
       "privacyUrl": "https://zuwango.com/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.zuwango",
       "buildLane": "physical-shopping",
-      "appleStatus": "testflight-processed-missing-export-compliance",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828633148",
       "appleBundleResourceId": "AJ9939S56P",
       "appleProfileId": "C5DR3CXJF3",
@@ -146,8 +161,11 @@
         "deliveryId": "1aaa8692-1260-4c88-a997-35283eb33d7e",
         "workflowRunId": 41007937094,
         "processingState": "VALID",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
       },
       "appleBuildId": "1aaa8692-1260-4c88-a997-35283eb33d7e"
     },
@@ -161,7 +179,7 @@
       "privacyUrl": "https://agromall.co/privacy.html",
       "googlePlayUrl": "https://play.google.com/store/apps/details?id=com.orizis.agromall",
       "buildLane": "physical-shopping",
-      "appleStatus": "upload-succeeded-processing-not-yet-confirmed",
+      "appleStatus": "testflight-ready-for-beta-submission",
       "appleAppId": "6828633188",
       "appleBundleResourceId": "SFCNQ2SDV5",
       "appleProfileId": "46YLDS7P84",
@@ -170,10 +188,14 @@
         "buildNumber": "1",
         "deliveryId": "6a7c9473-4105-4405-8307-f652293509bf",
         "workflowRunId": 41007937094,
-        "processingState": "AWAITING_BUILD_RECORD",
-        "exportCompliance": "AWAITING_OWNER_AUTHORIZATION",
-        "verifiedAt": "2026-10-30T05:45:06Z"
-      }
+        "processingState": "VALID",
+        "exportCompliance": "DECLARED_EXEMPT",
+        "verifiedAt": "2026-10-30T06:58:50Z",
+        "usesNonExemptEncryption": false,
+        "internalBuildState": "READY_FOR_BETA_TESTING",
+        "externalBuildState": "READY_FOR_BETA_SUBMISSION"
+      },
+      "appleBuildId": "6a7c9473-4105-4405-8307-f652293509bf"
     },
     {
       "key": "vochira",
