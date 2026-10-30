@@ -1,5 +1,8 @@
 name: Sign and upload Zambia shopping apps to TestFlight
 'on':
+  push:
+    branches: ['codex/apple-zambia-20261030']
+    paths: ['.github/workflows/zambia-testflight.yml']
   workflow_dispatch:
     inputs:
       app:
@@ -19,7 +22,7 @@ name: Sign and upload Zambia shopping apps to TestFlight
 permissions:
   contents: read
 concurrency:
-  group: zambia-testflight-${{ inputs.app }}
+  group: zambia-testflight-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   catalog:
@@ -37,7 +40,7 @@ jobs:
         appendFileSync(process.env.GITHUB_OUTPUT, 'apps=' + JSON.stringify(apps) + '\n');
         JS
       env:
-        REQUESTED_APP: ${{ inputs.app }}
+        REQUESTED_APP: ${{ inputs.app || 'all' }}
   build:
     needs: catalog
     runs-on: macos-26
