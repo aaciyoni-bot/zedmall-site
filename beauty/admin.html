@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ניהול הפלטפורמה — byoutoyou</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Comfortaa:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* motion */
+    --dur-1:120ms;
+    --dur-2:250ms;
+    --dur-3:400ms;
+    --ease-out:cubic-bezier(.16,1,.3,1);
+    --ease-in:cubic-bezier(.4,0,1,1);
+    --ease-back:cubic-bezier(.34,1.56,.64,1);
+    /* spacing scale */
+    --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px;
+    --bg:#f6f4f7;--surface:#fff;--ink:#231a26;--ink-2:#6b5f70;--ink-3:#6f6475;
+    --brand:#c94f7c;--brand-dark:#a83a64;--brand-soft:#fbeef3;--green:#1fa97a;--green-soft:#e6f7f0;
+    --gold:#e8a33d;--line:#eae4ec;--shadow:0 2px 12px rgba(60,30,50,.07);--shadow-lg:0 12px 40px rgba(60,30,50,.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Heebo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  .container{max-width:1180px;margin:0 auto;padding:0 20px}
+  header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .header-in{display:flex;align-items:center;justify-content:space-between;height:60px;max-width:1180px;margin:0 auto;padding:0 20px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .wordmark{font-family:'Comfortaa',system-ui,sans-serif;font-weight:700;font-size:1.45rem;letter-spacing:-1px;color:var(--ink);direction:ltr;unicode-bidi:isolate}
+  .logo .wordmark b{font-weight:700;background:linear-gradient(90deg,#c94f7c,#8e4fc9);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .wordmark i{font-style:normal;color:var(--brand)}
+  .logo .admin-tag{background:var(--ink);color:#fff;font-size:.68rem;font-weight:700;border-radius:99px;padding:3px 10px;margin-right:6px}
+  .btn-ghost{padding:7px 14px;border-radius:99px;font-weight:600;font-size:.88rem;color:var(--ink-2)}
+  .btn-ghost:hover{background:var(--brand-soft);color:var(--brand-dark)}
+
+  /* login gate */
+  .gate{max-width:400px;margin:80px auto;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow-lg);padding:32px;text-align:center}
+  .gate .mark{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#c94f7c,#8e4fc9);display:grid;place-items:center;color:#fff;font-size:1.5rem;margin:0 auto 14px}
+  .gate h1{font-size:1.3rem;font-weight:900}
+  .gate p{color:var(--ink-2);font-size:.88rem;margin:6px 0 18px}
+  .gate input{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--bg);outline:none;text-align:center;font-size:1.05rem;letter-spacing:2px}
+  .gate input:focus{border-color:var(--brand)}
+  .gate .hint{font-size:.76rem;color:var(--ink-3);margin-top:8px}
+  .btn-primary{background:linear-gradient(135deg,#c94f7c,#a83a64);color:#fff;font-weight:700;padding:13px 24px;border-radius:12px;width:100%;margin-top:14px;font-size:1rem}
+
+  main{padding:26px 0 60px;display:none}
+  h2.sec{font-size:1.15rem;font-weight:800;margin:26px 0 12px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+  .kpi .v{font-size:1.5rem;font-weight:900;letter-spacing:-.5px}
+  .kpi .l{font-size:.8rem;color:var(--ink-2);margin-top:2px}
+  .kpi .d{font-size:.72rem;color:var(--green);font-weight:700}
+
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px 20px;overflow-x:auto}
+  .two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+  @media(max-width:900px){.two-col{grid-template-columns:1fr}}
+
+  .chart{display:flex;align-items:flex-end;gap:6px;height:150px;padding-top:10px}
+  .chart .bar{flex:1;background:linear-gradient(180deg,#e66aa0,#c94f7c);border-radius:6px 6px 0 0;min-height:4px;position:relative;transition:.3s}
+  .chart .bar:hover{opacity:.8}
+  .chart .bar .tip{position:absolute;top:-22px;right:50%;transform:translateX(50%);font-size:.62rem;font-weight:700;color:var(--ink-2);white-space:nowrap}
+  .chart-labels{display:flex;gap:6px;margin-top:6px}
+  .chart-labels span{flex:1;text-align:center;font-size:.6rem;color:var(--ink-3)}
+
+  .cat-bars{display:flex;flex-direction:column;gap:10px}
+  .cat-bar .cb-head{display:flex;justify-content:space-between;font-size:.82rem;font-weight:600;margin-bottom:4px}
+  .cat-bar .cb-track{height:9px;background:var(--bg);border-radius:99px;overflow:hidden}
+  .cat-bar .cb-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#c94f7c,#8e4fc9)}
+
+  table{width:100%;border-collapse:collapse;font-size:.85rem;min-width:640px}
+  th{text-align:right;color:var(--ink-3);font-weight:700;font-size:.74rem;padding:8px 10px;border-bottom:1.5px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:var(--bg)}
+  .chip{font-size:.7rem;font-weight:700;border-radius:99px;padding:3px 10px;white-space:nowrap}
+  .chip.active{background:var(--green-soft);color:var(--green)}
+  .chip.done{background:#f0eef4;color:var(--ink-2)}
+  .chip.pending{background:#fdf3e2;color:#b07514}
+  .chip.approved{background:var(--green-soft);color:var(--green)}
+  .chip.rejected{background:#fdecec;color:#c93a3a}
+  .chip.new{background:var(--brand-soft);color:var(--brand-dark)}
+  .chip.live{background:var(--brand-soft);color:var(--brand-dark)}
+  .mini-avatar{width:30px;height:30px;border-radius:9px;display:inline-grid;place-items:center;color:#fff;font-weight:800;font-size:.8rem;vertical-align:middle;margin-left:7px}
+  .act{font-size:.76rem;font-weight:700;border-radius:9px;padding:5px 12px;margin-inline-start:4px}
+  .act.ok{background:var(--green-soft);color:var(--green)}
+  .act.no{background:#fdecec;color:#c93a3a}
+  .empty{color:var(--ink-3);font-size:.86rem;text-align:center;padding:18px}
+  .note{font-size:.76rem;color:var(--ink-3);margin-top:8px}
+
+  .kpi .v,td,.chart .tip,.cat-bar .cb-head b{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+  /* ---------- Pass 1: touch feedback ---------- */
+  .btn-primary,.btn-ghost,.act{transition:transform var(--dur-1) var(--ease-out),background var(--dur-1) var(--ease-out)}
+  .btn-primary:active,.btn-ghost:active,.act:active{transform:scale(.97)}
+  /* ---------- Pass 0: foundations ---------- */
+  :focus-visible{outline:2px solid var(--brand) !important;outline-offset:2px}
+  :focus:not(:focus-visible){outline:none}
+  .num,[data-num]{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+  .deco{color:#9a8fa0}
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+      animation-duration:.01ms!important;
+      animation-iteration-count:1!important;
+      transition-duration:.01ms!important;
+      scroll-behavior:auto!important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-in">
+    <a class="logo" href="index.html"><span class="wordmark">byou<b>toyou</b><i>.</i></span><span class="admin-tag">ADMIN</span></a>
+    <div>
+      <a class="btn-ghost" href="pro.html">אזור המטפלת</a>
+      <a class="btn-ghost" href="index.html">→ חזרה לאתר</a>
+    </div>
+  </div>
+</header>
+
+<div class="gate" id="gate">
+  <div class="mark">🔐</div>
+  <h1>כניסת מנהל</h1>
+  <p>אזור זה מיועד לצוות byoutoyou בלבד</p>
+  <input id="pin" type="password" placeholder="קוד גישה" onkeydown="if(event.key==='Enter')login()">
+  <button class="btn-primary" onclick="login()">כניסה</button>
+  <div class="hint">דמו: הקוד הוא 2026 · בפרודקשן: SSO + הרשאות לפי תפקיד</div>
+</div>
+
+<main id="main">
+  <div class="container">
+    <div class="kpis" id="kpis"></div>
+
+    <div class="two-col" style="margin-top:16px">
+      <div class="panel">
+        <h2 class="sec" style="margin-top:0">הכנסות — 14 ימים אחרונים</h2>
+        <div class="chart" id="chart"></div>
+        <div class="chart-labels" id="chartLabels"></div>
+      </div>
+      <div class="panel">
+        <h2 class="sec" style="margin-top:0">הכנסות לפי קטגוריה</h2>
+        <div class="cat-bars" id="catBars"></div>
+        <p class="note">עמלת פלטפורמה: 20% · נתוני דמו + הזמנות אמיתיות מהדפדפן הזה</p>
+      </div>
+    </div>
+
+    <h2 class="sec">הזמנות אחרונות <span class="chip live" id="liveCount"></span></h2>
+    <div class="panel"><table id="ordersTable"></table></div>
+
+    <h2 class="sec">בקשות הצטרפות מטפלות</h2>
+    <div class="panel" id="appsPanel"></div>
+
+    <h2 class="sec">פניות אירועים וחבילות</h2>
+    <div class="panel" id="leadsPanel"></div>
+
+    <h2 class="sec">בקשות byoutoyou care — בתי חולים 🏥</h2>
+    <div class="panel" id="hospPanel"></div>
+
+    <h2 class="sec">שוברי מתנה 🎁</h2>
+    <div class="panel" id="giftsPanel"></div>
+
+    <h2 class="sec">מטפלות פעילות <span class="chip live" id="provTotal"></span></h2>
+    <div class="panel"><table id="provTable"></table></div>
+  </div>
+</main>
+
+<script src="data.js"></script>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = window.BYT_FMT;
+const lsGet=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}};
+const lsSet=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
+const CATS = {nails:'מניקור־פדיקור', hair:'עיצוב שיער', makeup:'איפור', brows:'גבות וריסים', face:'טיפולי פנים'};
+
+function login(){
+  if($('pin').value === '2026'){ sessionStorage.setItem('byt_admin','1'); show(); }
+  else { $('pin').value=''; $('pin').placeholder='קוד שגוי — נסו 2026'; }
+}
+function show(){ $('gate').style.display='none'; $('main').style.display='block'; draw(); }
+
+function allOrders(){
+  const real = lsGet('byoutoyou_bookings_v1', []);
+  return [...real, ...window.BYT_GEN_ORDERS()];
+}
+
+function draw(){
+  const orders = allOrders();
+  const real = orders.filter(o => !o.demo);
+  const revenue = orders.reduce((a,o) => a + o.total, 0);
+  const commission = Math.round(revenue * window.BYT_COMMISSION);
+  const rated = orders.filter(o => o.rating);
+  const avgRating = rated.length ? (rated.reduce((a,o) => a + o.rating, 0) / rated.length).toFixed(2) : '—';
+  const active = orders.filter(o => o.status === 'active').length;
+  const apps = lsGet('byoutoyou_applications', []);
+  const leads = lsGet('byoutoyou_event_leads', []);
+
+  $('kpis').innerHTML = [
+    {v: fmt(revenue), l: 'מחזור 30 יום', d: '+12% מהחודש הקודם'},
+    {v: fmt(commission), l: 'הכנסות פלטפורמה (20%)', d: '+12%'},
+    {v: orders.length, l: 'הזמנות', d: real.length + ' מהדפדפן הזה'},
+    {v: active, l: 'הזמנות פעילות כרגע', d: ''},
+    {v: avgRating + ' ★', l: 'דירוג ממוצע', d: rated.length + ' דירוגים'},
+    {v: apps.filter(a => a.status === 'pending').length, l: 'בקשות הצטרפות ממתינות', d: leads.filter(l => l.status === 'new').length + ' פניות אירועים'},
+  ].map(k => `<div class="kpi"><div class="v num">${k.v}</div><div class="l">${k.l}</div>${k.d ? `<div class="d">${k.d}</div>` : ''}</div>`).join('');
+  /* Pass 1: המחזור נספר למעלה בכניסה */
+  const revEl = document.querySelector('#kpis .kpi .v');
+  if(revEl && !matchMedia('(prefers-reduced-motion:reduce)').matches){
+    const t0 = performance.now(), dur = 700, ease = t => 1 - Math.pow(1 - t, 3);
+    (function step(now){
+      const p = Math.min(1, (now - t0) / dur);
+      revEl.textContent = Math.round(revenue * ease(p)).toLocaleString('he-IL') + ' ₪';
+      if(p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  /* גרף 14 ימים */
+  const DAY = 86400000, today = new Date(); today.setHours(0,0,0,0);
+  const days = [];
+  for(let i = 13; i >= 0; i--){
+    const t0 = today.getTime() - i * DAY;
+    const sum = orders.filter(o => o.createdAt >= t0 && o.createdAt < t0 + DAY).reduce((a,o) => a + o.total, 0);
+    days.push({t0, sum});
+  }
+  const max = Math.max(...days.map(d => d.sum), 1);
+  $('chart').innerHTML = days.map(d =>
+    `<div class="bar" style="height:${Math.max(3, Math.round(d.sum / max * 100))}%"><span class="tip">${d.sum ? fmt(d.sum) : ''}</span></div>`).join('');
+  $('chartLabels').innerHTML = days.map(d =>
+    `<span>${new Date(d.t0).toLocaleDateString('he-IL', {day:'numeric', month:'numeric'})}</span>`).join('');
+
+  /* קטגוריות */
+  const byCat = {};
+  orders.forEach(o => {
+    const p = window.BYT_PROVIDERS.find(x => x.id === o.providerId);
+    const c = p ? p.cat : 'nails';
+    byCat[c] = (byCat[c] || 0) + o.total;
+  });
+  const cmax = Math.max(...Object.values(byCat), 1);
+  $('catBars').innerHTML = Object.entries(CATS).map(([k, label]) => `
+    <div class="cat-bar">
+      <div class="cb-head"><span>${label}</span><b>${fmt(byCat[k] || 0)}</b></div>
+      <div class="cb-track"><div class="cb-fill" style="width:${Math.round((byCat[k] || 0) / cmax * 100)}%"></div></div>
+    </div>`).join('');
+
+  /* טבלת הזמנות */
+  $('liveCount').textContent = real.length ? real.length + ' חדשות מהאתר' : 'נתוני דמו';
+  $('ordersTable').innerHTML = `
+    <tr><th>מס'</th><th>לקוחה</th><th>מטפלת</th><th>שירותים</th><th>כתובת</th><th>סכום</th><th>עמלה</th><th>דירוג</th><th>סטטוס</th><th>מתי</th></tr>` +
+    orders.slice(0, 15).map(o => `
+    <tr>
+      <td dir="ltr">${esc(o.id)}${o.demo ? '' : ' <span class="chip live">חי</span>'}</td>
+      <td>${esc(o.customerName)}</td>
+      <td>${esc(o.providerName)}</td>
+      <td>${esc((o.services || []).join(' + '))}</td>
+      <td>${esc(o.address || '')}</td>
+      <td><b>${fmt(o.total)}</b></td>
+      <td>${fmt(Math.round(o.total * window.BYT_COMMISSION))}</td>
+      <td>${o.rating ? '★'.repeat(o.rating) : '—'}</td>
+      <td><span class="chip ${o.status}">${o.status === 'active' ? 'פעילה' : 'הושלמה'}</span></td>
+      <td>${new Date(o.createdAt).toLocaleDateString('he-IL', {day:'numeric', month:'numeric'})} ${new Date(o.createdAt).toLocaleTimeString('he-IL', {hour:'2-digit', minute:'2-digit'})}</td>
+    </tr>`).join('');
+
+  /* בקשות הצטרפות */
+  $('appsPanel').innerHTML = apps.length ? `<table>
+    <tr><th>מס'</th><th>שם</th><th>תחום</th><th>עיר</th><th>ניסיון</th><th>שירותים</th><th>טלפון</th><th>סטטוס</th><th>פעולות</th></tr>` +
+    apps.map(a => `
+    <tr>
+      <td dir="ltr">${esc(a.id)}</td>
+      <td><b>${esc(a.name)}</b></td>
+      <td>${CATS[a.cat] || esc(a.cat)}</td>
+      <td>${esc(a.city)}</td>
+      <td>${esc(a.years)}</td>
+      <td>${(a.services || []).map(s => esc(s.name) + ' (' + fmt(s.price) + ')').join(', ')}</td>
+      <td dir="ltr">${esc(a.phone)}</td>
+      <td><span class="chip ${a.status}">${{pending:'ממתינה', approved:'אושרה ✓', rejected:'נדחתה'}[a.status]}</span></td>
+      <td>${a.status === 'pending' ? `
+        <button class="act ok" onclick="setApp('${a.id}','approved')">אשרי</button>
+        <button class="act no" onclick="setApp('${a.id}','rejected')">דחי</button>` : ''}</td>
+    </tr>`).join('') + '</table>'
+    : '<div class="empty">אין עדיין בקשות — נסו למלא את טופס ההצטרפות באתר 💜</div>';
+
+  /* פניות אירועים */
+  $('leadsPanel').innerHTML = leads.length ? `<table>
+    <tr><th>מס'</th><th>חבילה</th><th>שם</th><th>טלפון</th><th>תאריך אירוע</th><th>משתתפות</th><th>עיר</th><th>הערות</th><th>סטטוס</th></tr>` +
+    leads.map(l => `
+    <tr>
+      <td dir="ltr">${esc(l.id)}</td>
+      <td><b>${esc(l.pkg)}</b></td>
+      <td>${esc(l.name)}</td>
+      <td dir="ltr">${esc(l.phone)}</td>
+      <td>${esc(l.date || '—')}</td>
+      <td>${esc(l.count)}</td>
+      <td>${esc(l.city || '—')}</td>
+      <td>${esc(l.notes || '—')}</td>
+      <td><span class="chip new">חדשה</span></td>
+    </tr>`).join('') + '</table>'
+    : '<div class="empty">אין עדיין פניות אירועים — נסו את "אירועים וחבילות" באתר 🎉</div>';
+
+  /* בקשות בתי חולים */
+  const hosp = lsGet('byoutoyou_hospital_leads', []);
+  $('hospPanel').innerHTML = hosp.length ? `<table>
+    <tr><th>מס'</th><th>שם</th><th>טלפון</th><th>בית חולים</th><th>מחלקה</th><th>שירותים</th><th>מתנה?</th><th>מתי</th><th>סטטוס</th></tr>` +
+    hosp.map(h => `
+    <tr>
+      <td dir="ltr">${esc(h.id)}</td>
+      <td><b>${esc(h.name)}</b></td>
+      <td dir="ltr">${esc(h.phone)}</td>
+      <td>${esc(h.hospital)}</td>
+      <td>${esc(h.ward)}</td>
+      <td>${(h.services || []).map(esc).join(', ')}</td>
+      <td>${h.isGift ? '🎁 ל' + esc(h.giftTo || '—') : '—'}</td>
+      <td>${esc(h.when || '—')}</td>
+      <td><span class="chip new">חדשה</span></td>
+    </tr>`).join('') + '</table>'
+    : '<div class="empty">אין עדיין בקשות — נסו את "byoutoyou care" באתר 🏥</div>';
+
+  /* שוברי מתנה */
+  const gifts = lsGet('byoutoyou_gifts', []);
+  $('giftsPanel').innerHTML = gifts.length ? `<table>
+    <tr><th>קוד</th><th>סכום</th><th>יתרה</th><th>מאת</th><th>למי</th><th>טלפון</th><th>הקדשה</th><th>סטטוס</th></tr>` +
+    gifts.map(g => `
+    <tr>
+      <td dir="ltr"><b>${esc(g.code)}</b></td>
+      <td>${fmt(g.amount)}</td>
+      <td><b style="color:${g.balance > 0 ? 'var(--green)' : 'var(--ink-3)'}">${fmt(g.balance)}</b></td>
+      <td>${esc(g.from)}</td>
+      <td>${esc(g.to)}</td>
+      <td dir="ltr">${esc(g.toPhone)}</td>
+      <td>${esc(g.dedication || '—')}</td>
+      <td><span class="chip ${g.balance > 0 ? 'active' : 'done'}">${g.balance > 0 ? (g.balance < g.amount ? 'מומש חלקית' : 'פעיל') : 'מומש'}</span></td>
+    </tr>`).join('') + '</table>'
+    : '<div class="empty">אין עדיין שוברים — נסו לשלוח מתנה מהאתר 🎁</div>';
+
+  /* מטפלות */
+  const provRevenue = {};
+  orders.forEach(o => provRevenue[o.providerId] = (provRevenue[o.providerId] || 0) + o.total);
+  $('provTotal').textContent = window.BYT_PROVIDERS.length + ' מטפלות · מציג את 40 המובילות במחזור';
+  $('provTable').innerHTML = `
+    <tr><th>מטפלת</th><th>תחום</th><th>דירוג</th><th>ביקורות</th><th>זמן הגעה</th><th>מחזור 30 יום</th><th>עמלה</th><th>זמינות</th><th>מאומתת</th></tr>` +
+    [...window.BYT_PROVIDERS].sort((a,b) => (provRevenue[b.id]||0) - (provRevenue[a.id]||0)).slice(0, 40).map(p => `
+    <tr>
+      <td><span class="mini-avatar" style="background:${p.grad}">${p.initial}</span><b>${esc(p.name)}</b></td>
+      <td>${CATS[p.cat]}</td>
+      <td>★ ${p.rating.toFixed(1)}</td>
+      <td>${p.reviews}</td>
+      <td>~${p.etaMin} דק'</td>
+      <td><b>${fmt(provRevenue[p.id] || 0)}</b></td>
+      <td>${fmt(Math.round((provRevenue[p.id] || 0) * window.BYT_COMMISSION))}</td>
+      <td><span class="chip ${p.availableNow ? 'active' : 'done'}">${p.availableNow ? 'זמינה' : 'לא זמינה'}</span></td>
+      <td>${p.verified ? '✔️' : '—'}</td>
+    </tr>`).join('');
+}
+
+function setApp(id, status){
+  const apps = lsGet('byoutoyou_applications', []);
+  const a = apps.find(x => x.id === id);
+  if(a) a.status = status;
+  lsSet('byoutoyou_applications', apps);
+  draw();
+}
+
+if(sessionStorage.getItem('byt_admin') === '1') show();
+</script>
+</body>
+</html>
