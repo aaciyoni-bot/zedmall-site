@@ -9,6 +9,11 @@ export function nativeHtml(source) {
   html = replaceOnce(html,
     "const IS_INSTALLED = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;",
     'const IS_INSTALLED = true;');
+  // Keep the bundled WKWebView inside the iPhone safe area. A cover viewport
+  // opts content under the status bar/Dynamic Island even with automatic inset.
+  html = replaceOnce(html,
+    'content="width=device-width, initial-scale=1.0, viewport-fit=cover"',
+    'content="width=device-width, initial-scale=1.0, viewport-fit=contain"');
   // A missing/unreachable payment gateway returns null. Never turn that into
   // a successful order, or redeem a voucher when the remainder was not paid.
   html = replaceOnce(html, "if (outcome === 'failed') {", 'if (outcome !== true) {');
