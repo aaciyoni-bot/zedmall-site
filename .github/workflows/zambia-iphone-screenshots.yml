@@ -6,9 +6,10 @@ name: Capture Zambia iPhone review screenshots
   workflow_dispatch:
 permissions:
   contents: read
+# Captures include the native iPhone safe-area fix; no store upload or submission.
 concurrency:
   group: zambia-screenshots-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   catalog:
     runs-on: ubuntu-latest
