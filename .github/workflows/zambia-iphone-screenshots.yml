@@ -1,0 +1,116 @@
+name: Capture Zambia iPhone review screenshots
+'on':
+  push:
+    branches: ['codex/apple-zambia-20261030']
+    paths: ['.github/workflows/zambia-iphone-screenshots.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+# Captures include the native iPhone safe-area fix; no store upload or submission.
+concurrency:
+  group: zambia-screenshots-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    outputs:
+      apps: ${{ steps.matrix.outputs.apps }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: matrix
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          const apps = JSON.parse(readFileSync('mobile/apps.json')).apps.filter(a => a.buildLane === 'physical-shopping');
+          appendFileSync(process.env.GITHUB_OUTPUT, 'apps=' + JSON.stringify(apps) + '\n');
+          JS
+  screenshots:
+    needs: catalog
+    runs-on: macos-26
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include: ${{ fromJSON(needs.catalog.outputs.apps) }}
+    name: iPhone screenshots - ${{ matrix.name }}
+    env:
+      APP_KEY: ${{ matrix.key }}
+      SOURCE_DIR: ${{ github.workspace }}/web-source
+      APP_BUNDLE_ID: ${{ matrix.bundleId }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.repository }}
+          ref: ${{ matrix.sourceCommit }}
+          path: web-source
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: aaciyoni-bot/pokerten
+          ref: 57ca0e30b136da282bac8b54b00bc762ddff64bb
+          path: ios-template
+          sparse-checkout: mobile/ios
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - run: npm ci --prefix mobile --no-audit --no-fund
+      - run: npm test --prefix mobile
+      - run: npm run build --prefix mobile
+      - name: Configure existing iOS project
+        working-directory: mobile
+        run: |
+          cp -R ../ios-template/mobile/ios ./ios
+          swift scripts/configure-ios.swift
+          npx cap sync ios
+      - name: Select medium and large iPhones
+        run: |
+          xcrun simctl list devices available -j > "$RUNNER_TEMP/devices.json"
+          python3 - <<'PY'
+          import json, os
+          data=json.load(open(os.environ['RUNNER_TEMP']+'/devices.json'))['devices']
+          devices=[(runtime,d) for runtime,items in data.items() if 'iOS' in runtime for d in items if d.get('isAvailable')]
+          groups={'MEDIUM':['iPhone 17 Pro','iPhone 16 Pro'],'LARGE':['iPhone 17 Pro Max','iPhone 16 Pro Max']}
+          with open(os.environ['GITHUB_ENV'],'a') as env:
+            for label,names in groups.items():
+              matches=[(r,d) for r,d in devices if d['name'] in names]
+              if not matches: raise SystemExit('No supported '+label+' iPhone simulator')
+              runtime,device=sorted(matches,key=lambda x:(x[0],x[1]['name']))[-1]
+              env.write('SIM_'+label+'='+device['udid']+'\n')
+              print(label,runtime,device['name'],device['udid'])
+          PY
+      - name: Build real bundled iPhone app for Simulator
+        run: |
+          xcodebuild -project mobile/ios/App/App.xcodeproj -scheme App -configuration Debug -sdk iphonesimulator -destination "id=$SIM_MEDIUM" -derivedDataPath "$RUNNER_TEMP/derived" PRODUCT_BUNDLE_IDENTIFIER="$APP_BUNDLE_ID" CODE_SIGNING_ALLOWED=NO build
+          test -s "$RUNNER_TEMP/derived/Build/Products/Debug-iphonesimulator/App.app/public/index.html"
+      - name: Capture real iPhone screens
+        run: |
+          mkdir -p screenshots
+          APP_PATH="$RUNNER_TEMP/derived/Build/Products/Debug-iphonesimulator/App.app"
+          for SIZE in MEDIUM LARGE; do
+            KEY="SIM_$SIZE"
+            DEVICE="${!KEY}"
+            xcrun simctl boot "$DEVICE" || true
+            xcrun simctl bootstatus "$DEVICE" -b
+            xcrun simctl status_bar "$DEVICE" override --time "9:41" --dataNetwork wifi --wifiMode active --wifiBars 3 --batteryState charged --batteryLevel 100
+            xcrun simctl install "$DEVICE" "$APP_PATH"
+            xcrun simctl launch "$DEVICE" "$APP_BUNDLE_ID"
+            sleep 15
+            xcrun simctl io "$DEVICE" screenshot "screenshots/$APP_KEY-$SIZE-home-15s.png"
+            sleep 20
+            xcrun simctl io "$DEVICE" screenshot "screenshots/$APP_KEY-$SIZE-home-35s.png"
+            xcrun simctl shutdown "$DEVICE"
+          done
+          cp mobile/.generated/build-manifest.json screenshots/
+          sips -g pixelWidth -g pixelHeight screenshots/*.png
+          echo 'Actual iPhone simulator captures. Inspect loaded catalog, errors and layout before upload. No Apple submission or payment performed.' > screenshots/REVIEW.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.key }}-iphone-review-screenshots
+          path: screenshots/
+          if-no-files-found: error
+          retention-days: 14
