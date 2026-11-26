@@ -182,7 +182,7 @@ jobs:
         name: ${{ matrix.key }}-iPhone-signed-${{ github.run_number }}
         path: dist/
         if-no-files-found: error
-        retention-days: 14
+        retention-days: 30
     - name: Validate and upload to App Store Connect
       env:
         APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
