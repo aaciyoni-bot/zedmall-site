@@ -5,6 +5,8 @@ let configuration = try JSONSerialization.jsonObject(with: Data(contentsOf: root
 let plistURL = root.appendingPathComponent("ios/App/App/Info.plist")
 var plist = try PropertyListSerialization.propertyList(from: Data(contentsOf: plistURL), options: [], format: nil) as! [String: Any]
 plist["CFBundleDisplayName"] = configuration["appName"] as! String
+plist["UIViewControllerBasedStatusBarAppearance"] = true
+plist["UIStatusBarHidden"] = true
 plist["UISupportedInterfaceOrientations"] = ["UIInterfaceOrientationPortrait"]
 plist["UISupportedInterfaceOrientations~ipad"] = ["UIInterfaceOrientationPortrait"]
 try PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0).write(to: plistURL)
@@ -14,4 +16,4 @@ try Data(contentsOf: root.appendingPathComponent(".generated/AppIcon-512@2x.png"
 for name in ["splash-2732x2732.png", "splash-2732x2732-1.png", "splash-2732x2732-2.png"] {
     try Data(contentsOf: root.appendingPathComponent(".generated/splash.png")).write(to: assets.appendingPathComponent("Splash.imageset/" + name))
 }
-print("Configured display name, portrait orientation, brand icon and launch assets.")
+print("Configured display name, portrait orientation, hidden launch status bar, brand icon and launch assets.")

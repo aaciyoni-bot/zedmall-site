@@ -52,7 +52,16 @@ html = replaceOnce(html, firestoreTag, '');
 await build({ stdin: { contents: "import firebase from 'firebase/compat/app'; import 'firebase/compat/firestore'; window.firebase = firebase;", resolveDir: mobile }, bundle: true, format: 'iife', target: ['es2020'], minify: true, outfile: path.join(out, 'vendor/firebase.js') });
 if (/<script[^>]+src=["']https?:/i.test(html)) throw new Error('Unbundled remote executable script remains');
 await writeFile(path.join(out, 'index.html'), html);
-await writeFile(path.join(mobile, 'capacitor.config.json'), JSON.stringify({ appId: app.bundleId, appName: app.name, webDir: 'www', backgroundColor: '#ffffff', ios: { contentInset: 'automatic', preferredContentMode: 'mobile' } }, null, 2) + '\n');
+await writeFile(path.join(mobile, 'capacitor.config.json'), JSON.stringify({
+  appId: app.bundleId,
+  appName: app.name,
+  webDir: 'www',
+  backgroundColor: '#ffffff',
+  ios: { contentInset: 'automatic', preferredContentMode: 'mobile' },
+  // Capacitor 8 hides the status bar and asks iOS to auto-hide its home indicator.
+  // Keep automatic safe-area insets so controls stay clear of the camera cutout.
+  plugins: { SystemBars: { hidden: true, animation: 'NONE' } }
+}, null, 2) + '\n');
 const icon = await sharp(path.join(source, 'icon-512.png')).resize(1024, 1024).flatten({ background: '#ffffff' }).removeAlpha().png().toBuffer();
 await writeFile(path.join(mobile, '.generated/AppIcon-512@2x.png'), icon);
 const splashIcon = await sharp(icon).resize(512, 512).png().toBuffer();

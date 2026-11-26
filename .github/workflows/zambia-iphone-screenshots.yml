@@ -4,9 +4,15 @@ name: Capture Zambia iPhone review screenshots
     branches: ['codex/apple-zambia-20261030']
     paths: ['.github/workflows/zambia-iphone-screenshots.yml']
   workflow_dispatch:
+    inputs:
+      app:
+        description: Storefront to capture (all for the complete set)
+        type: choice
+        default: all
+        options: [all, zedmall, zedglow, mwanako, chipazi, kayachi, zuwango, agromall]
 permissions:
   contents: read
-# Captures include the native iPhone safe-area fix; no store upload or submission.
+# Capture fullscreen behavior with safe areas; no store upload or submission.
 concurrency:
   group: zambia-screenshots-${{ github.ref }}
   cancel-in-progress: true
@@ -21,9 +27,12 @@ jobs:
         run: |
           node --input-type=module <<'JS'
           import { readFileSync, appendFileSync } from 'node:fs';
-          const apps = JSON.parse(readFileSync('mobile/apps.json')).apps.filter(a => a.buildLane === 'physical-shopping');
+          const apps = JSON.parse(readFileSync('mobile/apps.json')).apps.filter(a => a.buildLane === 'physical-shopping' && (process.env.REQUESTED_APP === 'all' || a.key === process.env.REQUESTED_APP));
+          if (!apps.length) throw new Error('No supported storefront selected');
           appendFileSync(process.env.GITHUB_OUTPUT, 'apps=' + JSON.stringify(apps) + '\n');
           JS
+        env:
+          REQUESTED_APP: ${{ inputs.app || 'zedmall' }}
   screenshots:
     needs: catalog
     runs-on: macos-26
